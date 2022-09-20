@@ -1,0 +1,27 @@
+// app global css in SCSS form
+
+.mainflexbox {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  flex-direction: row;
+  max-height: 25vh;
+  justify-content: center;
+  text-align: center;
+}
+
+.flexitem {
+  margin: 10px;
+  border: 3px solid #d21919;
+  box-shadow: 3px 3px 8px 0px rgba(0, 0, 0, 0.3);
+  max-width: 18vw;
+  min-width: 18vw;
+} h2 {
+  font-size: 1.5rem;
+}
+
+.maintitle {
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}

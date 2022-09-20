@@ -1,0 +1,26 @@
+[
+ {
+  "ticker": "QQQ",
+  "shares": 100,
+  "price": 293.63,
+  "priceloaded": true,
+  "value": 291.05,
+  "message": ""
+ },
+ {
+  "ticker": "AAPL",
+  "shares": 200,
+  "price": 153.3,
+  "priceloaded": true,
+  "value": 154.48,
+  "message": ""
+ },
+ {
+  "ticker": "SPY",
+  "shares": 200,
+  "price": 294.63,
+  "priceloaded": true,
+  "value": 388.55,
+  "message": ""
+ }
+]
