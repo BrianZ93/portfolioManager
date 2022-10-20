@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Mon Sep 19 20:08:44 2022
+# Make data base, printed on Thu Oct 20 17:37:40 2022
 
 # Variables
 
@@ -23,7 +21,9 @@ SSH_AGENT_LAUNCHER = gnome-keyring
 # environment
 SNAP_INSTANCE_KEY = 
 # environment
-VSCODE_CWD = /home/brianz/coding/blackSwan
+GJS_DEBUG_OUTPUT = stderr
+# environment
+VSCODE_CWD = /home/brianz
 # default
 MAKE_COMMAND := make
 # environment
@@ -35,7 +35,7 @@ GOPATH = /home/brianz/go
 # environment
 SNAP_INSTANCE_NAME = code
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/106/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/108/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -46,24 +46,20 @@ PWD = /home/brianz/coding/blackSwan
 %D = $(patsubst %/,%,$(dir $%))
 # environment
 XDG_DATA_DIRS = /usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop
-# environment
-OLDPWD = /home/brianz/coding
 # automatic
 ^D = $(patsubst %/,%,$(dir $^))
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/brianz/.config/Code/CachedData/784b0177c56c607789f9638da7b6bf3230d47a8c
+VSCODE_CODE_CACHE_PATH = /home/brianz/.config/Code/CachedData/74b1f979648cc44d385a2286793c226e611f59e7
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.KQNES1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.T8GYT1
 # default
 .LOADED := 
 # default
 .INCLUDE_DIRS = /usr/local/include /usr/include /usr/include
-# environment
-GNOME_TERMINAL_SERVICE = :1.2109
 # makefile
 MAKEFLAGS = pqrR
 # makefile
@@ -95,13 +91,15 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 275369
+VSCODE_PID = 391345
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/brianz-Latitude-5400:@/tmp/.ICE-unix/1271,unix/brianz-Latitude-5400:/tmp/.ICE-unix/1271
+BAMF_DESKTOP_FILE_HINT = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
+SESSION_MANAGER = local/brianz-Latitude-5400:@/tmp/.ICE-unix/1170,unix/brianz-Latitude-5400:/tmp/.ICE-unix/1170
 # automatic
 *F = $(notdir $*)
 # environment
@@ -123,11 +121,13 @@ MAKECMDGOALS := all
 # environment
 XMODIFIERS = @im=ibus
 # environment
-SHLVL = 1
+GJS_DEBUG_TOPICS = JS ERROR;JS LOG
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/7eff1831_6373_4ba9_bb74_51329a0617af
+SHLVL = 0
 # environment
 MAKELEVEL := 0
+# environment
+IM_CONFIG_CHECK_ENV = 1
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
@@ -141,9 +141,11 @@ MAKEFILES :=
 # environment
 SNAP_USER_COMMON = /home/brianz/snap/code/common
 # environment
-SNAP = /snap/code/106
+SNAP = /snap/code/108
 # environment
-SNAP_REVISION = 106
+INVOCATION_ID = 7dd9e07418a246f090be75a602823d0f
+# environment
+SNAP_REVISION = 108
 # environment
 SNAP_REAL_HOME = /home/brianz
 # environment
@@ -157,7 +159,7 @@ LESSCLOSE = /usr/bin/lesspipe %s %s
 # environment
 XDG_CURRENT_DESKTOP = Unity
 # environment
-LS_COLORS = rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:
+LS_COLORS = 
 # automatic
 +F = $(notdir $+)
 # environment
@@ -169,11 +171,13 @@ GNUMAKEFLAGS :=
 # environment
 LOGNAME = brianz
 # environment
+GIO_LAUNCHED_DESKTOP_FILE = /var/lib/snapd/desktop/applications/code_code.desktop
+# environment
 SNAP_ARCH = amd64
 # makefile
-.DEFAULT_GOAL := 
+.DEFAULT_GOAL := default
 # environment
-SYSTEMD_EXEC_PID = 1864
+SYSTEMD_EXEC_PID = 1192
 # environment
 DISPLAY = :0
 # environment
@@ -183,15 +187,21 @@ GTK_MODULES = gail:atk-bridge
 # default
 MAKE_VERSION := 4.3
 # environment
-SNAP_DATA = /var/snap/code/106
+SNAP_DATA = /var/snap/code/108
 # environment
 SNAP_CONTEXT = 6cELwwixMNG-Odf6zelW4Nd1OHkillVEdiTn9YmEo_1HExyaVpLB
 # environment
+MANAGERPID = 982
+# environment
+GIO_LAUNCHED_DESKTOP_FILE_PID = 391292
+# environment
+_ = /snap/code/108/usr/share/code/code
+# environment
 XDG_RUNTIME_DIR = /run/user/1000
 # environment
-COLORTERM = truecolor
-# environment
 GDK_PIXBUF_MODULE_FILE = /home/brianz/snap/code/common/.cache/gdk-pixbuf-loaders.cache
+# environment
+JOURNAL_STREAM = 8:35137
 # environment
 GOMODCACHE = /home/brianz/go/pkg/mod
 # environment
@@ -205,13 +215,11 @@ QT_IM_MODULE = ibus
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-66360ad1-1.71.0-main.sock
-# environment
-TERM = xterm-256color
+VSCODE_IPC_HOOK = /run/user/1000/vscode-66360ad1-1.71.2-main.sock
 # environment
 SNAP_NAME = code
 # environment
-GSETTINGS_SCHEMA_DIR = /snap/code/106/usr/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /snap/code/108/usr/share/glib-2.0/schemas
 # environment
 IM_CONFIG_PHASE = 1
 # environment
@@ -221,7 +229,7 @@ GOPROXY = https://proxy.golang.org,direct
 # automatic
 <F = $(notdir $<)
 # environment
-SNAP_VERSION = 784b0177
+SNAP_VERSION = 74b1f979
 # default
 SUFFIXES := 
 # environment
@@ -229,13 +237,11 @@ VSCODE_CLI = 1
 # environment
 ELECTRON_NO_ATTACH_CONSOLE = 1
 # environment
-VTE_VERSION = 6800
-# environment
 SNAP_COMMON = /var/snap/code/common
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
-SNAP_USER_DATA = /home/brianz/snap/code/106
+SNAP_USER_DATA = /home/brianz/snap/code/108
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -243,7 +249,7 @@ GDMSESSION = ubuntu
 # environment
 SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd/void
 # variable set hash-table stats:
-# Load=115/1024=11%, Rehash=0, Collisions=10/144=7%
+# Load=119/1024=12%, Rehash=0, Collisions=4/149=3%
 
 # Pattern-specific Variable Values
 
@@ -251,9 +257,9 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 66306, inode 6557716): 7 files, no impossibilities.
+# . (device 66306, inode 6557716): 9 files, no impossibilities.
 
-# 7 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -261,12 +267,20 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Files
 
+default: build
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-09-19 19:34:45.014841231
+#  Last modified 2022-10-18 15:01:46.035575704
 #  File has been updated.
 #  Successfully updated.
+
+ 
+make: *** No rule to make target 'all'.  Stop.
 
 # Not a target:
 .DEFAULT:
@@ -281,21 +295,52 @@ all:
 #  File does not exist.
 #  File has not been updated.
 
+# Not a target:
+build:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+run-local:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 4):
+	docker login
+	docker build --file=blackswan/Dockerfile  -t web-frontend .
+	docker build --file=backend/Dockerfile  -t web-backend .
+	docker-compose -f docker-compose.yml build
+	docker-compose -f docker-compose.yml up
+
+init-backend:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 15):
+	alias air='$(go env GOPATH)/bin/air'
+	air
+
+stop-local:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+#  recipe to execute (from 'Makefile', line 11):
+	docker-compose -f docker-compose.yml down
+
 # files hash-table stats:
-# Load=4/1024=0%, Rehash=0, Collisions=0/14=0%
+# Load=9/1024=1%, Rehash=0, Collisions=0/20=0%
 # VPATH Search Paths
 
 # No 'vpath' search paths.
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 12 / storage = 107 B / avg = 8 B
-# current buf: size = 8162 B / used = 107 B / count = 12 / avg = 8 B
+# strcache buffers: 1 (0) / strings = 19 / storage = 178 B / avg = 9 B
+# current buf: size = 8162 B / used = 178 B / count = 19 / avg = 9 B
 
-# strcache performance: lookups = 16 / hit rate = 25%
+# strcache performance: lookups = 27 / hit rate = 29%
 # hash-table stats:
- 
-# Load=12/8192=0%, Rehash=0, Collisions=0/16=0%
-# Finished Make data base on Mon Sep 19 20:08:44 2022
+# Load=19/8192=0%, Rehash=0, Collisions=0/27=0%
+# Finished Make data base on Thu Oct 20 17:37:40 2022
 
  

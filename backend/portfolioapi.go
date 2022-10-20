@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -34,7 +33,7 @@ var TempEquities Equities
 func checkFile(filename string) error {
 	_, err := os.Stat(filename)
 	if os.IsNotExist(err) {
-		fmt.Println("New portfolio detected, initializing...")
+		logrus.Print("New portfolio detected, initializing...")
 		_, err := os.Create(filename)
 
 		StarterData := &[]EquityPost{
@@ -86,7 +85,7 @@ func readFile() {
 	dataSlice, ok := data.([]interface{})
 
 	if !ok {
-		fmt.Println("cannot convert equities JSON objects")
+		logrus.Print("cannot convert equities JSON objects")
 		os.Exit(1)
 	}
 
@@ -105,7 +104,7 @@ func readFile() {
 		objMap, ok := obj.(map[string]interface{})
 
 		if !ok {
-			fmt.Println("cannot convert interface{} to type map[string]interface{}")
+			logrus.Print("cannot convert interface{} to type map[string]interface{}")
 		}
 
 		if res, ok := objMap["ticker"].(string); ok {
@@ -138,6 +137,22 @@ func readFile() {
 
 	}
 
+}
+
+func retrieveEquities(w http.ResponseWriter, request *http.Request) {
+	// Enabling CORS
+	enableCors(&w)
+
+	// Sets the appropriate data type for JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Acces-Control-Allow-Origin", "*")
+
+	// Returns the status of the local host
+	w.WriteHeader(http.StatusOK)
+
+	logrus.Print(CurrentEquities, "retrieve current equities")
+
+	json.NewEncoder(w).Encode(CurrentEquities)
 }
 
 func addEquity(w http.ResponseWriter, request *http.Request) {
@@ -173,7 +188,7 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 		for i := 0; i < len(CurrentEquities); i++ {
 			if equityData.Ticker == CurrentEquities[i].Ticker {
 				if equityData.Shares > 0 {
-					fmt.Println("Security Already Exists - Shares Added")
+					logrus.Print("Security Already Exists - Shares Added")
 					if CurrentEquities[i].Shares+equityData.Shares >= 0 {
 						CurrentEquities[i].Shares += equityData.Shares
 
@@ -185,12 +200,12 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 					}
 					break
 				} else {
-					fmt.Println("No Security Added - No Shares to add")
+					logrus.Print("No Security Added - No Shares to add")
 					break
 				}
 
 			} else if equityData.Shares == 0 || equityData.Ticker == "" {
-				fmt.Println("Error Uploading Equity: Incomplete Data Sent")
+				logrus.Print("Error Uploading Equity: Incomplete Data Sent")
 			} else {
 				if i == len(CurrentEquities)-1 {
 
@@ -214,26 +229,12 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
 
-	fmt.Println(CurrentEquities, " current")
+	logrus.Print(CurrentEquities, " current")
 
 	json.NewEncoder(w).Encode(CurrentEquities)
 }
 
-func retrieveEquities(w http.ResponseWriter, request *http.Request) {
-	// Enabling CORS
-	enableCors(&w)
 
-	// Sets the appropriate data type for JSON data transfer
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Acces-Control-Allow-Origin", "*")
-
-	// Returns the status of the local host
-	w.WriteHeader(http.StatusOK)
-
-	fmt.Println(CurrentEquities, " retrieve current")
-
-	json.NewEncoder(w).Encode(CurrentEquities)
-}
 
 func modifyEquity(w http.ResponseWriter, request *http.Request) {
 	// Enabling CORS
@@ -284,8 +285,6 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 	// Uses the decoder to decode the response to Equity data at its memory location
 	decoder.Decode(&equityData)
 
-	fmt.Println(len(CurrentEquities))
-
 	if len(CurrentEquities) == 1 {
 		TempEquities = nil
 		CurrentEquities[0].Ticker = "0"
@@ -293,10 +292,6 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 		CurrentEquities[0].Price = 0
 		CurrentEquities[0].PriceLoaded = false
 		CurrentEquities[0].Value = 0
-
-		file, _ := json.MarshalIndent(CurrentEquities, "", " ")
-
-		_ = ioutil.WriteFile("Equities.json", file, 0644)
 
 	} else {
 		TempEquities = nil

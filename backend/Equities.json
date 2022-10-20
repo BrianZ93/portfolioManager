@@ -1,26 +1,18 @@
 [
  {
-  "ticker": "QQQ",
-  "shares": 100,
-  "price": 293.63,
-  "priceloaded": true,
-  "value": 291.05,
-  "message": ""
- },
- {
   "ticker": "AAPL",
   "shares": 200,
-  "price": 153.3,
+  "price": 153.35,
   "priceloaded": true,
-  "value": 154.48,
+  "value": 143.75,
   "message": ""
  },
  {
-  "ticker": "SPY",
-  "shares": 200,
-  "price": 294.63,
+  "ticker": "C",
+  "shares": 250,
+  "price": 16.18,
   "priceloaded": true,
-  "value": 388.55,
+  "value": 44.15,
   "message": ""
  }
 ]

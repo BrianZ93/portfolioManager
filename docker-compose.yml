@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  web-frontend:
+    image: web-frontend:latest
+    environment:
+      PORT: 3000
+      PROXY_API: http://backend:8080
+    ports:
+      - 3000:3000
+    volumes:
+      - $PWD/blackswan:/blackswan
+    command: "quasar dev"
+  web-backend:
+    image: web-backend:latest
+    ports:
+      - 8080:8080
+    volumes:
+      - $PWD/backend:/blackswan
+    command: "air"

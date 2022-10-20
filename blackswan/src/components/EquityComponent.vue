@@ -1,13 +1,19 @@
 <template>
   <q-page>
-    <h1>{{ title }}</h1>
+    <h1 style="text-align: center">{{ title }}</h1>
 
     <div>
       <div class="q-pa-md">
         <q-table
-          title="Equities"
+          :title="
+            'Positions Total - ' +
+            equitiesTotal
+              .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+              .toString()
+          "
           :columns="columns"
           :rows="equityRows"
+          :key="equities"
           @row-click="equityClick"
         >
         </q-table>
@@ -171,114 +177,12 @@
           </q-card>
         </q-dialog>
       </div>
-
-      <!-- Property Button with Dialog Box -->
-      <q-btn
-        class="glossy"
-        rounded
-        label="Add Property"
-        color="primary"
-        @click="persistentProperty = true"
-      ></q-btn>
-
-      <q-dialog
-        v-model="persistentProperty"
-        persistentProperty
-        transition-show="scale"
-        transition-hide="scale"
-      >
-        <q-card class="bg-black text-white" style="width: 300px">
-          <!-- Q-card-section is here for spacing on the title -->
-          <q-card-section>
-            <div class="text-h6 absolute-center"></div>
-          </q-card-section>
-
-          <q-card-section>
-            <div class="text-h6 absolute-center">New Property</div>
-          </q-card-section>
-
-          <q-card-section>
-            <q-input
-              autogrow
-              filled
-              v-model="form.description"
-              label="Description"
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.price"
-              label="Price"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.lien"
-              label="Lien"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.rate"
-              label="Rate"
-              mask="##.##%"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.years"
-              label="Years"
-              type="number"
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.monthsLeft"
-              label="Months Left"
-              type="number"
-            ></q-input>
-            <q-input
-              autogrow
-              prefix="$"
-              filled
-              v-model="form.value"
-              label="Value"
-              type="number"
-            ></q-input>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none"> </q-card-section>
-
-          <q-card-actions align="right" class="bg-black text-grey">
-            <q-btn
-              class="glossy"
-              rounded
-              color="primary"
-              label="Add Property"
-              @click="portfolioStore.importCurrentEquities"
-            ></q-btn>
-
-            <q-btn flat label="Cancel" v-close-popup></q-btn>
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onBeforeMount } from 'vue';
+import { defineComponent, ref, onBeforeMount, computed } from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { storeToRefs } from 'pinia';
 
@@ -296,15 +200,16 @@ export default defineComponent({
     let portfolioStore = usePortfolioStore();
 
     const { equities } = storeToRefs(portfolioStore);
-    const { realEstate } = storeToRefs(portfolioStore);
 
     const { form } = storeToRefs(portfolioStore);
 
     const equitiesImported = ref(false);
     const persistentEquity = ref(false);
-    const persistentProperty = ref(false);
     const persistentEquityEdit = ref(false);
 
+    const equitiesTotal = computed(() => portfolioStore.equitiesTotal);
+
+    // Equity Columns
     const columns = [
       {
         name: 'ticker',
@@ -330,7 +235,18 @@ export default defineComponent({
         label: 'Price',
         align: 'left',
         field: (row) => row.equityPrice,
-        format: (val) => `${val}`,
+        format: (val) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+        sortable: true,
+      },
+      {
+        name: 'value',
+        required: true,
+        label: 'Current Price',
+        align: 'left',
+        field: (row) => row.value,
+        format: (val) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
       {
@@ -338,8 +254,9 @@ export default defineComponent({
         required: true,
         label: 'Value',
         align: 'left',
-        field: (row) => row.value,
-        format: (val) => `${val}`,
+        field: (row) => row.value * row.shares,
+        format: (val) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
     ];
@@ -360,16 +277,15 @@ export default defineComponent({
 
     return {
       equities,
-      realEstate,
       portfolioStore,
       persistentEquity,
       persistentEquityEdit,
-      persistentProperty,
       form,
       columns,
       equityRows,
       equitiesImported,
       equityClick,
+      equitiesTotal,
       addEquity() {
         if (form.value.shares > 0 && typeof form.value.ticker == 'string') {
           portfolioStore.form.ticker = form.value.ticker;
@@ -382,7 +298,6 @@ export default defineComponent({
           portfolioStore.form.ticker = '';
           portfolioStore.form.shares = 0;
           portfolioStore.form.equityPrice = 0;
-        } else {
         }
       },
       modifyEquity() {

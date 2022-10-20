@@ -14,6 +14,7 @@ import (
 func main() {
 
 	readFile()
+	readREFile()
 	getPrices()
 	fmt.Println("MM-DD-YYYY: ", currentTime.Format("01-02-2006"))
 	handleRequests()
@@ -28,23 +29,23 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "\nhttp://localhost:8081/portfolio to inspect the portfolio page")
 }
 
-// Function to create the equities POST page
-func equitiesPage(w http.ResponseWriter, r *http.Request) {
-	// Enabling CORS
-	enableCors(&w)
-
-	fmt.Fprintf(w, "POST API Endpoint")
-}
-
 func handleRequests() {
 	http.HandleFunc("/", homePage)
 	http.HandleFunc("/index", indexPage)
-	http.HandleFunc("/equities", equitiesPage)
-	http.HandleFunc("/realestate", realEstatePage)
+
+	// Equities REST
 	http.HandleFunc("/portfolio", retrieveEquities)
 	http.HandleFunc("/portfolioadd", addEquity)
 	http.HandleFunc("/portfoliomod", modifyEquity)
 	http.HandleFunc("/portfoliodel", deleteEquity)
+
+	// Properties REST
+	http.HandleFunc("/properties", RERetrieve)
+	http.HandleFunc("/propertyadd", addProperty)
+	http.HandleFunc("/propertymod", modifyProperty)
+	http.HandleFunc("/propertydel", deleteProperty)
+
+
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }
 
