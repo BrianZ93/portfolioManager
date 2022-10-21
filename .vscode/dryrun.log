@@ -1,6 +1,6 @@
 make --dry-run --always-make --keep-going --print-directory
-make: Entering directory '/home/brianz/coding/blackSwan'
-make: Leaving directory '/home/brianz/coding/blackSwan'
+make: Entering directory '/home/brianz/coding/portfolio_manager'
+make: Leaving directory '/home/brianz/coding/portfolio_manager'
  
 make: *** No rule to make target 'build', needed by 'default'.
 

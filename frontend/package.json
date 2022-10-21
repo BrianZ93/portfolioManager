@@ -1,7 +1,7 @@
 {
-  "name": "blackswan",
+  "name": "portfoliomanager",
   "version": "0.0.1",
-  "description": "Black Swan Indicator",
+  "description": "Portfolio Manager",
   "productName": "Quasar App",
   "author": "Brian Zanayed",
   "private": true,
