@@ -57,11 +57,32 @@ export class Property {
   }
 }
 
+export class PropertyRow {
+  address: string;
+  marketValue: number;
+  lien: number;
+  equity: number;
+
+  constructor(
+    address: string,
+    marketValue: number,
+    lien: number,
+    equity: number
+  ) {
+    this.address = address;
+    this.marketValue = marketValue;
+    this.lien = lien;
+    this.equity = equity;
+  }
+}
+
 export const usePortfolioStore = defineStore('portfolioStore', {
   state: () => {
     return {
       equities: [],
       realEstate: new Map<number, Property>(),
+
+      propertyRows: [] as Array<PropertyRow>,
       // Equity table,
       equityRows: [] as Array<Equity>,
 
@@ -194,25 +215,39 @@ export const usePortfolioStore = defineStore('portfolioStore', {
       }
     },
     async importCurrentProperties() {
+      this.propertyRows = [] as Array<PropertyRow>;
+
       const res = await axios
         .get('http://localhost:8081/properties')
         .then((res: any) => {
-          this.realEstate.set(
-            res.Id,
-            new Property(
-              res.type,
-              res.id,
-              res.description,
-              res.price,
-              res.lien,
-              res.rate,
-              res.years,
-              res.monthsLeft,
-              res.value
-            )
-          );
-          console.log(res);
-          console.log(res.type);
+          for (let i = 0; i < res.data.length; i++) {
+            this.realEstate.set(
+              res.data[i].id,
+              new Property(
+                res.data[i].type,
+                res.data[i].id,
+                res.data[i].description,
+                res.data[i].price,
+                res.data[i].lien,
+                res.data[i].rate,
+                res.data[i].years,
+                res.data[i].monthsLeft,
+                res.data[i].value
+              )
+            );
+
+            this.propertyRows.push(
+              new PropertyRow(
+                res.data[i].description,
+                res.data[i].value,
+                res.data[i].lien,
+                res.data[i].value - res.data[i].lien
+              )
+            );
+          }
+
+          console.log(this.realEstate);
+          console.log(this.propertyRows);
         });
     },
     async modifyEquity() {

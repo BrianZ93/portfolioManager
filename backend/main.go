@@ -4,11 +4,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
 	// "bytes"
 	// "uuid"
 	// "flag"
 	// "os"
 	// "github.com/sirupsen/logrus"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -16,7 +19,7 @@ func main() {
 	readFile()
 	readREFile()
 	getPrices()
-	fmt.Println("MM-DD-YYYY: ", currentTime.Format("01-02-2006"))
+	logrus.Println("MM-DD-YYYY: ", currentTime.Format("01-02-2006"))
 	handleRequests()
 
 }
@@ -44,7 +47,6 @@ func handleRequests() {
 	http.HandleFunc("/propertyadd", addProperty)
 	http.HandleFunc("/propertymod", modifyProperty)
 	http.HandleFunc("/propertydel", deleteProperty)
-
 
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }

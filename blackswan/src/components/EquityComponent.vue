@@ -216,8 +216,8 @@ export default defineComponent({
         required: true,
         label: 'Ticker',
         align: 'left',
-        field: (row) => row.ticker,
-        format: (val) => `${val}`,
+        field: (row: Record<string, unknown>) => row.ticker,
+        format: (val: number) => `${val}`,
         sortable: true,
       },
       {
@@ -225,8 +225,8 @@ export default defineComponent({
         required: true,
         label: 'Shares',
         align: 'left',
-        field: (row) => row.shares,
-        format: (val) => `${val}`,
+        field: (row: Record<string, unknown>) => row.shares,
+        format: (val: number) => `${val}`,
         sortable: true,
       },
       {
@@ -234,8 +234,8 @@ export default defineComponent({
         required: true,
         label: 'Price',
         align: 'left',
-        field: (row) => row.equityPrice,
-        format: (val) =>
+        field: (row: Record<string, unknown>) => row.equityPrice,
+        format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
@@ -244,8 +244,8 @@ export default defineComponent({
         required: true,
         label: 'Current Price',
         align: 'left',
-        field: (row) => row.value,
-        format: (val) =>
+        field: (row: Record<string, unknown>) => row.value,
+        format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
@@ -254,8 +254,8 @@ export default defineComponent({
         required: true,
         label: 'Value',
         align: 'left',
-        field: (row) => row.value * row.shares,
-        format: (val) =>
+        field: (row: any) => row.value * row.shares,
+        format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
@@ -263,7 +263,7 @@ export default defineComponent({
 
     const { equityRows } = storeToRefs(portfolioStore);
 
-    function equityClick(e: Event, row) {
+    function equityClick(e: Event, row: any) {
       portfolioStore.form.modticker = row.ticker;
       portfolioStore.form.modshares = row.shares;
       portfolioStore.form.modprice = row.equityPrice;

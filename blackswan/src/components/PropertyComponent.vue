@@ -130,19 +130,146 @@
       </q-card>
     </q-dialog>
 
+    <!-- Modify Dialog -->
+
+    <q-dialog
+      v-model="persistentPropertyEdit"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
+      <q-card class="bg-black text-white" style="width: 300px">
+        <!-- Q-card-section is here for spacing on the title -->
+        <q-card-section>
+          <div class="text-h6 absolute-center"></div>
+        </q-card-section>
+
+        <q-card-section>
+          <div class="text-h6 absolute-center">Property Data</div>
+        </q-card-section>
+
+        <q-card-section>
+          <form class="columns" action="" method="POST">
+            <q-select
+              square
+              filled
+              v-model="modelType"
+              :options="options"
+              label="Property Type"
+            />
+            <q-input
+              autogrow
+              filled
+              v-model="form.moddescription"
+              label="Street Address"
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modprice"
+              label="Purchase Price"
+              mask="$#.##"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modlien"
+              label="Loan Amount"
+              mask="$#.##"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modrate"
+              label="Interest Rate"
+              mask="#.##%"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modyears"
+              label="Term (years)"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modmonthsLeft"
+              label="Term (months)"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+              disable
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modvalue"
+              label="Current Market Value"
+              mask="$#.##"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
+          </form>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none"> </q-card-section>
+
+        <q-card-actions align="right" class="bg-black text-grey">
+          <q-btn
+            class="glossy"
+            rounded
+            color="primary"
+            label="New Property"
+            @click="addProperty"
+          ></q-btn>
+
+          <!-- <q-popup-proxy>
+            <q-banner>
+              <template v-slot:avatar>
+                <q-icon name="warning" color="primary"></q-icon>
+              </template>
+              Please enter a number of shares greater than 0 and a valid symbol
+            </q-banner>
+          </q-popup-proxy> -->
+
+          <q-btn flat label="Cancel" v-close-popup></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+
     <div class="row">
-      <div class="col-xs-12 col-sm-6 col-md-4">col</div>
-      <div class="col-xs-12 col-sm-6 col-md-4">col</div>
+      <div class="col-sm-12 col-md-6 col-lg-4 q-pa-md">
+        <q-table
+          title="Properties"
+          :columns="columns"
+          :rows="propertyRows"
+          :key="propertyRows"
+          @row-click="propertyClick"
+        >
+        </q-table>
+      </div>
       <div class="col-xs-12 col-sm-6 col-md-4">col</div>
     </div>
   </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { defineComponent, ref, computed, onBeforeMount } from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { storeToRefs } from 'pinia';
-// import { PropertySummary } from './models';
 
 export default defineComponent({
   name: 'PropertyComponent',
@@ -161,11 +288,81 @@ export default defineComponent({
     const persistentProperty = ref(false);
     const persistentPropertyEdit = ref(false);
 
+    const realEstate = computed(() => portfolioStore.realEstate);
+
+    // Property Columns
+    const columns = [
+      {
+        name: 'address',
+        required: true,
+        label: 'Street Address',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.address,
+        format: (val: number) => `${val}`,
+        sortable: true,
+      },
+      {
+        name: 'value',
+        required: true,
+        label: 'Market Value',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.marketValue,
+        format: (val: number) => `${val}`,
+        sortable: true,
+      },
+      {
+        name: 'lien',
+        required: true,
+        label: 'Lien',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.lien,
+        format: (val: number) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+        sortable: true,
+      },
+      {
+        name: 'equity',
+        required: true,
+        label: 'Equity',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.equity,
+        format: (val: number) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+        sortable: true,
+      },
+    ];
+
+    const { propertyRows } = storeToRefs(portfolioStore);
+
+    function propertyClick(e: Event, row: any) {
+      console.log(row);
+
+      portfolioStore.form.modid = row.id;
+      portfolioStore.form.modtype = row.type;
+      portfolioStore.form.moddescription = row.description;
+      portfolioStore.form.modREprice = row.price;
+      portfolioStore.form.modlien = row.lien;
+      portfolioStore.form.modrate = row.rate;
+      portfolioStore.form.modyears = row.years;
+      portfolioStore.form.modmonthsLeft = row.monthsLeft;
+      portfolioStore.form.modvalue = row.value;
+
+      persistentPropertyEdit.value = true;
+    }
+
+    onBeforeMount(() => {
+      portfolioStore.importCurrentProperties();
+    });
+
     return {
       portfolioStore,
       propertiesImported,
       persistentProperty,
       persistentPropertyEdit,
+      realEstate,
+      columns,
+      propertyRows,
+      propertyClick,
       form,
       addProperty() {
         console.log('attempted');

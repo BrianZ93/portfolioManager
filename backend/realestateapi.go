@@ -5,13 +5,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
-	"reflect"
 
 	"github.com/sirupsen/logrus"
 )
 
 type RealEstatePost struct {
-	Id          float64 	`json:"id"`
+	Id          float64 `json:"id"`
 	Description string  `json:"description"`
 	Price       float64 `json:"price"`
 	Lien        float64 `json:"lien"`
@@ -19,13 +18,12 @@ type RealEstatePost struct {
 	Years       float64 `json:"years"`
 	Value       float64 `json:"value"`
 	MonthsLeft  float64 `json:"monthsleft"`
-	Type 		string  `json:"type"`
+	Type        string  `json:"type"`
 }
 
 type RealEstate []RealEstatePost
 
 var CurrentProperties RealEstate
-var CurrentProperty RealEstatePost
 var TempProperties RealEstate
 
 func checkREFile(filename string) error {
@@ -44,7 +42,7 @@ func checkREFile(filename string) error {
 				Years:       30,
 				MonthsLeft:  360,
 				Value:       330000,
-				Type: 		 "Empty",
+				Type:        "Empty",
 			},
 		}
 		file, _ := json.MarshalIndent(StarterREData, "", " ")
@@ -81,103 +79,89 @@ func readREFile() {
 	redataslice, ok := redata.([]interface{})
 
 	if !ok {
-		logrus.Print("cannot convert properties JSON objects")
+		logrus.Error("cannot convert properties JSON objects")
 		os.Exit(1)
 	}
 
-	logrus.Print("Number of JSON objects: ", len(redataslice))
-
 	logrus.Print(redata, "initial RE data")
 
-	var CurFloat float64
-	var CurStr string
+	var CurId float64
+	IdProceed := false
+	var CurDesc string
+	DescProceed := false
+	var CurPrice float64
+	PriceProceed := false
+	var CurLien float64
+	LienProceed := false
+	var CurRate float64
+	RateProceed := false
+	var CurYears float64
+	YearsProceed := false
+	var CurValue float64
+	ValueProceed := false
+	var CurMonthsLeft float64
+	MonthsLeftProceed := false
+	var CurType string
+	TypeProceed := false
 
 	var CurrentIndex = 0
 
-	DataProceed := true
-
 	for _, obj := range redataslice {
 		objMap, ok := obj.(map[string]interface{})
-
-		logrus.Print(objMap["id"])
-		logrus.Print(reflect.TypeOf(objMap["id"]))
 
 		if !ok {
 			logrus.Print("cannot convert RE interface{} to type map[string]interface{}")
 		}
 
 		// The below if statements check on the data type to see if an upload is possible
-		if res, ok := objMap["id"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.Id = CurFloat
-		}
-		 
-
-		if res, ok := objMap["description"].(string); !ok {
-			CurStr = res
-			DataProceed = false
-			CurrentProperty.Description = CurStr
-		}
-		 
-
-		if res, ok := objMap["price"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.Price = CurFloat
+		if res, ok := objMap["id"].(float64); ok {
+			CurId = res
+			IdProceed = true
 		}
 
-		 
-
-		if res, ok := objMap["lien"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.Lien = CurFloat
+		if res, ok := objMap["description"].(string); ok {
+			CurDesc = res
+			DescProceed = true
 		}
 
-		 
-
-		if res, ok := objMap["rate"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.Rate = CurFloat
-		}
-		 
-
-		if res, ok := objMap["years"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.Years = CurFloat
-		}
-		 
-
-		if res, ok := objMap["value"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.Value = CurFloat
-		}
-		 
-
-		if res, ok := objMap["monthsleft"].(float64); !ok {
-			CurFloat = res
-			DataProceed = false
-			CurrentProperty.MonthsLeft = CurFloat
-		}
-	 
-
-		if res, ok := objMap["type"].(string); !ok {
-			CurStr = res
-			DataProceed = false
-			CurrentProperty.Type = CurStr
+		if res, ok := objMap["price"].(float64); ok {
+			CurPrice = res
+			PriceProceed = true
 		}
 
-		 
-
-		if DataProceed {
-			CurrentProperties = append(CurrentProperties, CurrentProperty)
+		if res, ok := objMap["lien"].(float64); ok {
+			CurLien = res
+			LienProceed = true
 		}
 
-		logrus.Info(CurrentProperties)
+		if res, ok := objMap["rate"].(float64); ok {
+			CurRate = res
+			RateProceed = true
+		}
+
+		if res, ok := objMap["years"].(float64); ok {
+			CurYears = res
+			YearsProceed = true
+		}
+
+		if res, ok := objMap["value"].(float64); ok {
+			CurValue = res
+			ValueProceed = true
+		}
+
+		if res, ok := objMap["monthsleft"].(float64); ok {
+			CurMonthsLeft = res
+			MonthsLeftProceed = true
+		}
+
+		if res, ok := objMap["type"].(string); ok {
+			CurType = res
+			TypeProceed = true
+		}
+
+		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed {
+			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType})
+		}
 
 		CurrentIndex++
 	}
@@ -216,8 +200,6 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 
 	// Uses the decoder to decode the response to Property data at its memory location
 	decoder.Decode(&propertyData)
-
-	logrus.Print("++++++++++++++++++",propertyData)
 
 	TempProperties = nil
 
