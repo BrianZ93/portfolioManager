@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Oct 21 07:21:38 2022
+# Make data base, printed on Sat Oct 22 17:04:18 2022
 
 # Variables
 
@@ -95,7 +95,7 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 598522
+VSCODE_PID = 1144252
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -279,6 +279,7 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
+ 
 # Not a target:
 all:
 #  Command line target.
@@ -302,7 +303,6 @@ run-local:
 	docker build --file=backend/Dockerfile  -t web-backend .
 	docker-compose -f docker-compose.yml build
 	docker-compose -f docker-compose.yml up
- 
 
 stop-local:
 #  Implicit rule search has not been done.
@@ -325,6 +325,6 @@ stop-local:
 # strcache performance: lookups = 25 / hit rate = 28%
 # hash-table stats:
 # Load=18/8192=0%, Rehash=0, Collisions=0/25=0%
-# Finished Make data base on Fri Oct 21 07:21:38 2022
+# Finished Make data base on Sat Oct 22 17:04:18 2022
 
  

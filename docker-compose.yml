@@ -4,7 +4,6 @@ services:
     image: web-frontend:latest
     environment:
       PORT: 3000
-      PROXY_API: http://backend:8080
     ports:
       - 3000:3000
     volumes:

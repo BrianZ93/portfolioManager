@@ -1,6 +1,4 @@
-# Backend
-
-FROM golang:1.18.1-bullseye as builder
+FROM golang:1.18.1-bullseye as backend
 
 RUN mkdir -p /app
 
