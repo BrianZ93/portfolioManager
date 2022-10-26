@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Sat Oct 22 17:04:18 2022
+# Make data base, printed on Wed Oct 26 10:44:02 2022
 
 # Variables
 
@@ -95,7 +95,7 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 1144252
+VSCODE_PID = 2185504
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -251,9 +251,9 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 66306, inode 6557716): 9 files, no impossibilities.
+# . (device 66306, inode 6557716): 11 files, no impossibilities.
 
-# 9 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -269,7 +269,7 @@ default: build
 # Not a target:
 Makefile:
 #  Implicit rule search has been done.
-#  Last modified 2022-10-20 17:39:17.243597312
+#  Last modified 2022-10-23 15:53:49.007202201
 #  File has been updated.
 #  Successfully updated.
 
@@ -279,7 +279,6 @@ Makefile:
 #  Modification time never checked.
 #  File has not been updated.
 
- 
 # Not a target:
 all:
 #  Command line target.
@@ -299,10 +298,11 @@ run-local:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 4):
 	docker login
-	docker build --file=blackswan/Dockerfile  -t web-frontend .
-	docker build --file=backend/Dockerfile  -t web-backend .
+	docker build --file=frontend/Dockerfile -t web-frontend .
+	docker build --file=backend/Dockerfile -t web-backend .
 	docker-compose -f docker-compose.yml build
 	docker-compose -f docker-compose.yml up
+ 
 
 stop-local:
 #  Implicit rule search has not been done.
@@ -310,6 +310,8 @@ stop-local:
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 11):
 	docker-compose -f docker-compose.yml down
+	docker network prune
+	docker image prune -a
 
 # files hash-table stats:
 # Load=8/1024=1%, Rehash=0, Collisions=0/19=0%
@@ -319,12 +321,12 @@ stop-local:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 18 / storage = 164 B / avg = 9 B
-# current buf: size = 8162 B / used = 164 B / count = 18 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 20 / storage = 187 B / avg = 9 B
+# current buf: size = 8162 B / used = 187 B / count = 20 / avg = 9 B
 
-# strcache performance: lookups = 25 / hit rate = 28%
+# strcache performance: lookups = 27 / hit rate = 25%
 # hash-table stats:
-# Load=18/8192=0%, Rehash=0, Collisions=0/25=0%
-# Finished Make data base on Sat Oct 22 17:04:18 2022
+# Load=20/8192=0%, Rehash=0, Collisions=0/27=0%
+# Finished Make data base on Wed Oct 26 10:44:02 2022
 
  

@@ -232,8 +232,15 @@
             class="glossy"
             rounded
             color="primary"
-            label="New Property"
+            label="Modify"
             @click="addProperty"
+          ></q-btn>
+          <q-btn
+            class="glossy"
+            rounded
+            color="primary"
+            label="Delete"
+            @click="deleteProperty"
           ></q-btn>
 
           <!-- <q-popup-proxy>
@@ -251,7 +258,7 @@
     </q-dialog>
 
     <div class="row">
-      <div class="col-sm-12 col-md-6 col-lg-4 q-pa-md">
+      <div class="col q-pa-md">
         <q-table
           title="Properties"
           :columns="columns"
@@ -261,7 +268,6 @@
         >
         </q-table>
       </div>
-      <div class="col-xs-12 col-sm-6 col-md-4">col</div>
     </div>
   </q-page>
 </template>
@@ -297,7 +303,16 @@ export default defineComponent({
         required: true,
         label: 'Street Address',
         align: 'left',
-        field: (row: Record<string, unknown>) => row.address,
+        field: (row: Record<string, unknown>) => row.description,
+        format: (val: string) => `${val}`,
+        sortable: true,
+      },
+      {
+        name: 'type',
+        required: true,
+        label: 'Type',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.type,
         format: (val: number) => `${val}`,
         sortable: true,
       },
@@ -306,7 +321,7 @@ export default defineComponent({
         required: true,
         label: 'Market Value',
         align: 'left',
-        field: (row: Record<string, unknown>) => row.marketValue,
+        field: (row: Record<string, unknown>) => row.value,
         format: (val: number) => `${val}`,
         sortable: true,
       },
@@ -365,8 +380,6 @@ export default defineComponent({
       propertyClick,
       form,
       addProperty() {
-        console.log('attempted');
-        console.log('it worked');
         portfolioStore.form.type = form.value.type;
         portfolioStore.form.description = form.value.description;
         portfolioStore.form.price = form.value.price;
@@ -379,14 +392,16 @@ export default defineComponent({
         portfolioStore.addPropertyAPI();
 
         portfolioStore.form.description = '';
-        // portfolioStore.form.price = 0;
-        // portfolioStore.form.lien = 0;
-        // portfolioStore.form.rate = 0;
-        // portfolioStore.form.years = 0;
-        // portfolioStore.form.value = 0;
       },
       modelType: ref(null),
       options: ['Primary Residence', 'Second Home', 'Investment Property'],
+      deleteProperty() {
+        portfolioStore.form.delcurrentproperty = form.value.modid;
+
+        portfolioStore.deleteProperty();
+
+        persistentPropertyEdit.value = false;
+      },
     };
   },
 });

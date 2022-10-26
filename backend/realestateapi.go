@@ -211,7 +211,33 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 
 		_ = ioutil.WriteFile("Properties.json", file, 0644)
 	} else {
-		CurrentProperties = append(CurrentProperties, RealEstatePost{Id: float64(len(CurrentProperties)), Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type})
+
+		// Checking if CurrentProperties contain the ID to be added
+		idTaken := false
+		for _, property := range CurrentProperties {
+			if property.Id == float64(len(CurrentProperties)) {
+				idTaken = true
+			}
+		}
+
+		var NewId float64
+
+		if idTaken {
+			n := float64(0)
+			for n < float64(len(CurrentProperties)) {
+				for _, property := range CurrentProperties {
+					if property.Id == float64(len(CurrentProperties)) {
+						continue
+					} else {
+						NewId = n
+						break
+					}
+
+				}
+			}
+		}
+
+		CurrentProperties = append(CurrentProperties, RealEstatePost{Id: NewId, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type})
 
 		file, _ := json.MarshalIndent(CurrentProperties, "", " ")
 

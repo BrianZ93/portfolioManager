@@ -34,6 +34,27 @@
 
     <PropertyComponent v-if="tab == 'Real Estate'" title="Properties">
     </PropertyComponent>
+
+    <q-footer reveal elevated>
+      <q-toolbar>
+        <q-toolbar-title class="col-shrink">Market Pulse</q-toolbar-title>
+
+        <q-section class="row" style="justify-content: center">
+          <q-item>S&P 500</q-item>
+          <q-item>{{ indexStore.data[2] }}</q-item>
+          <q-item>{{ indexStore.data[3] }}</q-item>
+          <q-item>NASDAQ</q-item>
+          <q-item>{{ indexStore.data[6] }}</q-item>
+          <q-item>{{ indexStore.data[7] }}</q-item>
+          <q-item>DOW JONES</q-item>
+          <q-item>{{ indexStore.data[4] }}</q-item>
+          <q-item>{{ indexStore.data[5] }}</q-item>
+          <q-item>VIX</q-item>
+          <q-item>{{ indexStore.data[0] }}</q-item>
+          <q-item>{{ indexStore.data[1] }}</q-item>
+        </q-section>
+      </q-toolbar>
+    </q-footer>
   </q-page>
 </template>
 
@@ -42,19 +63,23 @@ import { defineComponent, onBeforeMount, ref } from 'vue';
 import EquityComponent from '../components/EquityComponent.vue';
 import PropertyComponent from '../components/PropertyComponent.vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
+import { useIndexStore } from 'src/stores/indexes-store';
 
 export default defineComponent({
   name: 'PortfolioPage',
   components: { EquityComponent, PropertyComponent },
   setup() {
     const portfolioStore = usePortfolioStore();
+    const indexStore = useIndexStore();
 
     onBeforeMount(async () => {
       portfolioStore.importCurrentEquities();
+      indexStore.getData();
     });
 
     return {
       tab: ref('Full Portfolio'),
+      indexStore,
     };
   },
 });

@@ -58,20 +58,38 @@ export class Property {
 }
 
 export class PropertyRow {
-  address: string;
-  marketValue: number;
+  type: string;
+  id: number;
+  description: string;
+  price: number;
   lien: number;
+  rate: number;
+  years: number;
+  monthsLeft: number;
+  value: number;
   equity: number;
 
   constructor(
-    address: string,
-    marketValue: number,
+    type: string,
+    id: number,
+    description: string,
+    price: number,
     lien: number,
+    rate: number,
+    years: number,
+    monthsLeft: number,
+    value: number,
     equity: number
   ) {
-    this.address = address;
-    this.marketValue = marketValue;
+    this.type = type;
+    this.id = id;
+    this.description = description;
+    this.price = price;
     this.lien = lien;
+    this.rate = rate;
+    this.years = years;
+    this.monthsLeft = monthsLeft;
+    this.value = value;
     this.equity = equity;
   }
 }
@@ -129,6 +147,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         modyears: 30,
         modmonthsLeft: 360,
         modvalue: 0,
+
+        // Property Delete Form Data
+        delcurrentproperty: 0,
       },
     };
   },
@@ -238,9 +259,15 @@ export const usePortfolioStore = defineStore('portfolioStore', {
 
             this.propertyRows.push(
               new PropertyRow(
+                res.data[i].type,
+                res.data[i].id,
                 res.data[i].description,
-                res.data[i].value,
+                res.data[i].price,
                 res.data[i].lien,
+                res.data[i].rate,
+                res.data[i].years,
+                res.data[i].monthsLeft,
+                res.data[i].value,
                 res.data[i].value - res.data[i].lien
               )
             );
@@ -278,6 +305,36 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         .then((response) => {
           console.log(response);
           this.importCurrentEquities();
+        });
+    },
+    // async modifyProperty() {
+    //   console.log(Number(this.form.modcurrentprice));
+
+    //   axios
+    //     .post(
+    //       'http://localhost:8081/portfoliomod',
+    //       JSON.stringify({
+    //         ticker: this.form.modcurrentticker,
+    //         shares: Number(this.form.modcurrentshares),
+    //         price: Number(this.form.modcurrentprice),
+    //       })
+    //     )
+    //     .then((response) => {
+    //       console.log(response);
+    //       this.importCurrentEquities();
+    //     });
+    // },
+    async deleteProperty() {
+      axios
+        .post(
+          'http://localhost:8081/propertydel',
+          JSON.stringify({
+            id: this.form.delcurrentproperty,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
         });
     },
   },
