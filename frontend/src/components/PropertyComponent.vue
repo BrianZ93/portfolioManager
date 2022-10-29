@@ -113,7 +113,7 @@
             rounded
             color="primary"
             label="New Property"
-            @click="addProperty"
+            @click="addProperty(modelType)"
           ></q-btn>
 
           <!-- <q-popup-proxy>
@@ -322,7 +322,8 @@ export default defineComponent({
         label: 'Market Value',
         align: 'left',
         field: (row: Record<string, unknown>) => row.value,
-        format: (val: number) => `${val}`,
+        format: (val: number) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
       {
@@ -379,8 +380,8 @@ export default defineComponent({
       propertyRows,
       propertyClick,
       form,
-      addProperty() {
-        portfolioStore.form.type = form.value.type;
+      addProperty(modelType: string) {
+        portfolioStore.form.type = modelType;
         portfolioStore.form.description = form.value.description;
         portfolioStore.form.price = form.value.price;
         portfolioStore.form.lien = form.value.lien;

@@ -80,7 +80,6 @@ func readREFile() {
 
 	if !ok {
 		logrus.Error("cannot convert properties JSON objects")
-		os.Exit(1)
 	}
 
 	logrus.Print(redata, "initial RE data")
@@ -212,28 +211,23 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 		_ = ioutil.WriteFile("Properties.json", file, 0644)
 	} else {
 
-		// Checking if CurrentProperties contain the ID to be added
-		idTaken := false
-		for _, property := range CurrentProperties {
-			if property.Id == float64(len(CurrentProperties)) {
-				idTaken = true
-			}
-		}
+		NewId := float64(len(CurrentProperties))
 
-		var NewId float64
+		IdAvailable := false
+		IdInBatch := false
 
-		if idTaken {
-			n := float64(0)
-			for n < float64(len(CurrentProperties)) {
-				for _, property := range CurrentProperties {
-					if property.Id == float64(len(CurrentProperties)) {
-						continue
-					} else {
-						NewId = n
-						break
-					}
-
+		for !IdAvailable {
+			IdInBatch = false
+			for _, property := range CurrentProperties {
+				if NewId == property.Id {
+					IdInBatch = true
 				}
+			}
+
+			if !IdInBatch {
+				IdAvailable = true
+			} else {
+				NewId++
 			}
 		}
 
@@ -321,6 +315,8 @@ func deleteProperty(w http.ResponseWriter, request *http.Request) {
 		TempProperties = nil
 		for property := range CurrentProperties {
 			if propertyData.Id == CurrentProperties[property].Id {
+				logrus.Info(propertyData.Id)
+				logrus.Info(CurrentProperties[property].Id)
 				continue
 			} else {
 				TempProperties = append(TempProperties, CurrentProperties[property])

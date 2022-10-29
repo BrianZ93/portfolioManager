@@ -228,8 +228,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 );
               }
             }
-
-            this.equityRows.shift();
           });
       } catch {
         console.log('Backend API is not available');
@@ -272,9 +270,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
               )
             );
           }
-
-          console.log(this.realEstate);
-          console.log(this.propertyRows);
         });
     },
     async modifyEquity() {

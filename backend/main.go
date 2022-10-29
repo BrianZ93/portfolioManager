@@ -5,12 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	// "bytes"
-	// "uuid"
-	// "flag"
-	// "os"
-	// "github.com/sirupsen/logrus"
-
 	"github.com/sirupsen/logrus"
 )
 

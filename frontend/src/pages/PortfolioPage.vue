@@ -35,24 +35,155 @@
     <PropertyComponent v-if="tab == 'Real Estate'" title="Properties">
     </PropertyComponent>
 
-    <q-footer reveal elevated>
+    <q-footer
+      style="background-color: rgb(16, 16, 16)"
+      reveal
+      elevated
+      bordered
+    >
       <q-toolbar>
-        <q-toolbar-title class="col-shrink">Market Pulse</q-toolbar-title>
+        <q-toolbar-title class="col-shrink" style="color: gray"
+          >Market Pulse</q-toolbar-title
+        >
 
-        <q-section class="row" style="justify-content: center">
-          <q-item>S&P 500</q-item>
-          <q-item>{{ indexStore.data[2] }}</q-item>
-          <q-item>{{ indexStore.data[3] }}</q-item>
-          <q-item>NASDAQ</q-item>
-          <q-item>{{ indexStore.data[6] }}</q-item>
-          <q-item>{{ indexStore.data[7] }}</q-item>
-          <q-item>DOW JONES</q-item>
-          <q-item>{{ indexStore.data[4] }}</q-item>
-          <q-item>{{ indexStore.data[5] }}</q-item>
-          <q-item>VIX</q-item>
-          <q-item>{{ indexStore.data[0] }}</q-item>
-          <q-item>{{ indexStore.data[1] }}</q-item>
-        </q-section>
+        <q-item style="text-align: center">
+          <q-item-section
+            :style="
+              indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+            >S&P 500</q-item-section
+          >
+          <q-item-section
+            :style="
+              indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+          >
+            {{
+              indexStore.data[2].toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })
+            }}
+            {{
+              parseFloat(indexStore.data[3]).toFixed(2) + '%'
+            }}</q-item-section
+          >
+          <q-icon
+            v-if="indexStore.data[3] < 0"
+            style="color: red"
+            name="arrow_drop_down"
+            size="lg"
+          ></q-icon>
+          <q-icon
+            v-if="indexStore.data[3] > 0"
+            style="color: green"
+            name="arrow_drop_up"
+            size="lg"
+          ></q-icon>
+          <q-item-section></q-item-section>
+        </q-item>
+
+        <q-item style="text-align: center">
+          <q-item-section
+            :style="
+              indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+            >NASDAQ</q-item-section
+          >
+          <q-item-section
+            :style="
+              indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+          >
+            {{
+              indexStore.data[6].toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })
+            }}
+            {{
+              parseFloat(indexStore.data[7]).toFixed(2) + '%'
+            }}</q-item-section
+          >
+          <q-icon
+            v-if="indexStore.data[7] < 0"
+            style="color: red"
+            name="arrow_drop_down"
+            size="lg"
+          ></q-icon>
+          <q-icon
+            v-if="indexStore.data[7] > 0"
+            style="color: green"
+            name="arrow_drop_up"
+            size="lg"
+          ></q-icon>
+          <q-item-section></q-item-section>
+        </q-item>
+
+        <q-item style="text-align: center">
+          <q-item-section
+            :style="
+              indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+            >Dow Jones</q-item-section
+          >
+          <q-item-section
+            :style="
+              indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+            >{{
+              indexStore.data[4].toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              })
+            }}
+            {{
+              parseFloat(indexStore.data[5]).toFixed(2) + '%'
+            }}</q-item-section
+          >
+          <q-icon
+            v-if="indexStore.data[5] < 0"
+            style="color: red"
+            name="arrow_drop_down"
+            size="lg"
+          ></q-icon>
+          <q-icon
+            v-if="indexStore.data[5] > 0"
+            style="color: green"
+            name="arrow_drop_up"
+            size="lg"
+          ></q-icon>
+          <q-item-section></q-item-section>
+        </q-item>
+
+        <q-item style="text-align: center">
+          <q-item-section
+            :style="
+              indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+            >VIX</q-item-section
+          >
+          <q-item-section
+            :style="
+              indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
+            "
+            >{{ indexStore.data[0] }}
+            {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
+          </q-item-section>
+          <q-icon
+            v-if="indexStore.data[1] < 0"
+            style="color: red"
+            name="arrow_drop_down"
+            size="lg"
+          ></q-icon>
+          <q-icon
+            v-if="indexStore.data[1] > 0"
+            style="color: green"
+            name="arrow_drop_up"
+            size="lg"
+          ></q-icon>
+          <q-item-section></q-item-section>
+        </q-item>
       </q-toolbar>
     </q-footer>
   </q-page>
@@ -64,6 +195,7 @@ import EquityComponent from '../components/EquityComponent.vue';
 import PropertyComponent from '../components/PropertyComponent.vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { useIndexStore } from 'src/stores/indexes-store';
+import { storeToRefs } from 'pinia';
 
 export default defineComponent({
   name: 'PortfolioPage',
@@ -71,6 +203,8 @@ export default defineComponent({
   setup() {
     const portfolioStore = usePortfolioStore();
     const indexStore = useIndexStore();
+
+    const { equityRows } = storeToRefs(portfolioStore);
 
     onBeforeMount(async () => {
       portfolioStore.importCurrentEquities();
@@ -80,6 +214,7 @@ export default defineComponent({
     return {
       tab: ref('Full Portfolio'),
       indexStore,
+      equityRows,
     };
   },
 });

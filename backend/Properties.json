@@ -1,13 +1,24 @@
 [
  {
-  "id": 0,
-  "description": "",
-  "price": 0,
-  "lien": 0,
+  "id": 1,
+  "description": "4530 N Magnolia Ave",
+  "price": 230000,
+  "lien": 209000,
   "rate": 0,
-  "years": 0,
-  "value": 0,
-  "monthsleft": 0,
-  "type": "Empty"
+  "years": 30,
+  "value": 315000,
+  "monthsleft": 360,
+  "type": "Investment Property"
+ },
+ {
+  "id": 2,
+  "description": "3352 N Glenlake",
+  "price": 315000,
+  "lien": 340000,
+  "rate": 0,
+  "years": 30,
+  "value": 425000,
+  "monthsleft": 360,
+  "type": "Second Home"
  }
 ]

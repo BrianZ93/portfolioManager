@@ -1,4 +1,4 @@
-module blackswan
+module backend
 
 go 1.18
 

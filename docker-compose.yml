@@ -1,18 +1,16 @@
-version: "3.9"
+version: "3"
 services:
-  web-frontend:
-    image: web-frontend:latest
-    environment:
-      PORT: 3000
-    ports:
-      - 3000:3000
+  frontend:
+    image: frontend
     volumes:
-      - $PWD/blackswan:/blackswan
-    command: "quasar dev"
-  web-backend:
-    image: web-backend:latest
+      - ./frontend:/frontend
     ports:
-      - 8080:8080
+      - 9000:9000
+    command: quasar dev
+  backend:
+    image: backend
     volumes:
-      - $PWD/backend:/blackswan
-    command: "air"
+      - ./backend:/backend
+    ports:
+      - 8081:8081
+    command: air
