@@ -1,7 +1,5 @@
 <template>
   <q-page>
-    <h1 style="text-align: center">{{ title }}</h1>
-
     <div style="text-align: center">
       <q-btn
         class="glossy"

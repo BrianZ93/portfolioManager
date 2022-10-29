@@ -1,25 +1,7 @@
 <template>
   <q-page>
-    <h1 style="text-align: center">{{ title }}</h1>
-
     <div>
-      <div class="q-pa-md">
-        <q-table
-          :title="
-            'Positions Total - ' +
-            equitiesTotal
-              .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-              .toString()
-          "
-          :columns="columns"
-          :rows="equityRows"
-          :key="equities"
-          @row-click="equityClick"
-        >
-        </q-table>
-      </div>
-
-      <div class="q-pa-md q-gutter-sm">
+      <div style="text-align: center">
         <q-btn
           class="glossy"
           rounded
@@ -177,6 +159,22 @@
           </q-card>
         </q-dialog>
       </div>
+    </div>
+
+    <div class="q-pa-md">
+      <q-table
+        :title="
+          'Positions Total - ' +
+          equitiesTotal
+            .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+            .toString()
+        "
+        :columns="columns"
+        :rows="equityRows"
+        :key="equities"
+        @row-click="equityClick"
+      >
+      </q-table>
     </div>
   </q-page>
 </template>

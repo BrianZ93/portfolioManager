@@ -94,6 +94,18 @@ export class PropertyRow {
   }
 }
 
+export class Ticker {
+  ticker: string;
+  price: number;
+  change: number;
+
+  constructor(ticker: string, price: number, change: number) {
+    this.ticker = ticker;
+    this.price = price;
+    this.change = change;
+  }
+}
+
 export const usePortfolioStore = defineStore('portfolioStore', {
   state: () => {
     return {

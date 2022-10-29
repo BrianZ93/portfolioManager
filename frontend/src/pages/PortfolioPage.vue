@@ -41,161 +41,183 @@
       elevated
       bordered
     >
-      <q-toolbar>
+      <q-toolbar class="ticker-tape">
         <q-toolbar-title class="col-shrink" style="color: gray"
           >Market Pulse</q-toolbar-title
         >
+        <div class="ticker">
+          <q-item style="text-align: center" class="ticker__item">
+            <q-item-section
+              :style="
+                indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+              >S&P 500
+              {{
+                indexStore.data[2].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+              {{ parseFloat(indexStore.data[3]).toFixed(2) + '%' }}
+            </q-item-section>
+            <q-item-section
+              :style="
+                indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+            >
+              {{
+                indexStore.data[2].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+              {{
+                parseFloat(indexStore.data[3]).toFixed(2) + '%'
+              }}</q-item-section
+            >
+            <q-icon
+              v-if="indexStore.data[3] < 0"
+              style="color: red"
+              name="arrow_drop_down"
+              size="lg"
+            ></q-icon>
+            <q-icon
+              v-if="indexStore.data[3] > 0"
+              style="color: green"
+              name="arrow_drop_up"
+              size="lg"
+            ></q-icon>
+          </q-item>
 
-        <q-item style="text-align: center">
-          <q-item-section
-            :style="
-              indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-            >S&P 500</q-item-section
-          >
-          <q-item-section
-            :style="
-              indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-          >
-            {{
-              indexStore.data[2].toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              })
-            }}
-            {{
-              parseFloat(indexStore.data[3]).toFixed(2) + '%'
-            }}</q-item-section
-          >
-          <q-icon
-            v-if="indexStore.data[3] < 0"
-            style="color: red"
-            name="arrow_drop_down"
-            size="lg"
-          ></q-icon>
-          <q-icon
-            v-if="indexStore.data[3] > 0"
-            style="color: green"
-            name="arrow_drop_up"
-            size="lg"
-          ></q-icon>
-          <q-item-section></q-item-section>
-        </q-item>
+          <q-item style="text-align: center" class="ticker__item">
+            <q-item-section
+              :style="
+                indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+              >NASDAQ
+              {{
+                indexStore.data[6].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+              {{
+                parseFloat(indexStore.data[7]).toFixed(2) + '%'
+              }}</q-item-section
+            >
+            <q-item-section
+              :style="
+                indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+            >
+              {{
+                indexStore.data[6].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+              {{
+                parseFloat(indexStore.data[7]).toFixed(2) + '%'
+              }}</q-item-section
+            >
+            <q-icon
+              v-if="indexStore.data[7] < 0"
+              style="color: red"
+              name="arrow_drop_down"
+              size="lg"
+            ></q-icon>
+            <q-icon
+              v-if="indexStore.data[7] > 0"
+              style="color: green"
+              name="arrow_drop_up"
+              size="lg"
+            ></q-icon>
+          </q-item>
 
-        <q-item style="text-align: center">
-          <q-item-section
-            :style="
-              indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-            >NASDAQ</q-item-section
-          >
-          <q-item-section
-            :style="
-              indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-          >
-            {{
-              indexStore.data[6].toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              })
-            }}
-            {{
-              parseFloat(indexStore.data[7]).toFixed(2) + '%'
-            }}</q-item-section
-          >
-          <q-icon
-            v-if="indexStore.data[7] < 0"
-            style="color: red"
-            name="arrow_drop_down"
-            size="lg"
-          ></q-icon>
-          <q-icon
-            v-if="indexStore.data[7] > 0"
-            style="color: green"
-            name="arrow_drop_up"
-            size="lg"
-          ></q-icon>
-          <q-item-section></q-item-section>
-        </q-item>
+          <q-item style="text-align: center" class="ticker__item">
+            <q-item-section
+              :style="
+                indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+              >Dow Jones
+              {{
+                indexStore.data[4].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+              {{
+                parseFloat(indexStore.data[5]).toFixed(2) + '%'
+              }}</q-item-section
+            >
+            <q-item-section
+              :style="
+                indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+              >{{
+                indexStore.data[4].toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+              {{
+                parseFloat(indexStore.data[5]).toFixed(2) + '%'
+              }}</q-item-section
+            >
+            <q-icon
+              v-if="indexStore.data[5] < 0"
+              style="color: red"
+              name="arrow_drop_down"
+              size="lg"
+            ></q-icon>
+            <q-icon
+              v-if="indexStore.data[5] > 0"
+              style="color: green"
+              name="arrow_drop_up"
+              size="lg"
+            ></q-icon>
+          </q-item>
 
-        <q-item style="text-align: center">
-          <q-item-section
-            :style="
-              indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-            >Dow Jones</q-item-section
-          >
-          <q-item-section
-            :style="
-              indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-            >{{
-              indexStore.data[4].toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD',
-              })
-            }}
-            {{
-              parseFloat(indexStore.data[5]).toFixed(2) + '%'
-            }}</q-item-section
-          >
-          <q-icon
-            v-if="indexStore.data[5] < 0"
-            style="color: red"
-            name="arrow_drop_down"
-            size="lg"
-          ></q-icon>
-          <q-icon
-            v-if="indexStore.data[5] > 0"
-            style="color: green"
-            name="arrow_drop_up"
-            size="lg"
-          ></q-icon>
-          <q-item-section></q-item-section>
-        </q-item>
-
-        <q-item style="text-align: center">
-          <q-item-section
-            :style="
-              indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-            >VIX</q-item-section
-          >
-          <q-item-section
-            :style="
-              indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
-            "
-            >{{ indexStore.data[0] }}
-            {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
-          </q-item-section>
-          <q-icon
-            v-if="indexStore.data[1] < 0"
-            style="color: red"
-            name="arrow_drop_down"
-            size="lg"
-          ></q-icon>
-          <q-icon
-            v-if="indexStore.data[1] > 0"
-            style="color: green"
-            name="arrow_drop_up"
-            size="lg"
-          ></q-icon>
-          <q-item-section></q-item-section>
-        </q-item>
+          <q-item style="text-align: center" class="ticker__item">
+            <q-item-section
+              :style="
+                indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+              >VIX {{ indexStore.data[0] }}
+              {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
+            </q-item-section>
+            <q-item-section
+              :style="
+                indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
+              "
+              >{{ indexStore.data[0] }}
+              {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
+            </q-item-section>
+            <q-icon
+              v-if="indexStore.data[1] < 0"
+              style="color: red"
+              name="arrow_drop_down"
+              size="lg"
+            ></q-icon>
+            <q-icon
+              v-if="indexStore.data[1] > 0"
+              style="color: green"
+              name="arrow_drop_up"
+              size="lg"
+            ></q-icon>
+          </q-item>
+        </div>
       </q-toolbar>
     </q-footer>
   </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, onBeforeMount, ref } from 'vue';
 import EquityComponent from '../components/EquityComponent.vue';
 import PropertyComponent from '../components/PropertyComponent.vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { useIndexStore } from 'src/stores/indexes-store';
-import { storeToRefs } from 'pinia';
 
 export default defineComponent({
   name: 'PortfolioPage',
@@ -204,7 +226,7 @@ export default defineComponent({
     const portfolioStore = usePortfolioStore();
     const indexStore = useIndexStore();
 
-    const { equityRows } = storeToRefs(portfolioStore);
+    const indexString = indexStore.data[1] + 'Hi there';
 
     onBeforeMount(async () => {
       portfolioStore.importCurrentEquities();
@@ -214,8 +236,74 @@ export default defineComponent({
     return {
       tab: ref('Full Portfolio'),
       indexStore,
-      equityRows,
+      indexString,
     };
   },
 });
 </script>
+
+<style>
+:root {
+  --height: 10vh;
+  --speed: 25s;
+}
+
+.ticker-tape {
+  display: flex;
+
+  width: 100%;
+  /* overflow: hidden; */
+  height: var(--height);
+  padding-left: 100%;
+}
+
+.ticker-tape .ticker {
+  height: var(--height);
+  line-height: var(--height);
+  white-space: nowrap;
+  padding-right: 100%;
+
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-name: ticker;
+  -webkit-animation-duration: var(--speed);
+
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-name: ticker;
+  animation-duration: var(--speed);
+}
+
+.ticker-tape .ticker__item {
+  display: inline-block;
+  padding: 0 0.5rem;
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 1.5rem;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+@-webkit-keyframes ticker {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translateX(-151000%);
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes ticker {
+  0% {
+    -webkit-transform: translateX(0);
+    transform: translateX(0);
+    visibility: visible;
+  }
+  100% {
+    -webkit-transform: translateX(-100%);
+    transform: translateX(-100%);
+  }
+}
+</style>
