@@ -314,23 +314,30 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           this.importCurrentEquities();
         });
     },
-    // async modifyProperty() {
-    //   console.log(Number(this.form.modcurrentprice));
+    async modifyProperty() {
+      console.log(Number(this.form.modcurrentprice));
+      // TODO - fix this, no data is being received for test in go
 
-    //   axios
-    //     .post(
-    //       'http://localhost:8081/portfoliomod',
-    //       JSON.stringify({
-    //         ticker: this.form.modcurrentticker,
-    //         shares: Number(this.form.modcurrentshares),
-    //         price: Number(this.form.modcurrentprice),
-    //       })
-    //     )
-    //     .then((response) => {
-    //       console.log(response);
-    //       this.importCurrentEquities();
-    //     });
-    // },
+      axios
+        .post(
+          'http://localhost:8081/propertymod',
+          JSON.stringify({
+            id: Number(this.form.modid),
+            description: this.form.moddescription,
+            price: Number(this.form.modprice),
+            lien: Number(this.form.modlien),
+            rate: Number(this.form.modrate),
+            years: Number(this.form.modyears),
+            value: Number(this.form.modvalue),
+            monthsleft: Number(this.form.modmonthsLeft),
+            type: this.form.modtype,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentEquities();
+        });
+    },
     async deleteProperty() {
       axios
         .post(

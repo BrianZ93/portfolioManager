@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Fri Oct 28 15:34:36 2022
+# Make data base, printed on Sat Oct 29 12:53:24 2022
 
 # Variables
 
@@ -93,7 +91,7 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 80303
+VSCODE_PID = 200470
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -195,7 +193,7 @@ SNAP_CONTEXT = 6cELwwixMNG-Odf6zelW4Nd1OHkillVEdiTn9YmEo_1HExyaVpLB
 # environment
 MANAGERPID = 78792
 # environment
-GIO_LAUNCHED_DESKTOP_FILE_PID = 80265
+GIO_LAUNCHED_DESKTOP_FILE_PID = 200430
 # environment
 _ = /snap/code/108/usr/share/code/code
 # environment
@@ -282,6 +280,9 @@ Makefile:
 #  Successfully updated.
 
 # Not a target:
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 .DEFAULT:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -305,7 +306,6 @@ run-local:
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 4):
- 
 	docker login
 	docker build --target="frontend" --tag frontend .
 	docker build --target="backend" --tag backend .
@@ -336,6 +336,6 @@ stop-local:
 # strcache performance: lookups = 26 / hit rate = 26%
 # hash-table stats:
 # Load=19/8192=0%, Rehash=0, Collisions=0/26=0%
-# Finished Make data base on Fri Oct 28 15:34:36 2022
+# Finished Make data base on Sat Oct 29 12:53:24 2022
 
  

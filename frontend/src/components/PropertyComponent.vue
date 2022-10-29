@@ -151,7 +151,7 @@
             <q-select
               square
               filled
-              v-model="modelType"
+              v-model="form.modtype"
               :options="options"
               label="Property Type"
             />
@@ -231,7 +231,7 @@
             rounded
             color="primary"
             label="Modify"
-            @click="addProperty"
+            @click="modifyProperty"
           ></q-btn>
           <q-btn
             class="glossy"
@@ -348,22 +348,6 @@ export default defineComponent({
 
     const { propertyRows } = storeToRefs(portfolioStore);
 
-    function propertyClick(e: Event, row: any) {
-      console.log(row);
-
-      portfolioStore.form.modid = row.id;
-      portfolioStore.form.modtype = row.type;
-      portfolioStore.form.moddescription = row.description;
-      portfolioStore.form.modREprice = row.price;
-      portfolioStore.form.modlien = row.lien;
-      portfolioStore.form.modrate = row.rate;
-      portfolioStore.form.modyears = row.years;
-      portfolioStore.form.modmonthsLeft = row.monthsLeft;
-      portfolioStore.form.modvalue = row.value;
-
-      persistentPropertyEdit.value = true;
-    }
-
     onBeforeMount(() => {
       portfolioStore.importCurrentProperties();
     });
@@ -376,7 +360,21 @@ export default defineComponent({
       realEstate,
       columns,
       propertyRows,
-      propertyClick,
+      propertyClick(e: Event, row: any) {
+        console.log(row);
+
+        portfolioStore.form.modid = row.id;
+        portfolioStore.form.modtype = row.type;
+        portfolioStore.form.moddescription = row.description;
+        portfolioStore.form.modREprice = row.price;
+        portfolioStore.form.modlien = row.lien;
+        portfolioStore.form.modrate = row.rate;
+        portfolioStore.form.modyears = row.years;
+        portfolioStore.form.modmonthsLeft = row.monthsLeft;
+        portfolioStore.form.modvalue = row.value;
+
+        persistentPropertyEdit.value = true;
+      },
       form,
       addProperty(modelType: string) {
         portfolioStore.form.type = modelType;
@@ -392,7 +390,21 @@ export default defineComponent({
 
         portfolioStore.form.description = '';
       },
-      modelType: ref(null),
+      modifyProperty() {
+        portfolioStore.form.modtype = form.value.type;
+        portfolioStore.form.moddescription = form.value.description;
+        portfolioStore.form.modREprice = form.value.price;
+        portfolioStore.form.modlien = form.value.lien;
+        portfolioStore.form.modrate = form.value.rate;
+        portfolioStore.form.modyears = form.value.years;
+        portfolioStore.form.modmonthsLeft = form.value.monthsLeft;
+        portfolioStore.form.modvalue = form.value.value;
+
+        portfolioStore.modifyProperty();
+
+        persistentPropertyEdit.value = false;
+      },
+      modelType: ref(''),
       options: ['Primary Residence', 'Second Home', 'Investment Property'],
       deleteProperty() {
         portfolioStore.form.delcurrentproperty = form.value.modid;

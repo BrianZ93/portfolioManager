@@ -263,6 +263,8 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 	// Uses the decoder to decode the response to Property data at its memory location
 	decoder.Decode(&propertyData)
 
+	logrus.Info("THIS++++++", propertyData)
+
 	for property := range CurrentProperties {
 		if propertyData.Id == CurrentProperties[property].Id {
 			CurrentProperties[property].Id = propertyData.Id

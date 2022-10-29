@@ -51,7 +51,7 @@
               :style="
                 indexStore.data[3] < 0 ? { color: 'red' } : { color: 'green' }
               "
-              >S&P 500
+              >S&P 500 (GSPC)
               {{
                 indexStore.data[2].toLocaleString('en-US', {
                   style: 'currency',
@@ -94,7 +94,7 @@
               :style="
                 indexStore.data[7] < 0 ? { color: 'red' } : { color: 'green' }
               "
-              >NASDAQ
+              >NASDAQ (IXIC)
               {{
                 indexStore.data[6].toLocaleString('en-US', {
                   style: 'currency',
@@ -139,7 +139,7 @@
               :style="
                 indexStore.data[5] < 0 ? { color: 'red' } : { color: 'green' }
               "
-              >Dow Jones
+              >Dow Jones (DJI)
               {{
                 indexStore.data[4].toLocaleString('en-US', {
                   style: 'currency',
@@ -183,7 +183,7 @@
               :style="
                 indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
               "
-              >VIX {{ indexStore.data[0] }}
+              >VIX (VIX) {{ indexStore.data[0] }}
               {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
             </q-item-section>
             <q-item-section
@@ -244,7 +244,7 @@ export default defineComponent({
 
 <style>
 :root {
-  --height: 10vh;
+  --height: 7vh;
   --speed: 25s;
 }
 
@@ -277,9 +277,9 @@ export default defineComponent({
 .ticker-tape .ticker__item {
   display: inline-block;
   padding: 0 0.5rem;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 900;
-  letter-spacing: 1.5rem;
+  letter-spacing: 1rem;
   color: rgba(0, 0, 0, 0.2);
 }
 
