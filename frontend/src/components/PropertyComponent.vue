@@ -352,6 +352,7 @@ export default defineComponent({
     const { propertyRows } = storeToRefs(portfolioStore);
 
     onBeforeMount(() => {
+      portfolioStore.importCurrentEquities();
       portfolioStore.importCurrentProperties();
     });
 

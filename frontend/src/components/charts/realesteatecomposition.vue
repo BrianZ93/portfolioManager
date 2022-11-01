@@ -1,0 +1,68 @@
+<template>
+  <div class="chart-wrap">
+    <div id="chart">
+      <apexchart
+        type="donut"
+        width="480"
+        :options="chartOptions"
+        :series="series"
+      ></apexchart>
+    </div>
+  </div>
+</template>
+
+<script>
+import { usePortfolioStore } from 'src/stores/portfolio-store';
+
+const portfolioStore = usePortfolioStore();
+
+export default {
+  name: 'realEstateChart',
+  data() {
+    return {
+      series: [
+        portfolioStore.primaryTotal,
+        portfolioStore.secondaryTotal,
+        portfolioStore.investmentTotal,
+      ],
+
+      chartOptions: {
+        labels: [
+          'Primary Residence',
+          'Second Home(s)',
+          'Investment Properties',
+        ],
+        chart: {
+          width: 380,
+          type: 'donut',
+        },
+        dataLabels: {
+          enabled: true,
+        },
+        responsive: [
+          {
+            breakpoint: 480,
+            options: {
+              chart: {
+                width: 200,
+              },
+              legend: {
+                show: true,
+              },
+            },
+          },
+        ],
+        legend: {
+          title: 'assets',
+          onItemHover: {
+            highlightDataSeries: true,
+          },
+          position: 'right',
+          offsetY: 50,
+          height: 230,
+        },
+      },
+    };
+  },
+};
+</script>

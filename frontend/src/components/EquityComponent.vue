@@ -270,6 +270,7 @@ export default defineComponent({
     }
 
     onBeforeMount(() => {
+      portfolioStore.importCurrentProperties();
       portfolioStore.importCurrentEquities();
     });
 

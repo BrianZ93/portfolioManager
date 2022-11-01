@@ -27,6 +27,9 @@
     </div>
 
     <!-- Tab Components -->
+
+    <DashboardComponent v-if="tab == 'Dashboard'"> </DashboardComponent>
+
     <EquityComponent
       v-if="tab == 'Equities'"
       title="Equities"
@@ -216,12 +219,13 @@
 import { defineComponent, onBeforeMount, ref } from 'vue';
 import EquityComponent from '../components/EquityComponent.vue';
 import PropertyComponent from '../components/PropertyComponent.vue';
+import DashboardComponent from '../components/DashboardComponent.vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { useIndexStore } from 'src/stores/indexes-store';
 
 export default defineComponent({
   name: 'PortfolioPage',
-  components: { EquityComponent, PropertyComponent },
+  components: { EquityComponent, PropertyComponent, DashboardComponent },
   setup() {
     const portfolioStore = usePortfolioStore();
     const indexStore = useIndexStore();

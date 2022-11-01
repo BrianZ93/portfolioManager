@@ -109,14 +109,20 @@ export class Ticker {
 export const usePortfolioStore = defineStore('portfolioStore', {
   state: () => {
     return {
-      equities: [],
+      equities: [] as Array<Equity>,
       realEstate: new Map<number, Property>(),
 
       propertyRows: [] as Array<PropertyRow>,
       // Equity table,
       equityRows: [] as Array<Equity>,
 
+      // Chart Specific Data
       equitiesTotal: 0,
+      propertiesTotal: 0,
+      // Property Type Totals
+      primaryTotal: 0,
+      secondaryTotal: 0,
+      investmentTotal: 0,
 
       form: {
         // Equity Form Data
@@ -205,41 +211,29 @@ export const usePortfolioStore = defineStore('portfolioStore', {
     },
     async importCurrentEquities() {
       try {
-        this.equitiesTotal = 0;
         const res = await axios
           .get('http://localhost:8081/portfolio')
           .then((res) => {
-            let tempticker = '';
-            let tempshares = 0;
-            let tempvalue = 0;
-            let tempprice = 0;
-
-            this.equities = [];
+            this.equities = [] as Array<Equity>;
 
             for (let i = 0; i < res.data.length; i++) {
-              tempticker = res.data[i].ticker;
-              tempshares = res.data[i].shares;
-              tempvalue = res.data[i].value;
-              tempprice = res.data[i].price;
-              this.equities.push(tempticker, tempshares, tempvalue, tempprice);
+              this.equities.push(
+                new Equity(
+                  res.data[i].ticker as string,
+                  res.data[i].shares as number,
+                  res.data[i].price,
+                  false,
+                  res.data[i].value
+                )
+              );
             }
 
             this.equityRows = [] as Array<Equity>;
 
-            for (let i = 0; i < this.equities.length; i++) {
-              if (typeof this.equities[i] == 'string') {
-                this.equitiesTotal +=
-                  this.equities[i + 2] * this.equities[i + 1];
-                this.equityRows.push(
-                  new Equity(
-                    this.equities[i],
-                    this.equities[i + 1],
-                    this.equities[i + 3],
-                    false,
-                    this.equities[i + 2]
-                  )
-                );
-              }
+            this.equitiesTotal = 0;
+            for (const equity of this.equities) {
+              this.equityRows.push(equity);
+              this.equitiesTotal += equity.value * equity.shares;
             }
           });
       } catch {
@@ -252,6 +246,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
       const res = await axios
         .get('http://localhost:8081/properties')
         .then((res: any) => {
+          this.propertiesTotal = 0;
           for (let i = 0; i < res.data.length; i++) {
             this.realEstate.set(
               res.data[i].id,
@@ -282,6 +277,18 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].value - res.data[i].lien
               )
             );
+
+            this.propertiesTotal += res.data[i].value - res.data[i].lien;
+
+            if (res.data[i].type == 'Primary Residence') {
+              this.primaryTotal += res.data[i].value - res.data[i].lien;
+            } else if (res.data[i].type == 'Second Home') {
+              this.secondaryTotal += res.data[i].value - res.data[i].lien;
+            } else if (res.data[i].type == 'Investment Property') {
+              this.investmentTotal += res.data[i].value - res.data[i].lien;
+            } else {
+              console.log('property type not recognized');
+            }
           }
         });
     },
