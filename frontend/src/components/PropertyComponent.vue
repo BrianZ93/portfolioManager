@@ -297,6 +297,8 @@
   </q-page>
 </template>
 
+<!-- TODO - Make ownership percentage reflect in actual property equity -->
+
 <script lang="ts">
 import { defineComponent, ref, computed, onBeforeMount } from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
