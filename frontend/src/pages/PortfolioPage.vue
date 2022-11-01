@@ -6,9 +6,9 @@
         <q-tabs v-model="tab" narrow-indicator dense align="justify">
           <q-tab
             class="text-purple"
-            name="Full Portfolio"
-            icon="card_travel"
-            label="Full Portflio"
+            name="Dashboard"
+            icon="dashboard"
+            label="Dashboard"
           />
           <q-tab
             class="text-orange"
@@ -234,7 +234,7 @@ export default defineComponent({
     });
 
     return {
-      tab: ref('Full Portfolio'),
+      tab: ref('Dashboard'),
       indexStore,
       indexString,
     };

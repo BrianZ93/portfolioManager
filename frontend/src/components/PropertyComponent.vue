@@ -46,10 +46,13 @@
               filled
               v-model="form.price"
               label="Purchase Price"
-              mask="$#.##"
+              prefix="$"
+              mask="#.##"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
+              step="0.01"
+              type="number"
             ></q-input>
             <q-input
               autogrow
@@ -164,7 +167,7 @@
             <q-input
               autogrow
               filled
-              v-model="form.modprice"
+              v-model="form.modREprice"
               label="Purchase Price"
               mask="$#.##"
               input-class="text-left"
@@ -364,7 +367,7 @@ export default defineComponent({
         console.log(row);
 
         portfolioStore.form.modid = row.id;
-        portfolioStore.form.modtype = row.type;
+        portfolioStore.form.modtype = ref(row.type);
         portfolioStore.form.moddescription = row.description;
         portfolioStore.form.modREprice = row.price;
         portfolioStore.form.modlien = row.lien;
@@ -391,14 +394,14 @@ export default defineComponent({
         portfolioStore.form.description = '';
       },
       modifyProperty() {
-        portfolioStore.form.modtype = form.value.type;
-        portfolioStore.form.moddescription = form.value.description;
-        portfolioStore.form.modREprice = form.value.price;
-        portfolioStore.form.modlien = form.value.lien;
-        portfolioStore.form.modrate = form.value.rate;
-        portfolioStore.form.modyears = form.value.years;
-        portfolioStore.form.modmonthsLeft = form.value.monthsLeft;
-        portfolioStore.form.modvalue = form.value.value;
+        portfolioStore.form.modtype = form.value.modtype;
+        portfolioStore.form.moddescription = form.value.moddescription;
+        portfolioStore.form.modREprice = form.value.modREprice;
+        portfolioStore.form.modlien = form.value.modlien;
+        portfolioStore.form.modrate = form.value.modrate;
+        portfolioStore.form.modyears = form.value.modyears;
+        portfolioStore.form.modmonthsLeft = form.value.modmonthsLeft;
+        portfolioStore.form.modvalue = form.value.modvalue;
 
         portfolioStore.modifyProperty();
 

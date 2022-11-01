@@ -182,6 +182,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         });
     },
     addPropertyAPI() {
+      const rate = parseFloat(this.form.modrate);
       axios
         .post(
           'http://localhost:8081/propertyadd',
@@ -191,7 +192,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             description: this.form.description,
             price: Number(this.form.price),
             lien: Number(this.form.lien),
-            rate: Number(this.form.rate),
+            rate: Number(rate),
             years: Number(this.form.years),
             monthsLeft: Number(this.form.monthsLeft),
             value: Number(this.form.value),
@@ -315,8 +316,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         });
     },
     async modifyProperty() {
-      console.log(Number(this.form.modcurrentprice));
-      // TODO - fix this, no data is being received for test in go
+      const rate = parseFloat(this.form.modrate);
 
       axios
         .post(
@@ -324,9 +324,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           JSON.stringify({
             id: Number(this.form.modid),
             description: this.form.moddescription,
-            price: Number(this.form.modprice),
+            price: Number(this.form.modREprice),
             lien: Number(this.form.modlien),
-            rate: Number(this.form.modrate),
+            rate: Number(rate),
             years: Number(this.form.modyears),
             value: Number(this.form.modvalue),
             monthsleft: Number(this.form.modmonthsLeft),
@@ -335,7 +335,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         )
         .then((response) => {
           console.log(response);
-          this.importCurrentEquities();
+          this.importCurrentProperties();
         });
     },
     async deleteProperty() {
