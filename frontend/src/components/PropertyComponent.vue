@@ -237,7 +237,7 @@
               filled
               v-model="form.modOwnership"
               label="Ownership %"
-              mask="$#.##"
+              mask="#.##%"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -368,6 +368,17 @@ export default defineComponent({
         label: 'Equity',
         align: 'left',
         field: (row: Record<string, unknown>) => row.equity,
+        format: (val: number) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+        sortable: true,
+      },
+      {
+        name: 'ownership',
+        required: true,
+        label: 'Ownership',
+        align: 'left',
+        field: (row: Record<string, unknown>) =>
+          (row.equity * row.ownership) / 100,
         format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,

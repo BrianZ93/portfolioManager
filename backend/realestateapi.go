@@ -19,6 +19,7 @@ type RealEstatePost struct {
 	Value       float64 `json:"value"`
 	MonthsLeft  float64 `json:"monthsleft"`
 	Type        string  `json:"type"`
+	Ownership   float64 `json:"ownership"`
 }
 
 type RealEstate []RealEstatePost
@@ -43,6 +44,7 @@ func checkREFile(filename string) error {
 				MonthsLeft:  360,
 				Value:       330000,
 				Type:        "Empty",
+				Ownership:   100,
 			},
 		}
 		file, _ := json.MarshalIndent(StarterREData, "", " ")
@@ -102,6 +104,8 @@ func readREFile() {
 	MonthsLeftProceed := false
 	var CurType string
 	TypeProceed := false
+	var CurOwnership float64
+	OwnershipProceed := false
 
 	var CurrentIndex = 0
 
@@ -158,8 +162,13 @@ func readREFile() {
 			TypeProceed = true
 		}
 
-		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed {
-			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType})
+		if res, ok := objMap["ownership"].(float64); ok {
+			CurOwnership = res
+			OwnershipProceed = true
+		}
+
+		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed && OwnershipProceed {
+			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType, Ownership: CurOwnership})
 		}
 
 		CurrentIndex++
@@ -203,7 +212,7 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 	TempProperties = nil
 
 	if CurrentProperties == nil {
-		TempProperties = append(TempProperties, RealEstatePost{Id: 0, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type})
+		TempProperties = append(TempProperties, RealEstatePost{Id: 0, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type, Ownership: propertyData.Ownership})
 		CurrentProperties = TempProperties
 
 		file, _ := json.MarshalIndent(CurrentProperties, "", " ")
@@ -231,7 +240,7 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-		CurrentProperties = append(CurrentProperties, RealEstatePost{Id: NewId, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type})
+		CurrentProperties = append(CurrentProperties, RealEstatePost{Id: NewId, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type, Ownership: propertyData.Ownership})
 
 		file, _ := json.MarshalIndent(CurrentProperties, "", " ")
 
@@ -276,6 +285,7 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 			CurrentProperties[property].Value = propertyData.Value
 			CurrentProperties[property].MonthsLeft = propertyData.MonthsLeft
 			CurrentProperties[property].Type = propertyData.Type
+			CurrentProperties[property].Ownership = propertyData.Ownership
 		}
 	}
 
@@ -312,6 +322,7 @@ func deleteProperty(w http.ResponseWriter, request *http.Request) {
 		CurrentProperties[0].Value = 0
 		CurrentProperties[0].MonthsLeft = 0
 		CurrentProperties[0].Type = "Empty"
+		CurrentProperties[0].Ownership = 0
 
 	} else {
 		TempProperties = nil
