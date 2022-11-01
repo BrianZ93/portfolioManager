@@ -33,6 +33,7 @@ export class Property {
   years: number;
   monthsLeft: number;
   value: number;
+  ownership: number;
 
   constructor(
     type: string,
@@ -43,7 +44,8 @@ export class Property {
     rate: number,
     years: number,
     monthsLeft: number,
-    value: number
+    value: number,
+    ownership: number
   ) {
     this.type = type;
     this.id = id;
@@ -54,6 +56,7 @@ export class Property {
     this.years = years;
     this.monthsLeft = monthsLeft;
     this.value = value;
+    this.ownership = ownership;
   }
 }
 
@@ -68,6 +71,7 @@ export class PropertyRow {
   monthsLeft: number;
   value: number;
   equity: number;
+  ownership: number;
 
   constructor(
     type: string,
@@ -79,7 +83,8 @@ export class PropertyRow {
     years: number,
     monthsLeft: number,
     value: number,
-    equity: number
+    equity: number,
+    ownership: number
   ) {
     this.type = type;
     this.id = id;
@@ -91,6 +96,7 @@ export class PropertyRow {
     this.monthsLeft = monthsLeft;
     this.value = value;
     this.equity = equity;
+    this.ownership = ownership;
   }
 }
 
@@ -117,12 +123,17 @@ export const usePortfolioStore = defineStore('portfolioStore', {
       equityRows: [] as Array<Equity>,
 
       // Chart Specific Data
+
+      // Asset Totals
       equitiesTotal: 0,
       propertiesTotal: 0,
       // Property Type Totals
       primaryTotal: 0,
       secondaryTotal: 0,
       investmentTotal: 0,
+      // Equities Type Totals
+      equityTickers: [] as Array<string>,
+      equityValues: [] as Array<number>,
 
       form: {
         // Equity Form Data
@@ -154,6 +165,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         years: 30,
         monthsLeft: 360,
         value: 0,
+        ownership: 0,
 
         // Property Modify Form Data
         modtype: '',
@@ -165,6 +177,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         modyears: 30,
         modmonthsLeft: 360,
         modvalue: 0,
+        modOwnership: 0,
 
         // Property Delete Form Data
         delcurrentproperty: 0,
@@ -189,6 +202,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
     },
     addPropertyAPI() {
       const rate = parseFloat(this.form.modrate);
+      const ownership = parseFloat(this.form.modOwnership);
       axios
         .post(
           'http://localhost:8081/propertyadd',
@@ -202,6 +216,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             years: Number(this.form.years),
             monthsLeft: Number(this.form.monthsLeft),
             value: Number(this.form.value),
+            ownership: Number(ownership),
           })
         )
         .then((response) => {
@@ -231,9 +246,14 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             this.equityRows = [] as Array<Equity>;
 
             this.equitiesTotal = 0;
+            this.equityTickers = [] as Array<string>;
+            this.equityValues = [] as Array<number>;
             for (const equity of this.equities) {
               this.equityRows.push(equity);
               this.equitiesTotal += equity.value * equity.shares;
+
+              this.equityTickers.push(equity.ticker);
+              this.equityValues.push(equity.value * equity.shares);
             }
           });
       } catch {
@@ -259,7 +279,8 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].rate,
                 res.data[i].years,
                 res.data[i].monthsLeft,
-                res.data[i].value
+                res.data[i].value,
+                res.data[i].ownership
               )
             );
 
@@ -274,7 +295,8 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].years,
                 res.data[i].monthsLeft,
                 res.data[i].value,
-                res.data[i].value - res.data[i].lien
+                res.data[i].value - res.data[i].lien,
+                res.data[i].ownership
               )
             );
 
@@ -338,6 +360,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             value: Number(this.form.modvalue),
             monthsleft: Number(this.form.modmonthsLeft),
             type: this.form.modtype,
+            ownership: this.form.modOwnership,
           })
         )
         .then((response) => {

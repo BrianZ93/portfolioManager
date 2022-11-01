@@ -51,8 +51,6 @@
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
-              step="0.01"
-              type="number"
             ></q-input>
             <q-input
               autogrow
@@ -99,6 +97,17 @@
               v-model="form.value"
               label="Current Market Value"
               mask="$#.##"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.ownership"
+              label="OWnership %"
+              prefix="$"
+              mask="#.##"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -223,6 +232,16 @@
               fill-mask="0"
               reverse-fill-mask
             ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modOwnership"
+              label="Ownership %"
+              mask="$#.##"
+              input-class="text-left"
+              fill-mask="0"
+              reverse-fill-mask
+            ></q-input>
           </form>
         </q-card-section>
 
@@ -261,7 +280,12 @@
     <div class="row">
       <div class="col q-pa-md">
         <q-table
-          title="Properties"
+          :title="
+            'Properties - ' +
+            propertiesTotal
+              .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+              .toString()
+          "
           :columns="columns"
           :rows="propertyRows"
           :key="propertyRows"
@@ -296,6 +320,7 @@ export default defineComponent({
     const persistentPropertyEdit = ref(false);
 
     const realEstate = computed(() => portfolioStore.realEstate);
+    const propertiesTotal = computed(() => portfolioStore.propertiesTotal);
 
     // Property Columns
     const columns = [
@@ -362,6 +387,7 @@ export default defineComponent({
       persistentProperty,
       persistentPropertyEdit,
       realEstate,
+      propertiesTotal,
       columns,
       propertyRows,
       propertyClick(e: Event, row: any) {
@@ -376,6 +402,7 @@ export default defineComponent({
         portfolioStore.form.modyears = row.years;
         portfolioStore.form.modmonthsLeft = row.monthsLeft;
         portfolioStore.form.modvalue = row.value;
+        portfolioStore.form.modOwnership = row.ownership;
 
         persistentPropertyEdit.value = true;
       },
@@ -388,6 +415,7 @@ export default defineComponent({
         portfolioStore.form.rate = form.value.rate;
         portfolioStore.form.years = form.value.years;
         portfolioStore.form.value = form.value.value;
+        portfolioStore.form.ownership = form.value.ownership;
 
         persistentProperty.value = false;
         portfolioStore.addPropertyAPI();
@@ -403,6 +431,7 @@ export default defineComponent({
         portfolioStore.form.modyears = form.value.modyears;
         portfolioStore.form.modmonthsLeft = form.value.modmonthsLeft;
         portfolioStore.form.modvalue = form.value.modvalue;
+        portfolioStore.form.modOwnership = form.value.modOwnership;
 
         portfolioStore.modifyProperty();
 

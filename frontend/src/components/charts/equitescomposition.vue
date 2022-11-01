@@ -11,16 +11,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 
 const portfolioStore = usePortfolioStore();
 
 export default {
-  name: 'portfolioChart',
+  name: 'equitiesChart',
   data() {
     return {
-      series: [portfolioStore.equitiesTotal, portfolioStore.propertiesTotal],
+      series: [...portfolioStore.equityValues],
 
       chartOptions: {
         tooltip: {
@@ -33,7 +33,7 @@ export default {
             },
           },
         },
-        labels: ['Equities', 'Real Estate'],
+        labels: [...portfolioStore.equityTickers],
         chart: {
           width: 380,
           type: 'donut',

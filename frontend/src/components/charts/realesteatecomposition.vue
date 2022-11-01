@@ -27,6 +27,16 @@ export default {
       ],
 
       chartOptions: {
+        tooltip: {
+          y: {
+            formatter: function (value) {
+              return value.toLocaleString('en-US', {
+                style: 'currency',
+                currency: 'USD',
+              });
+            },
+          },
+        },
         labels: [
           'Primary Residence',
           'Second Home(s)',

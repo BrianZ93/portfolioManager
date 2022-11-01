@@ -1,22 +1,57 @@
 <template>
   <q-page>
-    <div class="flex">
+    <div class="flex flex-center">
+      <!-- Cards on Top -->
+
+      <div class="row cards">
+        <div class="col section">
+          <q-card class="card" v-ripple>
+            <q-card-section>
+              <div>Heaviest Asset Here</div>
+              <p1>Ticker or Description</p1>
+              <p1>Amount</p1>
+            </q-card-section>
+          </q-card>
+        </div>
+
+        <div class="col section">
+          <q-card class="card">
+            <q-card-section>
+              <div>Diversification Factor</div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+
+      <!-- Mid Charts -->
       <div class="row">
         <!-- Total Assets Chart -->
         <div
-          class="col-grow section summary"
+          class="col section summary"
           style="background-color: rgba(30, 30, 30, 1)"
         >
           <div class="title">Total Assets</div>
           <portfolioCompositionChart></portfolioCompositionChart>
         </div>
+
         <!-- RE Chart -->
+
         <div
-          class="col-grow section summary"
+          class="col section propertysummary"
           style="background-color: rgba(30, 30, 30, 1)"
         >
           <div class="title">Real Estate</div>
           <realEstateChart></realEstateChart>
+        </div>
+
+        <!-- Equities Chart -->
+
+        <div
+          class="col section equitysummary"
+          style="background-color: rgba(30, 30, 30, 1)"
+        >
+          <div class="title">Equities</div>
+          <equitiesChart></equitiesChart>
         </div>
       </div>
     </div>
@@ -37,11 +72,16 @@ const realEstateChart = defineAsyncComponent(
   () => import('components/charts/realesteatecomposition.vue')
 );
 
+const equitiesChart = defineAsyncComponent(
+  () => import('components/charts/equitescomposition.vue')
+);
+
 export default defineComponent({
   name: 'DashboardComponent',
   components: {
     portfolioCompositionChart,
     realEstateChart,
+    equitiesChart,
   },
   setup() {
     onBeforeMount(() => {
@@ -96,6 +136,32 @@ export default defineComponent({
 }
 
 .summary {
-  margin-left: 2vw;
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
+
+.propertysummary {
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
+
+.equitysummary {
+  margin-left: 1vw;
+  margin-right: 1vw;
+}
+
+/* Cards */
+
+.cards {
+  padding-bottom: 2vh;
+}
+
+.card {
+  max-width: 10vw;
+  min-width: 10vw;
+  max-height: 10vh;
+  min-height: 6vh;
+  margin-left: 1vw;
+  margin-right: 1vw;
 }
 </style>
