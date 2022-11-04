@@ -46,6 +46,11 @@
     <PropertyComponent v-if="tab == 'Real Estate'" title="Properties">
     </PropertyComponent>
 
+    <BudgetComponent v-if="tab == 'Budget'" title="Budget"></BudgetComponent>
+
+    <DebtComponent v-if="tab == 'Debt'" title="Debt"></DebtComponent>
+
+    <!-- Ticker Tape -->
     <q-footer
       style="background-color: rgb(16, 16, 16)"
       reveal
@@ -228,12 +233,20 @@ import { defineComponent, onBeforeMount, ref } from 'vue';
 import EquityComponent from '../components/EquityComponent.vue';
 import PropertyComponent from '../components/PropertyComponent.vue';
 import DashboardComponent from '../components/DashboardComponent.vue';
+import BudgetComponent from 'src/components/BudgetComponent.vue';
+import DebtComponent from 'src/components/DebtComponent.vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { useIndexStore } from 'src/stores/indexes-store';
 
 export default defineComponent({
   name: 'PortfolioPage',
-  components: { EquityComponent, PropertyComponent, DashboardComponent },
+  components: {
+    EquityComponent,
+    PropertyComponent,
+    DashboardComponent,
+    BudgetComponent,
+    DebtComponent,
+  },
   setup() {
     const portfolioStore = usePortfolioStore();
     const indexStore = useIndexStore();
