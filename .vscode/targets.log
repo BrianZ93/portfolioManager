@@ -8,7 +8,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Nov  3 10:08:10 2022
+# Make data base, printed on Thu Nov  3 21:07:17 2022
 
 # Variables
 
@@ -95,7 +95,7 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 110059
+VSCODE_PID = 130940
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -285,7 +285,6 @@ clean:
 
 # Not a target:
 .DEFAULT:
- 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -298,6 +297,7 @@ all:
 #  File has not been updated.
 
 # Not a target:
+ 
 build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -328,6 +328,6 @@ run-local:
 # strcache performance: lookups = 27 / hit rate = 25%
 # hash-table stats:
 # Load=20/8192=0%, Rehash=0, Collisions=0/27=0%
-# Finished Make data base on Thu Nov  3 10:08:10 2022
+# Finished Make data base on Thu Nov  3 21:07:17 2022
 
  
