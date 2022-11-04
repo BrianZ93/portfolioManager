@@ -2,22 +2,40 @@
   <q-page>
     <div class="flex flex-center">
       <!-- Cards on Top -->
-
       <div class="row cards">
+        <!-- Net Worth Card -->
         <div class="col section">
           <q-card class="card" v-ripple>
             <q-card-section>
-              <div>Heaviest Asset Here</div>
+              <div>Net Worth</div>
               <p1>Ticker or Description</p1>
-              <p1>Amount</p1>
             </q-card-section>
           </q-card>
         </div>
 
+        <!-- Real Estate Card -->
         <div class="col section">
           <q-card class="card">
             <q-card-section>
-              <div>Diversification Factor</div>
+              <div>Real Estate</div>
+            </q-card-section>
+          </q-card>
+        </div>
+
+        <!-- Equities Card -->
+        <div class="col section">
+          <q-card class="card">
+            <q-card-section>
+              <div>Equities</div>
+            </q-card-section>
+          </q-card>
+        </div>
+
+        <!-- Debt Card -->
+        <div class="col section">
+          <q-card class="card">
+            <q-card-section>
+              <div>Debt</div>
             </q-card-section>
           </q-card>
         </div>
@@ -94,7 +112,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style lang="scss">
 .title {
   text-align: center;
   font-size: 2rem;
@@ -153,15 +171,16 @@ export default defineComponent({
 /* Cards */
 
 .cards {
-  padding-bottom: 2vh;
+  padding-bottom: 3vh;
 }
 
 .card {
-  max-width: 10vw;
-  min-width: 10vw;
+  max-width: 15vw;
+  min-width: 15vw;
   max-height: 10vh;
-  min-height: 6vh;
+  min-height: 10vh;
   margin-left: 1vw;
   margin-right: 1vw;
+  background-color: $primary;
 }
 </style>

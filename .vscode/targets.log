@@ -1,4 +1,6 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
+make: *** No rule to make target 'all'.  Stop.
+
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -6,7 +8,7 @@ make all --print-data-base --no-builtin-variables --no-builtin-rules --question
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Tue Nov  1 12:07:42 2022
+# Make data base, printed on Thu Nov  3 10:08:10 2022
 
 # Variables
 
@@ -93,7 +95,7 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 25153
+VSCODE_PID = 110059
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
@@ -249,9 +251,9 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 66306, inode 6557716): 13 files, no impossibilities.
+# . (device 66306, inode 6557716): 11 files, no impossibilities.
 
-# 13 files, no impossibilities in 1 directories.
+# 11 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -278,14 +280,12 @@ clean:
 #  recipe to execute (from 'Makefile', line 12):
 	docker login
 	docker-compose down --remove-orphans
- 
-make: *** No rule to make target 'all'.  Stop.
-
 	docker image prune -a
 	docker network prune
 
 # Not a target:
 .DEFAULT:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -322,12 +322,12 @@ run-local:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 22 / storage = 206 B / avg = 9 B
-# current buf: size = 8162 B / used = 206 B / count = 22 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 20 / storage = 183 B / avg = 9 B
+# current buf: size = 8162 B / used = 183 B / count = 20 / avg = 9 B
 
-# strcache performance: lookups = 29 / hit rate = 24%
+# strcache performance: lookups = 27 / hit rate = 25%
 # hash-table stats:
-# Load=22/8192=0%, Rehash=0, Collisions=0/29=0%
-# Finished Make data base on Tue Nov  1 12:07:42 2022
+# Load=20/8192=0%, Rehash=0, Collisions=0/27=0%
+# Finished Make data base on Thu Nov  3 10:08:10 2022
 
  

@@ -2,7 +2,7 @@
   <q-page>
     <!-- Navigation for Portfolio Page -->
     <div class="q-pa-md">
-      <div class="q-gutter-y-md" style="max-width: 400px">
+      <div class="q-gutter-y-md">
         <q-tabs v-model="tab" narrow-indicator dense align="justify">
           <q-tab
             class="text-purple"
@@ -22,6 +22,14 @@
             icon="maps_home_work"
             label="Real Estate"
           />
+          <q-tab
+            class="text-yellow"
+            name="Budget"
+            icon="pages"
+            label="Budget"
+          />
+          <q-tab class="text-red" name="Debt" icon="pages" label="Debt" />
+          <q-tab class="text-blue" name="Market" icon="pages" label="Market" />
         </q-tabs>
       </div>
     </div>
