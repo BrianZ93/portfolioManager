@@ -16,7 +16,7 @@
       transition-show="scale"
       transition-hide="scale"
     >
-      <q-card class="bg-black text-white" style="width: 300px">
+      <q-card class="bg-black text-white" style="width: 400px">
         <!-- Q-card-section is here for spacing on the title -->
         <q-card-section>
           <div class="text-h6 absolute-center"></div>
@@ -105,13 +105,38 @@
               autogrow
               filled
               v-model="form.ownership"
-              label="OWnership %"
+              label="Ownership %"
               prefix="$"
               mask="#.##"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
             ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.REdate"
+              label="Date"
+              @click="persistentDate = true"
+            ></q-input>
+
+            <div
+              class="q-pa-md bg-grey-10 text-white"
+              v-if="persistentDate == true"
+            >
+              <div class="q-gutter-md">
+                <q-date v-model="date" color="primary" dark bordered />
+                <q-btn
+                  class="glossy"
+                  rounded
+                  color="primary"
+                  label="Select Date"
+                  @click="selectDate(date)"
+                >
+                </q-btn>
+                <q-btn label="Cancel" @click="persistentDate = false"> </q-btn>
+              </div>
+            </div>
           </form>
         </q-card-section>
 
@@ -148,7 +173,7 @@
       transition-show="scale"
       transition-hide="scale"
     >
-      <q-card class="bg-black text-white" style="width: 300px">
+      <q-card class="bg-black text-white" style="width: 400px">
         <!-- Q-card-section is here for spacing on the title -->
         <q-card-section>
           <div class="text-h6 absolute-center"></div>
@@ -242,6 +267,31 @@
               fill-mask="0"
               reverse-fill-mask
             ></q-input>
+            <q-input
+              autogrow
+              filled
+              v-model="form.modREDate"
+              label="Date"
+              @click="persistentDate = true"
+            ></q-input>
+
+            <div
+              class="q-pa-md bg-grey-10 text-white"
+              v-if="persistentDate == true"
+            >
+              <div class="q-gutter-md">
+                <q-date v-model="date" color="primary" dark bordered />
+                <q-btn
+                  class="glossy"
+                  rounded
+                  color="primary"
+                  label="Select Date"
+                  @click="selectDate(date)"
+                >
+                </q-btn>
+                <q-btn label="Cancel" @click="persistentDate = false"> </q-btn>
+              </div>
+            </div>
           </form>
         </q-card-section>
 
@@ -297,9 +347,8 @@
   </q-page>
 </template>
 
-<!-- TODO - Make ownership percentage reflect in actual property equity -->
-
 <script lang="ts">
+// TODO - Change the input types and change the way percentages are reflected
 import { defineComponent, ref, computed, onBeforeMount } from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { storeToRefs } from 'pinia';
@@ -320,6 +369,7 @@ export default defineComponent({
     const propertiesImported = ref(false);
     const persistentProperty = ref(false);
     const persistentPropertyEdit = ref(false);
+    const persistentDate = ref(false);
 
     const realEstate = computed(() => portfolioStore.realEstate);
     const propertiesTotal = computed(() => portfolioStore.propertiesTotal);
@@ -355,11 +405,21 @@ export default defineComponent({
         sortable: true,
       },
       {
-        name: 'lien',
+        name: 'original loan balance',
         required: true,
-        label: 'Lien',
+        label: 'Original Loan Balance',
         align: 'left',
         field: (row: Record<string, unknown>) => row.lien,
+        format: (val: number) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+        sortable: true,
+      },
+      {
+        name: 'current loan balance',
+        required: true,
+        label: 'Current Loan Balance',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.currentBalance,
         format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
@@ -385,6 +445,15 @@ export default defineComponent({
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
       },
+      {
+        name: 'loan start date',
+        required: true,
+        label: 'Loan Start Date',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.date,
+        format: (val: string) => `${val}`,
+        sortable: true,
+      },
     ];
 
     const { propertyRows } = storeToRefs(portfolioStore);
@@ -392,6 +461,7 @@ export default defineComponent({
     onBeforeMount(() => {
       portfolioStore.importCurrentEquities();
       portfolioStore.importCurrentProperties();
+      portfolioStore.importCurrentDebts();
     });
 
     return {
@@ -418,6 +488,7 @@ export default defineComponent({
         portfolioStore.form.modOwnership = row.ownership;
 
         persistentPropertyEdit.value = true;
+        persistentDate.value = false;
       },
       form,
       addProperty(modelType: string) {
@@ -458,6 +529,14 @@ export default defineComponent({
         portfolioStore.deleteProperty();
 
         persistentPropertyEdit.value = false;
+      },
+      persistentDate,
+      date: ref('2022/10/01'),
+      selectDate(date: string) {
+        portfolioStore.form.REdate = date;
+        portfolioStore.form.modREDate = date;
+
+        persistentDate.value = false;
       },
     };
   },

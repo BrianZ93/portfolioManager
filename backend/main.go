@@ -4,16 +4,16 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
 
 	readFile()
 	readREFile()
+	readDebtFile()
 	getPrices()
-	logrus.Println("MM-DD-YYYY: ", currentTime.Format("01-02-2006"))
+
+	// This function must be the last one as it ties up the terminal
 	handleRequests()
 
 }
@@ -41,6 +41,12 @@ func handleRequests() {
 	http.HandleFunc("/propertyadd", addProperty)
 	http.HandleFunc("/propertymod", modifyProperty)
 	http.HandleFunc("/propertydel", deleteProperty)
+
+	// Debt REST
+	http.HandleFunc("/debts", DebtRetrieve)
+	http.HandleFunc("/debtadd", addDebt)
+	http.HandleFunc("/debtmod", modifyDebt)
+	http.HandleFunc("/debtdel", deleteDebt)
 
 	log.Fatal(http.ListenAndServe(":8081", nil))
 }

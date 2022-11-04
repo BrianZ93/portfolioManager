@@ -1,0 +1,32 @@
+[
+ {
+  "id": 1,
+  "title": "Home",
+  "type": "Installment",
+  "amount": 208000,
+  "rate": 261.5,
+  "term": 30,
+  "payment": 1000,
+  "date": "10/01/2022"
+ },
+ {
+  "id": 3,
+  "title": "Lexus Financial",
+  "type": "Installment",
+  "amount": 40000,
+  "rate": 400,
+  "term": 5,
+  "payment": 300,
+  "date": "2022/10/04"
+ },
+ {
+  "id": 4,
+  "title": "Toyota",
+  "type": "Installment",
+  "amount": 22000,
+  "rate": 350,
+  "term": 3,
+  "payment": 597,
+  "date": "2022/10/05"
+ }
+]

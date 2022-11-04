@@ -1,50 +1,41 @@
 [
-  {
-    "id": 1,
-    "description": "4530 N Magnolia Ave",
-    "price": 200000,
-    "lien": 209000,
-    "rate": 3,
-    "years": 30,
-    "value": 315000,
-    "monthsleft": 0,
-    "type": "Investment Property",
-    "ownership": 100
-  },
-  {
-    "id": 2,
-    "description": "2143 Maple Ave",
-    "price": 10000,
-    "lien": 209500,
-    "rate": 4,
-    "years": 30,
-    "value": 315000,
-    "monthsleft": 0,
-    "type": "Primary Residence",
-    "ownership": 100
-  },
-  {
-    "id": 3,
-    "description": "3352 N Glenlake",
-    "price": 300000,
-    "lien": 415000,
-    "rate": 4,
-    "years": 30,
-    "value": 450000,
-    "monthsleft": 0,
-    "type": "Investment Property",
-    "ownership": 10
-  },
-  {
-    "id": 4,
-    "description": "3107 Everglade Ave",
-    "price": 315000,
-    "lien": 310000,
-    "rate": 0,
-    "years": 30,
-    "value": 335000,
-    "monthsleft": 0,
-    "type": "Second Home",
-    "ownership": 100
-  }
+ {
+  "id": 1,
+  "description": "4530 N Magnolia Ave",
+  "price": 240500,
+  "lien": 207000,
+  "rate": 387,
+  "years": 30,
+  "value": 300000,
+  "monthsleft": 0,
+  "type": "Investment Property",
+  "ownership": 100,
+  "date": ""
+ },
+ {
+  "id": 2,
+  "description": "2143 Maple Ave",
+  "price": 230000,
+  "lien": 208000,
+  "rate": 261,
+  "years": 30,
+  "value": 305000,
+  "monthsleft": 0,
+  "type": "Primary Residence",
+  "ownership": 100,
+  "date": ""
+ },
+ {
+  "id": 3,
+  "description": "3352 N Glenlake",
+  "price": 300000,
+  "lien": 415000,
+  "rate": 401,
+  "years": 30,
+  "value": 450000,
+  "monthsleft": 0,
+  "type": "Investment Property",
+  "ownership": 10,
+  "date": ""
+ }
 ]

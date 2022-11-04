@@ -34,6 +34,7 @@ export class Property {
   monthsLeft: number;
   value: number;
   ownership: number;
+  date: string;
 
   constructor(
     type: string,
@@ -45,7 +46,8 @@ export class Property {
     years: number,
     monthsLeft: number,
     value: number,
-    ownership: number
+    ownership: number,
+    date: string
   ) {
     this.type = type;
     this.id = id;
@@ -57,6 +59,7 @@ export class Property {
     this.monthsLeft = monthsLeft;
     this.value = value;
     this.ownership = ownership;
+    this.date = date;
   }
 }
 
@@ -72,6 +75,8 @@ export class PropertyRow {
   value: number;
   equity: number;
   ownership: number;
+  date: string;
+  currentBalance: number;
 
   constructor(
     type: string,
@@ -84,7 +89,9 @@ export class PropertyRow {
     monthsLeft: number,
     value: number,
     equity: number,
-    ownership: number
+    ownership: number,
+    date: string,
+    currentBalance: number
   ) {
     this.type = type;
     this.id = id;
@@ -97,6 +104,8 @@ export class PropertyRow {
     this.value = value;
     this.equity = equity;
     this.ownership = ownership;
+    this.date = date;
+    this.currentBalance = currentBalance;
   }
 }
 
@@ -112,6 +121,37 @@ export class Ticker {
   }
 }
 
+export class Debt {
+  id: number;
+  title: string;
+  type: string;
+  amount: number;
+  rate: number;
+  term: number;
+  payment: number;
+  date: string;
+
+  constructor(
+    id: number,
+    title: string,
+    type: string,
+    amount: number,
+    rate: number,
+    term: number,
+    payment: number,
+    date: string
+  ) {
+    this.id = id;
+    this.title = title;
+    this.type = type;
+    this.amount = amount;
+    this.rate = rate;
+    this.term = term;
+    this.payment = payment;
+    this.date = date;
+  }
+}
+
 export const usePortfolioStore = defineStore('portfolioStore', {
   state: () => {
     return {
@@ -122,11 +162,14 @@ export const usePortfolioStore = defineStore('portfolioStore', {
       // Equity table,
       equityRows: [] as Array<Equity>,
 
+      Debts: [] as Array<Debt>,
+
       // Chart Specific Data
 
       // Asset Totals
       equitiesTotal: 0,
       propertiesTotal: 0,
+      debtsTotal: 0,
       // Property Type Totals
       primaryTotal: 0,
       secondaryTotal: 0,
@@ -166,6 +209,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         monthsLeft: 360,
         value: 0,
         ownership: 0,
+        REdate: '',
 
         // Property Modify Form Data
         modtype: '',
@@ -178,9 +222,33 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         modmonthsLeft: 360,
         modvalue: 0,
         modOwnership: 0,
+        modREDate: '',
 
         // Property Delete Form Data
         delcurrentproperty: 0,
+
+        // Debt Form Data
+        debtid: 0,
+        debttitle: '',
+        debttype: '',
+        debtamount: 0,
+        debtrate: 0,
+        debtterm: 0,
+        debtpayment: 0,
+        debtdate: '',
+
+        // Debt Modify Form Data
+        debtmodid: 0,
+        debtmodtitle: '',
+        debtmodtype: '',
+        debtmodamount: 0,
+        debtmodrate: 0,
+        debtmodterm: 0,
+        debtmodpayment: 0,
+        debtmoddate: '',
+
+        // Debt Delete Form Data
+        delcurrentdebt: 0,
       },
     };
   },
@@ -201,8 +269,8 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         });
     },
     addPropertyAPI() {
-      const rate = parseFloat(this.form.modrate);
-      const ownership = parseFloat(this.form.modOwnership);
+      const rate = parseFloat(this.form.rate);
+      const ownership = parseFloat(this.form.ownership);
       axios
         .post(
           'http://localhost:8081/propertyadd',
@@ -212,16 +280,37 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             description: this.form.description,
             price: Number(this.form.price),
             lien: Number(this.form.lien),
-            rate: Number(rate),
+            rate: Number(rate * 100),
             years: Number(this.form.years),
             monthsLeft: Number(this.form.monthsLeft),
             value: Number(this.form.value),
             ownership: Number(ownership),
+            date: this.form.REdate,
           })
         )
         .then((response) => {
           console.log(response);
           this.importCurrentProperties();
+        });
+    },
+    addDebtAPI() {
+      const rate = parseFloat(this.form.debtrate);
+      axios
+        .post(
+          'http://localhost:8081/debtadd',
+          JSON.stringify({
+            title: this.form.debttitle,
+            type: this.form.debttype,
+            amount: Number(this.form.debtamount),
+            rate: Number(rate * 100),
+            term: Number(this.form.debtterm),
+            payment: Number(this.form.debtpayment),
+            date: this.form.debtdate,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentDebts();
         });
     },
     async importCurrentEquities() {
@@ -276,13 +365,20 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].description,
                 res.data[i].price,
                 res.data[i].lien,
-                res.data[i].rate,
+                res.data[i].rate / 100,
                 res.data[i].years,
                 res.data[i].monthsLeft,
                 res.data[i].value,
-                res.data[i].ownership
+                res.data[i].ownership,
+                res.data[i].REdate
               )
             );
+
+            // let loanAmount = res.data[i].lien;
+            // let interestRate = 0.0025;
+
+            // let Interest =
+            //   loanAmount * ((0.0025 * (1.0025 / 48)) / (1.0025 / 48) - 1);
 
             this.propertyRows.push(
               new PropertyRow(
@@ -296,7 +392,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].monthsLeft,
                 res.data[i].value,
                 res.data[i].value - res.data[i].lien,
-                res.data[i].ownership
+                res.data[i].ownership,
+                res.data[i].date,
+                0
               )
             );
 
@@ -313,6 +411,37 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             }
           }
         });
+    },
+    async importCurrentDebts() {
+      try {
+        const res = await axios
+          .get('http://localhost:8081/debts')
+          .then((res) => {
+            this.Debts = [] as Array<Debt>;
+
+            for (let i = 0; i < res.data.length; i++) {
+              this.Debts.push(
+                new Debt(
+                  res.data[i].id as number,
+                  res.data[i].title as string,
+                  res.data[i].type as string,
+                  res.data[i].amount as number,
+                  (res.data[i].rate / 100) as number,
+                  res.data[i].term as number,
+                  res.data[i].payment as number,
+                  res.data[i].date as string
+                )
+              );
+            }
+
+            this.debtsTotal = 0;
+            for (const debt of this.Debts) {
+              this.debtsTotal += debt.amount;
+            }
+          });
+      } catch {
+        console.log('Backend API is not available');
+      }
     },
     async modifyEquity() {
       console.log(Number(this.form.modcurrentprice));
@@ -346,6 +475,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
     },
     async modifyProperty() {
       const rate = parseFloat(this.form.modrate);
+      const ownership = parseFloat(this.form.modOwnership);
 
       axios
         .post(
@@ -355,12 +485,13 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             description: this.form.moddescription,
             price: Number(this.form.modREprice),
             lien: Number(this.form.modlien),
-            rate: Number(rate),
+            rate: Number(rate * 100),
             years: Number(this.form.modyears),
             value: Number(this.form.modvalue),
             monthsleft: Number(this.form.modmonthsLeft),
             type: this.form.modtype,
-            ownership: this.form.modOwnership,
+            ownership: Number(ownership),
+            date: this.form.REdate,
           })
         )
         .then((response) => {
@@ -381,6 +512,41 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           this.importCurrentProperties();
         });
     },
+    async modifyDebt() {
+      const rate = parseFloat(this.form.debtmodrate);
+
+      axios
+        .post(
+          'http://localhost:8081/debtmod',
+          JSON.stringify({
+            id: Number(this.form.debtmodid),
+            title: this.form.debtmodtitle,
+            type: this.form.debtmodtype,
+            amount: Number(this.form.debtmodamount),
+            rate: Number(rate * 100),
+            term: Number(this.form.debtmodterm),
+            payment: Number(this.form.debtmodpayment),
+            date: this.form.debtmoddate,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentDebts();
+        });
+    },
+    async deleteDebt() {
+      axios
+        .post(
+          'http://localhost:8081/debtdel',
+          JSON.stringify({
+            id: this.form.delcurrentdebt,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentDebts();
+        });
+    },
   },
   getters: {
     grabEquities: (state) => {
@@ -388,6 +554,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
     },
     grabRealEstate(state) {
       return [...state.realEstate];
+    },
+    grabDebts: (state) => {
+      return [...state.Debts];
     },
   },
 });

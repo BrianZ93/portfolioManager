@@ -20,6 +20,7 @@ type RealEstatePost struct {
 	MonthsLeft  float64 `json:"monthsleft"`
 	Type        string  `json:"type"`
 	Ownership   float64 `json:"ownership"`
+	Date        string  `json:"date"`
 }
 
 type RealEstate []RealEstatePost
@@ -30,7 +31,7 @@ var TempProperties RealEstate
 func checkREFile(filename string) error {
 	_, err := os.Stat(filename)
 	if os.IsNotExist(err) {
-		logrus.Print("New RE portfolio detected, initializing...")
+		logrus.Info("New RE portfolio detected, initializing...")
 		_, err := os.Create(filename)
 
 		StarterREData := &[]RealEstatePost{
@@ -45,6 +46,7 @@ func checkREFile(filename string) error {
 				Value:       330000,
 				Type:        "Empty",
 				Ownership:   100,
+				Date:        "10/01/2022",
 			},
 		}
 		file, _ := json.MarshalIndent(StarterREData, "", " ")
@@ -84,8 +86,6 @@ func readREFile() {
 		logrus.Error("cannot convert properties JSON objects")
 	}
 
-	logrus.Print(redata, "initial RE data")
-
 	var CurId float64
 	IdProceed := false
 	var CurDesc string
@@ -106,6 +106,8 @@ func readREFile() {
 	TypeProceed := false
 	var CurOwnership float64
 	OwnershipProceed := false
+	var CurDate string
+	DateProceed := false
 
 	var CurrentIndex = 0
 
@@ -113,7 +115,7 @@ func readREFile() {
 		objMap, ok := obj.(map[string]interface{})
 
 		if !ok {
-			logrus.Print("cannot convert RE interface{} to type map[string]interface{}")
+			logrus.Error("cannot convert RE interface{} to type map[string]interface{}")
 		}
 
 		// The below if statements check on the data type to see if an upload is possible
@@ -167,8 +169,13 @@ func readREFile() {
 			OwnershipProceed = true
 		}
 
-		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed && OwnershipProceed {
-			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType, Ownership: CurOwnership})
+		if res, ok := objMap["date"].(string); ok {
+			CurDate = res
+			DateProceed = true
+		}
+
+		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed && OwnershipProceed && DateProceed {
+			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType, Ownership: CurOwnership, Date: CurDate})
 		}
 
 		CurrentIndex++
@@ -186,8 +193,6 @@ func RERetrieve(w http.ResponseWriter, request *http.Request) {
 
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
-
-	logrus.Print(CurrentProperties, "retrieve current properties")
 
 	json.NewEncoder(w).Encode(CurrentProperties)
 }
@@ -212,7 +217,7 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 	TempProperties = nil
 
 	if CurrentProperties == nil {
-		TempProperties = append(TempProperties, RealEstatePost{Id: 0, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type, Ownership: propertyData.Ownership})
+		TempProperties = append(TempProperties, RealEstatePost{Id: 0, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type, Ownership: propertyData.Ownership, Date: propertyData.Date})
 		CurrentProperties = TempProperties
 
 		file, _ := json.MarshalIndent(CurrentProperties, "", " ")
@@ -240,7 +245,7 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-		CurrentProperties = append(CurrentProperties, RealEstatePost{Id: NewId, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type, Ownership: propertyData.Ownership})
+		CurrentProperties = append(CurrentProperties, RealEstatePost{Id: NewId, Description: propertyData.Description, Price: propertyData.Price, Lien: propertyData.Lien, Rate: propertyData.Rate, Years: propertyData.Years, Value: propertyData.Value, MonthsLeft: propertyData.MonthsLeft, Type: propertyData.Type, Ownership: propertyData.Ownership, Date: propertyData.Date})
 
 		file, _ := json.MarshalIndent(CurrentProperties, "", " ")
 
@@ -249,8 +254,6 @@ func addProperty(w http.ResponseWriter, request *http.Request) {
 
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
-
-	logrus.Print(CurrentProperties, " current properties")
 
 	json.NewEncoder(w).Encode(CurrentProperties)
 }
@@ -272,8 +275,6 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 	// Uses the decoder to decode the response to Property data at its memory location
 	decoder.Decode(&propertyData)
 
-	logrus.Info("THIS++++++", propertyData)
-
 	for property := range CurrentProperties {
 		if propertyData.Id == CurrentProperties[property].Id {
 			CurrentProperties[property].Id = propertyData.Id
@@ -286,6 +287,7 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 			CurrentProperties[property].MonthsLeft = propertyData.MonthsLeft
 			CurrentProperties[property].Type = propertyData.Type
 			CurrentProperties[property].Ownership = propertyData.Ownership
+			CurrentProperties[property].Date = propertyData.Date
 		}
 	}
 
@@ -323,13 +325,12 @@ func deleteProperty(w http.ResponseWriter, request *http.Request) {
 		CurrentProperties[0].MonthsLeft = 0
 		CurrentProperties[0].Type = "Empty"
 		CurrentProperties[0].Ownership = 0
+		CurrentProperties[0].Date = "10/01/2022"
 
 	} else {
 		TempProperties = nil
 		for property := range CurrentProperties {
 			if propertyData.Id == CurrentProperties[property].Id {
-				logrus.Info(propertyData.Id)
-				logrus.Info(CurrentProperties[property].Id)
 				continue
 			} else {
 				TempProperties = append(TempProperties, CurrentProperties[property])
