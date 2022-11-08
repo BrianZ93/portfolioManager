@@ -57,7 +57,7 @@
               filled
               v-model="form.debtrate"
               label="Interest Rate"
-              mask="#.####%"
+              mask="#.####"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -183,7 +183,7 @@
               filled
               v-model="form.debtmodrate"
               label="Interest Rate"
-              mask="#.####%"
+              mask="#.####"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -397,8 +397,15 @@ export default defineComponent({
       form,
       date: ref('2022/10/01'),
       selectDate(date: string) {
-        portfolioStore.form.debtdate = date;
-        portfolioStore.form.debtmoddate = date;
+        // Date Constructor (Original Quasar Object has YYYY/MM/DD Format)
+        const year = date.slice(0, 4);
+        const month = date.slice(5, 7);
+        const day = date.slice(8, 10);
+
+        const datestring = month + '/' + day + '/' + year;
+
+        portfolioStore.form.debtdate = datestring;
+        portfolioStore.form.debtmoddate = datestring;
 
         persistentDate.value = false;
       },

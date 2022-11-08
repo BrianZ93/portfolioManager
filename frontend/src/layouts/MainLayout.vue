@@ -29,16 +29,16 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'MainLayout',
   setup() {
-    let currentTime = new Date();
+    // Creating the date object
+    let dateObject = new Date();
+    // Retrieving todays date
+    const dd = String(dateObject.getDate()).padStart(2, 0);
+    const mm = String(dateObject.getMonth() + 1).padStart(2, '0');
+    const yyyy = dateObject.getFullYear();
 
     let dateString = '';
 
-    dateString =
-      currentTime.getMonth() +
-      '/' +
-      currentTime.getDay() +
-      '/' +
-      currentTime.getFullYear();
+    dateString = mm + '/' + dd + '/' + yyyy;
 
     return {
       dateString,

@@ -67,7 +67,7 @@
               filled
               v-model="form.rate"
               label="Interest Rate"
-              mask="#.##%"
+              mask="#.####"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -223,7 +223,7 @@
               filled
               v-model="form.modrate"
               label="Interest Rate"
-              mask="#.##%"
+              mask="#.####"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -262,7 +262,7 @@
               filled
               v-model="form.modOwnership"
               label="Ownership %"
-              mask="#.##%"
+              mask="#.##"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -332,9 +332,10 @@
         <q-table
           :title="
             'Properties - ' +
-            propertiesTotal
-              .toLocaleString('en-US', { style: 'currency', currency: 'USD' })
-              .toString()
+            propertiesTotal.toLocaleString('en-US', {
+              style: 'currency',
+              currency: 'USD',
+            })
           "
           :columns="columns"
           :rows="propertyRows"
@@ -486,6 +487,7 @@ export default defineComponent({
         portfolioStore.form.modmonthsLeft = row.monthsLeft;
         portfolioStore.form.modvalue = row.value;
         portfolioStore.form.modOwnership = row.ownership;
+        portfolioStore.form.modREDate = row.date;
 
         persistentPropertyEdit.value = true;
         persistentDate.value = false;
@@ -500,6 +502,7 @@ export default defineComponent({
         portfolioStore.form.years = form.value.years;
         portfolioStore.form.value = form.value.value;
         portfolioStore.form.ownership = form.value.ownership;
+        portfolioStore.form.REdate = form.value.REdate;
 
         persistentProperty.value = false;
         portfolioStore.addPropertyAPI();
@@ -516,6 +519,7 @@ export default defineComponent({
         portfolioStore.form.modmonthsLeft = form.value.modmonthsLeft;
         portfolioStore.form.modvalue = form.value.modvalue;
         portfolioStore.form.modOwnership = form.value.modOwnership;
+        portfolioStore.form.modREDate = form.value.modREDate;
 
         portfolioStore.modifyProperty();
 
@@ -533,8 +537,15 @@ export default defineComponent({
       persistentDate,
       date: ref('2022/10/01'),
       selectDate(date: string) {
-        portfolioStore.form.REdate = date;
-        portfolioStore.form.modREDate = date;
+        // Date Constructor (Original Quasar Object has YYYY/MM/DD Format)
+        const year = date.slice(0, 4);
+        const month = date.slice(5, 7);
+        const day = date.slice(8, 10);
+
+        const datestring = month + '/' + day + '/' + year;
+
+        portfolioStore.form.REdate = datestring;
+        portfolioStore.form.modREDate = datestring;
 
         persistentDate.value = false;
       },

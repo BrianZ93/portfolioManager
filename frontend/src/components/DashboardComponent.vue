@@ -6,37 +6,60 @@
         <!-- Net Worth Card -->
         <div class="col section">
           <q-card class="card" v-ripple>
-            <q-card-section>
-              <div>Net Worth</div>
-              <p1>Ticker or Description</p1>
-            </q-card-section>
+            <div>Net Worth</div>
+            <div>
+              {{
+                netWorth.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+            </div>
           </q-card>
         </div>
 
         <!-- Real Estate Card -->
         <div class="col section">
-          <q-card class="card">
-            <q-card-section>
-              <div>Real Estate</div>
-            </q-card-section>
+          <q-card class="card" v-ripple>
+            <div>Real Estate</div>
+            <div>
+              {{
+                propertiesTotal.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+            </div>
           </q-card>
         </div>
 
         <!-- Equities Card -->
         <div class="col section">
-          <q-card class="card">
-            <q-card-section>
-              <div>Equities</div>
-            </q-card-section>
+          <q-card class="card" v-ripple>
+            <div>Equities</div>
+            <div>
+              {{
+                equitiesTotal.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+            </div>
           </q-card>
         </div>
 
         <!-- Debt Card -->
         <div class="col section">
-          <q-card class="card">
-            <q-card-section>
-              <div>Debt</div>
-            </q-card-section>
+          <q-card class="card" v-ripple>
+            <div>Debt</div>
+            <div>
+              {{
+                debtsTotal.toLocaleString('en-US', {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+            </div>
           </q-card>
         </div>
       </div>
@@ -77,7 +100,12 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, defineAsyncComponent, onBeforeMount } from 'vue';
+import {
+  defineComponent,
+  defineAsyncComponent,
+  onBeforeMount,
+  computed,
+} from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 
 const portfolioStore = usePortfolioStore();
@@ -105,9 +133,27 @@ export default defineComponent({
     onBeforeMount(() => {
       portfolioStore.importCurrentEquities();
       portfolioStore.importCurrentProperties();
+      portfolioStore.importCurrentDebts();
     });
 
-    return {};
+    // Card balances
+    const netWorth = computed(
+      () =>
+        portfolioStore.equitiesTotal +
+        portfolioStore.propertiesTotal -
+        portfolioStore.debtsTotal
+    );
+
+    const equitiesTotal = computed(() => portfolioStore.equitiesTotal);
+    const propertiesTotal = computed(() => portfolioStore.propertiesTotal);
+    const debtsTotal = computed(() => portfolioStore.debtsTotal * -1);
+
+    return {
+      netWorth,
+      equitiesTotal,
+      propertiesTotal,
+      debtsTotal,
+    };
   },
 });
 </script>
@@ -177,10 +223,13 @@ export default defineComponent({
 .card {
   max-width: 15vw;
   min-width: 15vw;
-  max-height: 10vh;
-  min-height: 10vh;
+  max-height: 9vh;
+  min-height: 9vh;
   margin-left: 1vw;
   margin-right: 1vw;
   background-color: $primary;
+  font-size: 1.25rem;
+  text-align: center;
+  padding-top: 1vh;
 }
 </style>

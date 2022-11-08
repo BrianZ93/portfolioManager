@@ -280,7 +280,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             description: this.form.description,
             price: Number(this.form.price),
             lien: Number(this.form.lien),
-            rate: Number(rate * 100),
+            rate: Number(rate),
             years: Number(this.form.years),
             monthsLeft: Number(this.form.monthsLeft),
             value: Number(this.form.value),
@@ -302,7 +302,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             title: this.form.debttitle,
             type: this.form.debttype,
             amount: Number(this.form.debtamount),
-            rate: Number(rate * 100),
+            rate: Number(rate),
             term: Number(this.form.debtterm),
             payment: Number(this.form.debtpayment),
             date: this.form.debtdate,
@@ -365,20 +365,55 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].description,
                 res.data[i].price,
                 res.data[i].lien,
-                res.data[i].rate / 100,
+                res.data[i].rate,
                 res.data[i].years,
                 res.data[i].monthsLeft,
                 res.data[i].value,
                 res.data[i].ownership,
-                res.data[i].REdate
+                res.data[i].date
               )
             );
 
-            // let loanAmount = res.data[i].lien;
-            // let interestRate = 0.0025;
+            // Creating a blank date object
+            const dateObject = new Date();
+            // Retrieving todays date
+            const dd = String(dateObject.getDate()).padStart(2, 0);
+            const mm = String(dateObject.getMonth() + 1).padStart(2, '0');
+            const yyyy = dateObject.getFullYear();
 
-            // let Interest =
-            //   loanAmount * ((0.0025 * (1.0025 / 48)) / (1.0025 / 48) - 1);
+            const todayString = (mm + '/' + dd + '/' + yyyy) as string;
+
+            // Getting the current property lien to be amortized
+            const amortizingProperty = this.realEstate.get(res.data[i].id);
+
+            // Calculating how many payments to amortize
+            const yearsElapsed =
+              parseFloat(todayString.slice(6, 10)) -
+              parseFloat(amortizingProperty?.date.slice(6, 10) as string);
+
+            const monthsElapsed =
+              parseFloat(todayString.slice(0, 2)) -
+              parseFloat(amortizingProperty?.date.slice(0, 2) as string) +
+              yearsElapsed * 12;
+
+            const monthlyRate = res.data[i].rate / 100 / 12;
+            const rate = res.data[i].rate / 100;
+            const term = res.data[i].years * 12;
+            const lien = res.data[i].lien;
+
+            const factor = (1 + monthlyRate) ** term;
+            const rateFactor = monthlyRate * factor;
+
+            const termFactor = (1 + monthlyRate) ** term - 1;
+
+            const payment = lien * (rateFactor / termFactor);
+
+            let currentBalance = lien;
+            for (let i = 1; i < monthsElapsed; i++) {
+              const interest = (rate / 12) * currentBalance;
+
+              currentBalance = currentBalance - (payment - interest);
+            }
 
             this.propertyRows.push(
               new PropertyRow(
@@ -391,10 +426,10 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].years,
                 res.data[i].monthsLeft,
                 res.data[i].value,
-                res.data[i].value - res.data[i].lien,
+                res.data[i].value - currentBalance,
                 res.data[i].ownership,
                 res.data[i].date,
-                0
+                currentBalance
               )
             );
 
@@ -426,7 +461,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                   res.data[i].title as string,
                   res.data[i].type as string,
                   res.data[i].amount as number,
-                  (res.data[i].rate / 100) as number,
+                  res.data[i].rate as number,
                   res.data[i].term as number,
                   res.data[i].payment as number,
                   res.data[i].date as string
@@ -440,7 +475,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             }
           });
       } catch {
-        console.log('Backend API is not available');
+        console.error('Backend API is not available');
       }
     },
     async modifyEquity() {
@@ -485,13 +520,13 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             description: this.form.moddescription,
             price: Number(this.form.modREprice),
             lien: Number(this.form.modlien),
-            rate: Number(rate * 100),
+            rate: Number(rate),
             years: Number(this.form.modyears),
             value: Number(this.form.modvalue),
             monthsleft: Number(this.form.modmonthsLeft),
             type: this.form.modtype,
             ownership: Number(ownership),
-            date: this.form.REdate,
+            date: this.form.modREDate,
           })
         )
         .then((response) => {
@@ -523,7 +558,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             title: this.form.debtmodtitle,
             type: this.form.debtmodtype,
             amount: Number(this.form.debtmodamount),
-            rate: Number(rate * 100),
+            rate: Number(rate),
             term: Number(this.form.debtmodterm),
             payment: Number(this.form.debtmodpayment),
             date: this.form.debtmoddate,

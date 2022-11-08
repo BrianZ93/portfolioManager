@@ -9,6 +9,26 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+type Tenant struct {
+	Name       string    `json:"name"`
+	LeaseStart string    `json:"leasestart"`
+	LeaseEnd   string    `json:"leaseend"`
+	Expenses   []Expense `json:"expenses"`
+	Revenues   []Revenue `json:"income"`
+}
+
+type Expense struct {
+	Description string  `json:"description"`
+	Amount      float64 `json:"amount"`
+	Date        string  `json:"date"`
+}
+
+type Revenue struct {
+	Description string  `json:"description"`
+	Amount      float64 `json:"amount"`
+	Date        string  `json:"date"`
+}
+
 type RealEstatePost struct {
 	Id          float64 `json:"id"`
 	Description string  `json:"description"`

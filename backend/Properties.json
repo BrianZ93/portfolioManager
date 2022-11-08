@@ -3,39 +3,39 @@
   "id": 1,
   "description": "4530 N Magnolia Ave",
   "price": 240500,
-  "lien": 207000,
-  "rate": 387,
+  "lien": 228475,
+  "rate": 3.875,
   "years": 30,
-  "value": 300000,
+  "value": 315000,
   "monthsleft": 0,
   "type": "Investment Property",
   "ownership": 100,
-  "date": ""
+  "date": "07/01/2017"
  },
  {
   "id": 2,
   "description": "2143 Maple Ave",
   "price": 230000,
-  "lien": 208000,
-  "rate": 261,
+  "lien": 214700,
+  "rate": 2.615,
   "years": 30,
   "value": 305000,
   "monthsleft": 0,
   "type": "Primary Residence",
   "ownership": 100,
-  "date": ""
+  "date": "07/01/2021"
  },
  {
   "id": 3,
   "description": "3352 N Glenlake",
   "price": 300000,
   "lien": 415000,
-  "rate": 401,
+  "rate": 4.01,
   "years": 30,
   "value": 450000,
   "monthsleft": 0,
   "type": "Investment Property",
   "ownership": 10,
-  "date": ""
+  "date": "10/01/2019"
  }
 ]
