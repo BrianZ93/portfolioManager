@@ -10,11 +10,13 @@ import (
 )
 
 type Tenant struct {
-	Name       string    `json:"name"`
-	LeaseStart string    `json:"leasestart"`
-	LeaseEnd   string    `json:"leaseend"`
-	Expenses   []Expense `json:"expenses"`
-	Revenues   []Revenue `json:"income"`
+	Name          string    `json:"name"`
+	LeaseStart    string    `json:"leasestart"`
+	LeaseEnd      string    `json:"leaseend"`
+	Expenses      []Expense `json:"expenses"`
+	Revenues      []Revenue `json:"income"`
+	Unit          string    `json:"unit"`
+	CurrentTenant bool      `json:"currenttenant"`
 }
 
 type Expense struct {
@@ -30,17 +32,19 @@ type Revenue struct {
 }
 
 type RealEstatePost struct {
-	Id          float64 `json:"id"`
-	Description string  `json:"description"`
-	Price       float64 `json:"price"`
-	Lien        float64 `json:"lien"`
-	Rate        float64 `json:"rate"`
-	Years       float64 `json:"years"`
-	Value       float64 `json:"value"`
-	MonthsLeft  float64 `json:"monthsleft"`
-	Type        string  `json:"type"`
-	Ownership   float64 `json:"ownership"`
-	Date        string  `json:"date"`
+	Id               float64   `json:"id"`
+	Description      string    `json:"description"`
+	Price            float64   `json:"price"`
+	Lien             float64   `json:"lien"`
+	Rate             float64   `json:"rate"`
+	Years            float64   `json:"years"`
+	Value            float64   `json:"value"`
+	MonthsLeft       float64   `json:"monthsleft"`
+	Type             string    `json:"type"`
+	Ownership        float64   `json:"ownership"`
+	Date             string    `json:"date"`
+	Tenants          []Tenant  `json:"tenants"`
+	BuildingExpenses []Expense `json:"buildingexpenses"`
 }
 
 type RealEstate []RealEstatePost
@@ -308,6 +312,8 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 			CurrentProperties[property].Type = propertyData.Type
 			CurrentProperties[property].Ownership = propertyData.Ownership
 			CurrentProperties[property].Date = propertyData.Date
+			CurrentProperties[property].Tenants = propertyData.Tenants
+			CurrentProperties[property].BuildingExpenses = propertyData.BuildingExpenses
 		}
 	}
 
@@ -364,4 +370,47 @@ func deleteProperty(w http.ResponseWriter, request *http.Request) {
 
 	_ = ioutil.WriteFile("Properties.json", file, 0644)
 
+}
+
+func addTenant(w http.ResponseWriter, request *http.Request) {
+	// Enabling CORS
+	enableCors(&w)
+
+	// Sets the appropriate data type for JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Returns the status of the local host
+	w.WriteHeader(http.StatusOK)
+
+	// Initializing API variables
+	var propertyData RealEstatePost
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to tenant data at its memory location
+	decoder.Decode(&propertyData)
+
+	for property := range CurrentProperties {
+		if propertyData.Id == CurrentProperties[property].Id {
+			CurrentProperties[property].Id = propertyData.Id
+			CurrentProperties[property].Description = propertyData.Description
+			CurrentProperties[property].Price = propertyData.Price
+			CurrentProperties[property].Lien = propertyData.Lien
+			CurrentProperties[property].Rate = propertyData.Rate
+			CurrentProperties[property].Years = propertyData.Years
+			CurrentProperties[property].Value = propertyData.Value
+			CurrentProperties[property].MonthsLeft = propertyData.MonthsLeft
+			CurrentProperties[property].Type = propertyData.Type
+			CurrentProperties[property].Ownership = propertyData.Ownership
+			CurrentProperties[property].Date = propertyData.Date
+			CurrentProperties[property].Tenants = propertyData.Tenants
+			CurrentProperties[property].BuildingExpenses = propertyData.BuildingExpenses
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
 }

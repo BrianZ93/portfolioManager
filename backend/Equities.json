@@ -1,18 +1,18 @@
 [
-  {
-    "ticker": "QQQ",
-    "shares": 100,
-    "price": 405.9,
-    "priceloaded": true,
-    "value": 259.8,
-    "message": ""
-  },
-  {
-    "ticker": "MARGIN",
-    "shares": -17847.84,
-    "price": 1,
-    "priceloaded": true,
-    "value": 1,
-    "message": ""
-  }
+ {
+  "ticker": "QQQ",
+  "shares": 100,
+  "price": 153,
+  "priceloaded": true,
+  "value": 267.59,
+  "message": ""
+ },
+ {
+  "ticker": "C",
+  "shares": 100,
+  "price": 45.01,
+  "priceloaded": true,
+  "value": 45.73,
+  "message": ""
+ }
 ]

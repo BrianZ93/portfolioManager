@@ -6,7 +6,7 @@
         rounded
         color="primary"
         label="New Property"
-        @click="persistentProperty = true"
+        @click="newPropertyDialog"
       ></q-btn>
     </div>
 
@@ -29,114 +29,122 @@
         <q-card-section>
           <form class="columns" action="" method="POST">
             <q-select
-              square
               filled
               v-model="modelType"
               :options="options"
               label="Property Type"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) || 'Please select a property type',
+              ]"
             />
             <q-input
               autogrow
               filled
-              v-model="form.description"
+              v-model="description"
               label="Street Address"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type property address here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.price"
+              type="number"
+              v-model="price"
               label="Purchase Price"
               prefix="$"
-              mask="#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type what you paid for the property here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.lien"
-              label="Loan Amount"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.rate"
-              label="Interest Rate"
-              mask="#.####"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.years"
-              label="Term (years)"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.monthsLeft"
-              label="Term (months)"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-              disable
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.value"
-              label="Current Market Value"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.ownership"
-              label="Ownership %"
+              type="number"
+              v-model="lien"
+              label="Mortgage"
               prefix="$"
-              mask="#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type Your full mortgage amount here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.REdate"
-              label="Date"
-              @click="persistentDate = true"
+              type="number"
+              v-model="rate"
+              label="Interest Rate"
+              suffix="%"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type you interest rate here',
+              ]"
             ></q-input>
-
-            <div
-              class="q-pa-md bg-grey-10 text-white"
-              v-if="persistentDate == true"
-            >
-              <div class="q-gutter-md">
-                <q-date v-model="date" color="primary" dark bordered />
-                <q-btn
-                  class="glossy"
-                  rounded
-                  color="primary"
-                  label="Select Date"
-                  @click="selectDate(date)"
-                >
-                </q-btn>
-                <q-btn label="Cancel" @click="persistentDate = false"> </q-btn>
-              </div>
-            </div>
+            <q-input
+              autogrow
+              filled
+              type="number"
+              v-model="years"
+              label="Years"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type the number of years on your mortgage here',
+              ]"
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              type="number"
+              v-model="value"
+              label="Market Value"
+              prefix="$"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type the current market value of your property here',
+              ]"
+            ></q-input>
+            <q-input
+              autogrow
+              filled
+              type="number"
+              v-model="ownership"
+              label="Ownership Percentage"
+              suffix="%"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type how much overship you have in the property here',
+              ]"
+            ></q-input>
+            <q-input
+              filled
+              v-model="REdate"
+              type="date"
+              hint="Loan Closing Date"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) || 'Please type or select a date',
+              ]"
+            ></q-input>
           </form>
         </q-card-section>
 
@@ -148,7 +156,7 @@
             rounded
             color="primary"
             label="New Property"
-            @click="addProperty(modelType)"
+            @click="addProperty(modelType as string)"
           ></q-btn>
 
           <!-- <q-popup-proxy>
@@ -186,118 +194,136 @@
         <q-card-section>
           <form class="columns" action="" method="POST">
             <q-select
-              square
               filled
-              v-model="form.modtype"
+              v-model="modType"
               :options="options"
               label="Property Type"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) || 'Please select a property type',
+              ]"
             />
             <q-input
               autogrow
               filled
-              v-model="form.moddescription"
+              v-model="modDescription"
               label="Street Address"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type property address here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.modREprice"
+              type="number"
+              v-model="modREprice"
               label="Purchase Price"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              prefix="$"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type what you originally paid for the property here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.modlien"
-              label="Loan Amount"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              type="number"
+              v-model="modLien"
+              label="Mortgage"
+              prefix="$"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type Your full mortgage amount here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.modrate"
+              type="number"
+              v-model="modRate"
               label="Interest Rate"
-              mask="#.####"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              suffix="%"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type you interest rate here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.modyears"
-              label="Term (years)"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              type="number"
+              v-model="modYears"
+              label="Years"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type the number of years on your mortgage here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.modmonthsLeft"
-              label="Term (months)"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-              disable
+              type="number"
+              v-model="modValue"
+              label="Market Value"
+              prefix="$"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type the current market value of your property here',
+              ]"
             ></q-input>
             <q-input
               autogrow
               filled
-              v-model="form.modvalue"
-              label="Current Market Value"
-              mask="$#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              type="number"
+              v-model="modOwnership"
+              label="Ownership Percentage"
+              suffix="%"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) ||
+                  'Please type how much overship you have in the property here',
+              ]"
             ></q-input>
             <q-input
-              autogrow
               filled
-              v-model="form.modOwnership"
-              label="Ownership %"
-              mask="#.##"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
+              v-model="modREDate"
+              type="date"
+              hint="Loan Closing Date"
+              lazy-rules
+              :rules="[
+                (val) =>
+                  (val && val.length > 0) || 'Please type or select a date',
+              ]"
             ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.modREDate"
-              label="Date"
-              @click="persistentDate = true"
-            ></q-input>
-
-            <div
-              class="q-pa-md bg-grey-10 text-white"
-              v-if="persistentDate == true"
-            >
-              <div class="q-gutter-md">
-                <q-date v-model="date" color="primary" dark bordered />
-                <q-btn
-                  class="glossy"
-                  rounded
-                  color="primary"
-                  label="Select Date"
-                  @click="selectDate(date)"
-                >
-                </q-btn>
-                <q-btn label="Cancel" @click="persistentDate = false"> </q-btn>
-              </div>
-            </div>
           </form>
         </q-card-section>
 
         <q-card-section class="q-pt-none"> </q-card-section>
 
         <q-card-actions align="right" class="bg-black text-grey">
+          <q-btn
+            class="glossy"
+            rounded
+            color="primary"
+            label="Manage Property"
+            @click="dialog = true"
+          >
+          </q-btn>
           <q-btn
             class="glossy"
             rounded
@@ -312,6 +338,241 @@
             label="Delete"
             @click="deleteProperty"
           ></q-btn>
+
+          <!-- Manage Properties Full Dialog Box -->
+          <q-dialog
+            v-model="dialog"
+            persistent
+            :maximized="maximizedToggle"
+            transition-show="slide-up"
+            transition-hide="slide-down"
+          >
+            <q-card class="bg-black text-primary">
+              <q-banner dense inline-actions class="text-primary bg-black">
+                <div style="font-size: 2rem; text-align: center">
+                  Property Dashboard
+                </div>
+                <template v-slot:action>
+                  <q-btn flat color="primary" label="Update Property" />
+                  <q-btn dense flat icon="close" v-close-popup>
+                    <q-tooltip class="bg-white text-primary">Close</q-tooltip>
+                  </q-btn>
+                </template>
+              </q-banner>
+
+              <!-- Provides spacing between dashboard title and components -->
+              <q-card-section>
+                <div class="text-h6"></div>
+              </q-card-section>
+
+              <!-- Middle Dialog -->
+              <div class="q-pa-md q-gutter-sm">
+                <q-dialog
+                  v-model="persistent"
+                  persistent
+                  transition-show="scale"
+                  transition-hide="scale"
+                >
+                  <q-card class="text-primary" style="width: 30vw">
+                    <q-card-section>
+                      <div class="text-h6 absolute-center">Tenants</div>
+                    </q-card-section>
+
+                    <q-card-section>
+                      <q-list>
+                        <q-item v-for="tenant in realEstate" :key="tenant">
+                          <q-item-label>{{
+                            tenant[1].description
+                          }}</q-item-label>
+                        </q-item>
+
+                        <q-expansion-item
+                          icon="perm_identity"
+                          label="Add Tenant"
+                        >
+                          <q-form
+                            @submit="onSubmit"
+                            @reset="onReset"
+                            class="q-gutter-md"
+                          >
+                            <q-input
+                              filled
+                              v-model="name"
+                              label="Tenant Name"
+                              hint="Name and surname"
+                              lazy-rules
+                              :rules="[
+                                (val) =>
+                                  (val && val.length > 0) ||
+                                  'Please type something',
+                              ]"
+                            />
+
+                            <q-input
+                              filled
+                              v-model="unit"
+                              label="Tenant Unit Number"
+                              hint="If no units type anything here"
+                              lazy-rules
+                              :rules="[
+                                (val) =>
+                                  (val && val.length > 0) ||
+                                  'Please type something',
+                              ]"
+                            />
+
+                            <q-input
+                              filled
+                              v-model="start"
+                              type="date"
+                              hint="Lease Start Date"
+                              lazy-rules
+                              :rules="[
+                                (val) =>
+                                  (val && val.length > 0) ||
+                                  'Please type something',
+                              ]"
+                            />
+
+                            <q-input
+                              filled
+                              v-model="end"
+                              type="date"
+                              hint="Lease End Date"
+                              lazy-rules
+                              :rules="[
+                                (val) =>
+                                  (val && val.length > 0) ||
+                                  'Please type something',
+                              ]"
+                            />
+
+                            <q-toggle
+                              v-model="currentTenant"
+                              label="This tenant currently lives here"
+                            />
+
+                            <div>
+                              <q-btn
+                                label="Submit"
+                                type="submit"
+                                color="primary"
+                              />
+                              <q-btn
+                                label="Reset"
+                                type="reset"
+                                color="primary"
+                                flat
+                                class="q-ml-sm"
+                              />
+                            </div>
+                          </q-form>
+                        </q-expansion-item>
+                      </q-list>
+                    </q-card-section>
+
+                    <q-card-actions align="right" class="text-primary">
+                      <q-btn flat label="OK" v-close-popup />
+                    </q-card-actions>
+                  </q-card>
+                </q-dialog>
+              </div>
+
+              <div class="flex row">
+                <div class="flex col">
+                  <q-card class="my-card">
+                    <q-item>
+                      <q-item-section
+                        class="text-h6 text-primary"
+                        style="text-align: center"
+                      >
+                        Property Snapshot
+                      </q-item-section>
+                    </q-item>
+                    <q-separator></q-separator>
+                    <q-list>
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="primary" name="home" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>
+                            {{ selectedProperty.description }}</q-item-label
+                          >
+                          <q-item-label caption>{{
+                            selectedProperty.type
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="primary" name="local_bar" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Current Value</q-item-label>
+                          <q-item-label caption>{{
+                            selectedProperty.value.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="red" name="pages" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Outstanding Liens</q-item-label>
+                          <q-item-label caption>{{
+                            selectedProperty.lien.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="amber" name="local_movies" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Equity</q-item-label>
+                          <q-item-label caption>{{
+                            (
+                              selectedProperty.value - selectedProperty.lien
+                            ).toLocaleString('en-us', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+
+                      <q-item clickable @click="persistent = true">
+                        <q-item-section avatar>
+                          <q-icon color="amber" name="people" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Manage Tenants</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+                  </q-card>
+                </div>
+                <div class="flex col">
+                  <!-- Put apex chart in here for loan paydown -->
+                </div>
+              </div>
+            </q-card>
+          </q-dialog>
 
           <!-- <q-popup-proxy>
             <q-banner>
@@ -353,6 +614,7 @@
 import { defineComponent, ref, computed, onBeforeMount } from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { storeToRefs } from 'pinia';
+import { Property } from 'src/stores/portfolio-store';
 
 export default defineComponent({
   name: 'PropertyComponent',
@@ -374,6 +636,9 @@ export default defineComponent({
 
     const realEstate = computed(() => portfolioStore.realEstate);
     const propertiesTotal = computed(() => portfolioStore.propertiesTotal);
+    const selectedProperty = computed(
+      () => portfolioStore.form.selectedProperty
+    );
 
     // Property Columns
     const columns = [
@@ -465,7 +730,91 @@ export default defineComponent({
       portfolioStore.importCurrentDebts();
     });
 
+    // Tenant Form
+    const name = ref(null);
+    const unit = ref(null);
+    const start = ref(null);
+    const end = ref(null);
+    const currentTenant = ref(false);
+
+    function onSubmit() {
+      console.log('form submitted');
+      console.log(
+        name.value,
+        ' ',
+        unit.value,
+        ' ',
+        currentTenant.value,
+        ' ',
+        start.value,
+        ' ',
+        end.value
+      );
+    }
+
+    function newPropertyDialog() {
+      persistentProperty.value = true;
+    }
+
+    // Real Estate Forms
+    const modelType = ref(null);
+    const description = ref(null);
+    const price = ref(null);
+    const lien = ref(null);
+    const rate = ref(null);
+    const years = ref(null);
+    const value = ref(null);
+    const ownership = ref(null);
+    const REdate = ref(null);
+    // Modify Portion
+    const modType = ref('');
+    const modDescription = ref('');
+    const modREprice = ref(0);
+    const modLien = ref(0);
+    const modRate = ref(0);
+    const modYears = ref(0);
+    const modValue = ref(0);
+    const modOwnership = ref(0);
+    const modREDate = ref('');
+
     return {
+      // Property Form
+      modelType,
+      description,
+      price,
+      lien,
+      rate,
+      years,
+      value,
+      ownership,
+      REdate,
+      modType,
+      modDescription,
+      modREprice,
+      modLien,
+      modRate,
+      modYears,
+      modValue,
+      modOwnership,
+      modREDate,
+      newPropertyDialog,
+
+      // Tenant Form
+      name,
+      unit,
+      currentTenant,
+      end,
+      start,
+      onSubmit,
+
+      onReset() {
+        name.value = null;
+        unit.value = null;
+        start.value = null;
+        end.value = null;
+        currentTenant.value = false;
+      },
+
       portfolioStore,
       propertiesImported,
       persistentProperty,
@@ -476,6 +825,36 @@ export default defineComponent({
       propertyRows,
       propertyClick(e: Event, row: any) {
         console.log(row);
+
+        portfolioStore.form.selectedProperty = new Property(
+          ref(row.type),
+          row.id,
+          row.description,
+          row.price,
+          row.lien,
+          row.rate,
+          row.years,
+          row.monthsLeft,
+          row.value,
+          row.ownership,
+          row.date
+        );
+
+        // Conversion to "YYYY-MM-DD" required to use with Quasar date pickers
+        const dd = row.date.slice(3, 5);
+        const mm = row.date.slice(0, 2);
+        const yyyy = row.date.slice(6, 10);
+        const dateString = (yyyy + '-' + mm + '-' + dd) as string;
+
+        modType.value = row.type;
+        modDescription.value = row.description;
+        modREprice.value = row.price;
+        modLien.value = row.lien;
+        modRate.value = row.rate;
+        modYears.value = row.years;
+        modValue.value = row.value;
+        modOwnership.value = row.ownership;
+        modREDate.value = dateString;
 
         portfolioStore.form.modid = row.id;
         portfolioStore.form.modtype = ref(row.type);
@@ -490,19 +869,25 @@ export default defineComponent({
         portfolioStore.form.modREDate = row.date;
 
         persistentPropertyEdit.value = true;
-        persistentDate.value = false;
       },
       form,
       addProperty(modelType: string) {
         portfolioStore.form.type = modelType;
-        portfolioStore.form.description = form.value.description;
-        portfolioStore.form.price = form.value.price;
-        portfolioStore.form.lien = form.value.lien;
-        portfolioStore.form.rate = form.value.rate;
-        portfolioStore.form.years = form.value.years;
-        portfolioStore.form.value = form.value.value;
-        portfolioStore.form.ownership = form.value.ownership;
-        portfolioStore.form.REdate = form.value.REdate;
+        portfolioStore.form.description = description.value;
+        portfolioStore.form.price = price.value;
+        portfolioStore.form.lien = lien.value;
+        portfolioStore.form.rate = rate.value;
+        portfolioStore.form.years = years.value;
+        portfolioStore.form.value = value.value;
+        portfolioStore.form.ownership = ownership.value;
+
+        const dd = REdate.value.slice(8, 10);
+        const mm = REdate.value.slice(5, 7);
+        const yyyy = REdate.value.slice(0, 4);
+
+        const dateString = mm + '-' + dd + '-' + yyyy;
+
+        portfolioStore.form.REdate = dateString;
 
         persistentProperty.value = false;
         portfolioStore.addPropertyAPI();
@@ -510,22 +895,27 @@ export default defineComponent({
         portfolioStore.form.description = '';
       },
       modifyProperty() {
-        portfolioStore.form.modtype = form.value.modtype;
-        portfolioStore.form.moddescription = form.value.moddescription;
-        portfolioStore.form.modREprice = form.value.modREprice;
-        portfolioStore.form.modlien = form.value.modlien;
-        portfolioStore.form.modrate = form.value.modrate;
-        portfolioStore.form.modyears = form.value.modyears;
-        portfolioStore.form.modmonthsLeft = form.value.modmonthsLeft;
-        portfolioStore.form.modvalue = form.value.modvalue;
-        portfolioStore.form.modOwnership = form.value.modOwnership;
-        portfolioStore.form.modREDate = form.value.modREDate;
+        portfolioStore.form.modtype = modType.value;
+        portfolioStore.form.moddescription = modDescription.value;
+        portfolioStore.form.modREprice = modREprice.value;
+        portfolioStore.form.modlien = modLien.value;
+        portfolioStore.form.modrate = modRate.value;
+        portfolioStore.form.modyears = modYears.value;
+        portfolioStore.form.modvalue = modValue.value;
+        portfolioStore.form.modOwnership = modOwnership.value;
+
+        const dd = modREDate.value.slice(8, 10);
+        const mm = modREDate.value.slice(5, 7);
+        const yyyy = modREDate.value.slice(0, 4);
+
+        const dateString = mm + '-' + dd + '-' + yyyy;
+
+        portfolioStore.form.modREDate = dateString;
 
         portfolioStore.modifyProperty();
 
         persistentPropertyEdit.value = false;
       },
-      modelType: ref(''),
       options: ['Primary Residence', 'Second Home', 'Investment Property'],
       deleteProperty() {
         portfolioStore.form.delcurrentproperty = form.value.modid;
@@ -534,22 +924,18 @@ export default defineComponent({
 
         persistentPropertyEdit.value = false;
       },
-      persistentDate,
-      date: ref('2022/10/01'),
-      selectDate(date: string) {
-        // Date Constructor (Original Quasar Object has YYYY/MM/DD Format)
-        const year = date.slice(0, 4);
-        const month = date.slice(5, 7);
-        const day = date.slice(8, 10);
-
-        const datestring = month + '/' + day + '/' + year;
-
-        portfolioStore.form.REdate = datestring;
-        portfolioStore.form.modREDate = datestring;
-
-        persistentDate.value = false;
-      },
+      dialog: ref(false),
+      maximizedToggle: ref(true),
+      selectedProperty,
+      persistent: ref(false),
     };
   },
 });
 </script>
+
+<style lang="sass" scoped>
+.my-card
+  width: 100%
+  max-width: 15vw
+  margin-left: 1vw
+</style>

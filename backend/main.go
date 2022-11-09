@@ -41,6 +41,8 @@ func handleRequests() {
 	http.HandleFunc("/propertyadd", addProperty)
 	http.HandleFunc("/propertymod", modifyProperty)
 	http.HandleFunc("/propertydel", deleteProperty)
+	// Tenant Portion
+	http.HandleFunc("/tenantAdd", addTenant)
 
 	// Debt REST
 	http.HandleFunc("/debts", DebtRetrieve)

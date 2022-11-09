@@ -167,8 +167,6 @@ func DebtRetrieve(w http.ResponseWriter, request *http.Request) {
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
 
-	logrus.Info(CurrentDebts, "retrieve current Debts")
-
 	json.NewEncoder(w).Encode(CurrentDebts)
 }
 
@@ -230,8 +228,6 @@ func addDebt(w http.ResponseWriter, request *http.Request) {
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
 
-	logrus.Info(CurrentDebts, " current Debts")
-
 	json.NewEncoder(w).Encode(CurrentDebts)
 }
 
@@ -264,8 +260,6 @@ func modifyDebt(w http.ResponseWriter, request *http.Request) {
 			CurrentDebts[debt].Date = debtData.Date
 		}
 	}
-
-	logrus.Info("THIS+_+++++", CurrentDebts)
 
 	file, _ := json.MarshalIndent(CurrentDebts, "", " ")
 

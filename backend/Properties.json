@@ -10,7 +10,9 @@
   "monthsleft": 0,
   "type": "Investment Property",
   "ownership": 100,
-  "date": "07/01/2017"
+  "date": "07-01-2017",
+  "tenants": null,
+  "buildingexpenses": null
  },
  {
   "id": 2,
@@ -23,7 +25,9 @@
   "monthsleft": 0,
   "type": "Primary Residence",
   "ownership": 100,
-  "date": "07/01/2021"
+  "date": "07-01-2021",
+  "tenants": null,
+  "buildingexpenses": null
  },
  {
   "id": 3,
@@ -36,6 +40,23 @@
   "monthsleft": 0,
   "type": "Investment Property",
   "ownership": 10,
-  "date": "10/01/2019"
+  "date": "09-01-2019",
+  "tenants": null,
+  "buildingexpenses": null
+ },
+ {
+  "id": 4,
+  "description": "3107 Everglade",
+  "price": 315000,
+  "lien": 314000,
+  "rate": 6.75,
+  "years": 30,
+  "value": 325000,
+  "monthsleft": 0,
+  "type": "Second Home",
+  "ownership": 100,
+  "date": "08-01-2022",
+  "tenants": null,
+  "buildingexpenses": null
  }
 ]

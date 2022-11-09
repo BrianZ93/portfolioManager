@@ -1,6 +1,4 @@
 make all --print-data-base --no-builtin-variables --no-builtin-rules --question
-make: *** No rule to make target 'all'.  Stop.
-
 # GNU Make 4.3
 # Built for x86_64-pc-linux-gnu
 # Copyright (C) 1988-2020 Free Software Foundation, Inc.
@@ -8,7 +6,7 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Thu Nov  3 21:07:17 2022
+# Make data base, printed on Wed Nov  9 08:25:58 2022
 
 # Variables
 
@@ -35,7 +33,7 @@ GOPATH = /home/brianz/go
 # environment
 SNAP_INSTANCE_NAME = code
 # environment
-GDK_PIXBUF_MODULEDIR = /snap/code/111/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
+GDK_PIXBUF_MODULEDIR = /snap/code/112/usr/lib/x86_64-linux-gnu/gdk-pixbuf-2.0/2.10.0/loaders
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -53,11 +51,11 @@ OLDPWD = /home/brianz/coding
 # automatic
 %F = $(notdir $%)
 # environment
-VSCODE_CODE_CACHE_PATH = /home/brianz/.config/Code/CachedData/d045a5eda657f4d7b676dedbfa7aab8207f8a075
+VSCODE_CODE_CACHE_PATH = /home/brianz/.config/Code/CachedData/8fa188b2b301d36553cbc9ce1b0a146ccb93351f
 # environment
 LANG = C
 # environment
-XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.W8V1U1
+XAUTHORITY = /run/user/1000/.mutter-Xwaylandauth.Q37DV1
 # default
 .LOADED := 
 # default
@@ -95,13 +93,13 @@ SNAP_REEXEC =
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 130940
+VSCODE_PID = 4107
 # environment
 XDG_SESSION_TYPE = wayland
 # automatic
 ?D = $(patsubst %/,%,$(dir $?))
 # environment
-SESSION_MANAGER = local/brianz-Latitude-5400:@/tmp/.ICE-unix/1366,unix/brianz-Latitude-5400:/tmp/.ICE-unix/1366
+SESSION_MANAGER = local/brianz-Latitude-5400:@/tmp/.ICE-unix/1194,unix/brianz-Latitude-5400:/tmp/.ICE-unix/1194
 # automatic
 *F = $(notdir $*)
 # environment
@@ -125,7 +123,7 @@ XMODIFIERS = @im=ibus
 # environment
 SHLVL = 1
 # environment
-GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/239f9976_16c7_40fd_8f0f_4210f54591a1
+GNOME_TERMINAL_SCREEN = /org/gnome/Terminal/screen/97c0450f_873c_4c2c_82d9_58788299864f
 # environment
 MAKELEVEL := 0
 # default
@@ -141,9 +139,9 @@ MAKEFILES :=
 # environment
 SNAP_USER_COMMON = /home/brianz/snap/code/common
 # environment
-SNAP = /snap/code/111
+SNAP = /snap/code/112
 # environment
-SNAP_REVISION = 111
+SNAP_REVISION = 112
 # environment
 SNAP_REAL_HOME = /home/brianz
 # environment
@@ -173,7 +171,7 @@ SNAP_ARCH = amd64
 # makefile
 .DEFAULT_GOAL := default
 # environment
-SYSTEMD_EXEC_PID = 2231
+SYSTEMD_EXEC_PID = 1472
 # environment
 DISPLAY = :0
 # environment
@@ -183,7 +181,7 @@ GTK_MODULES = gail:atk-bridge
 # default
 MAKE_VERSION := 4.3
 # environment
-SNAP_DATA = /var/snap/code/111
+SNAP_DATA = /var/snap/code/112
 # environment
 SNAP_CONTEXT = 6cELwwixMNG-Odf6zelW4Nd1OHkillVEdiTn9YmEo_1HExyaVpLB
 # environment
@@ -205,13 +203,13 @@ QT_IM_MODULE = ibus
 # environment
 ELECTRON_RUN_AS_NODE = 1
 # environment
-VSCODE_IPC_HOOK = /run/user/1000/vscode-66360ad1-1.72.2-main.sock
+VSCODE_IPC_HOOK = /run/user/1000/vscode-66360ad1-1.73.0-main.sock
 # environment
 TERM = xterm-256color
 # environment
 SNAP_NAME = code
 # environment
-GSETTINGS_SCHEMA_DIR = /snap/code/111/usr/share/glib-2.0/schemas
+GSETTINGS_SCHEMA_DIR = /snap/code/112/usr/share/glib-2.0/schemas
 # environment
 IM_CONFIG_PHASE = 1
 # environment
@@ -221,7 +219,7 @@ GOPROXY = https://proxy.golang.org,direct
 # automatic
 <F = $(notdir $<)
 # environment
-SNAP_VERSION = d045a5ed
+SNAP_VERSION = 8fa188b2
 # default
 SUFFIXES := 
 # environment
@@ -235,7 +233,7 @@ SNAP_COMMON = /var/snap/code/common
 # default
 .FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs archives jobserver output-sync check-symlink load
 # environment
-SNAP_USER_DATA = /home/brianz/snap/code/111
+SNAP_USER_DATA = /home/brianz/snap/code/112
 # environment
 XDG_MENU_PREFIX = gnome-
 # environment
@@ -251,9 +249,9 @@ SNAP_LIBRARY_PATH = /var/lib/snapd/lib/gl:/var/lib/snapd/lib/gl32:/var/lib/snapd
 
 # Directories
 
-# . (device 66306, inode 6557716): 11 files, no impossibilities.
+# . (device 66306, inode 6557716): 13 files, no impossibilities.
 
-# 11 files, no impossibilities in 1 directories.
+# 13 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -297,7 +295,6 @@ all:
 #  File has not been updated.
 
 # Not a target:
- 
 build:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
@@ -313,6 +310,9 @@ run-local:
 	docker build --target="backend" --tag backend .
 	docker-compose -f docker-compose.yml build
 	docker-compose -f docker-compose.yml up
+ 
+make: *** No rule to make target 'all'.  Stop.
+
 
 # files hash-table stats:
 # Load=8/1024=1%, Rehash=0, Collisions=0/19=0%
@@ -322,12 +322,12 @@ run-local:
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 20 / storage = 183 B / avg = 9 B
-# current buf: size = 8162 B / used = 183 B / count = 20 / avg = 9 B
+# strcache buffers: 1 (0) / strings = 22 / storage = 199 B / avg = 9 B
+# current buf: size = 8162 B / used = 199 B / count = 22 / avg = 9 B
 
-# strcache performance: lookups = 27 / hit rate = 25%
+# strcache performance: lookups = 29 / hit rate = 24%
 # hash-table stats:
-# Load=20/8192=0%, Rehash=0, Collisions=0/27=0%
-# Finished Make data base on Thu Nov  3 21:07:17 2022
+# Load=22/8192=0%, Rehash=0, Collisions=0/29=0%
+# Finished Make data base on Wed Nov  9 08:25:58 2022
 
  

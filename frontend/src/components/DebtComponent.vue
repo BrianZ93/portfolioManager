@@ -313,8 +313,6 @@ export default defineComponent({
       portfolioStore.importCurrentDebts();
     });
 
-    console.log(Debts);
-
     const debtsTotal = computed(() => portfolioStore.debtsTotal);
 
     // Property Columns

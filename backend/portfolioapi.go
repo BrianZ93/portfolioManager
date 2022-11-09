@@ -220,6 +220,8 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 
 	updatePrices()
 
+	// TODO - make the API check if its a valid ticker before adding it to prevent unnecessary errors
+
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
 
@@ -253,8 +255,6 @@ func modifyEquity(w http.ResponseWriter, request *http.Request) {
 
 		_ = ioutil.WriteFile("Equities.json", file, 0644)
 	}
-
-	updatePrices()
 
 }
 
@@ -298,8 +298,6 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 
 	}
 
-	updatePrices()
-
 	file, _ := json.MarshalIndent(CurrentEquities, "", " ")
 
 	_ = ioutil.WriteFile("Equities.json", file, 0644)
@@ -313,6 +311,7 @@ func updatePrices() {
 		if err != nil {
 			CurrentEquities[i].PriceLoaded = false
 			CurrentEquities[i].Value = 0
+			logrus.Warn("Ticker not found")
 		}
 
 		CurrentEquities[i].PriceLoaded = true

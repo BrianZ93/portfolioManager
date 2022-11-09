@@ -109,6 +109,58 @@ export class PropertyRow {
   }
 }
 
+export class Tenant {
+  name: string;
+  leasestart: string;
+  leaseend: string;
+  expenses: Array<Expense>;
+  revenues: Array<Revenue>;
+  unit: string;
+  currenttenant: boolean;
+
+  constructor(
+    name: string,
+    leasestart: string,
+    leaseend: string,
+    expenses: Array<Expense>,
+    revenues: Array<Revenue>,
+    unit: string,
+    currenttenant: boolean
+  ) {
+    this.name = name;
+    this.leasestart = leasestart;
+    this.leaseend = leaseend;
+    this.expenses = expenses;
+    this.revenues = revenues;
+    this.unit = unit;
+    this.currenttenant = currenttenant;
+  }
+}
+
+export class Expense {
+  description: string;
+  amount: number;
+  date: string;
+
+  constructor(description: string, amount: number, date: string) {
+    this.description = description;
+    this.amount = amount;
+    this.date = date;
+  }
+}
+
+export class Revenue {
+  description: string;
+  amount: number;
+  date: string;
+
+  constructor(description: string, amount: number, date: string) {
+    this.description = description;
+    this.amount = amount;
+    this.date = date;
+  }
+}
+
 export class Ticker {
   ticker: string;
   price: number;
@@ -227,6 +279,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         // Property Delete Form Data
         delcurrentproperty: 0,
 
+        // Selected Property
+        selectedProperty: new Property('', 0, '', 0, 0, 0, 0, 0, 0, 0, ''),
+
         // Debt Form Data
         debtid: 0,
         debttitle: '',
@@ -271,6 +326,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
     addPropertyAPI() {
       const rate = parseFloat(this.form.rate);
       const ownership = parseFloat(this.form.ownership);
+
       axios
         .post(
           'http://localhost:8081/propertyadd',
@@ -479,8 +535,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
       }
     },
     async modifyEquity() {
-      console.log(Number(this.form.modcurrentprice));
-
       axios
         .post(
           'http://localhost:8081/portfoliomod',
