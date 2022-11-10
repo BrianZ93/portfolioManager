@@ -11,7 +11,19 @@
   "type": "Investment Property",
   "ownership": 100,
   "date": "07-01-2017",
-  "tenants": null,
+  "tenants": [
+   {
+    "name": "Janine Risk",
+    "leasestart": "2022-10-01",
+    "leaseend": "2023-10-01",
+    "expenses": [],
+    "income": null,
+    "unit": "GS",
+    "currenttenant": true,
+    "id": 1,
+    "subid": 0
+   }
+  ],
   "buildingexpenses": null
  },
  {

@@ -17,6 +17,8 @@ type Tenant struct {
 	Revenues      []Revenue `json:"income"`
 	Unit          string    `json:"unit"`
 	CurrentTenant bool      `json:"currenttenant"`
+	Id            float64   `json:"id"`
+	SubId         float64   `json:"subid"`
 }
 
 type Expense struct {
@@ -132,8 +134,7 @@ func readREFile() {
 	OwnershipProceed := false
 	var CurDate string
 	DateProceed := false
-
-	var CurrentIndex = 0
+	var CurExpenses []Expense
 
 	for _, obj := range redataslice {
 		objMap, ok := obj.(map[string]interface{})
@@ -198,11 +199,61 @@ func readREFile() {
 			DateProceed = true
 		}
 
-		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed && OwnershipProceed && DateProceed {
-			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType, Ownership: CurOwnership, Date: CurDate})
+		tenantsdataslice, ok := objMap["tenants"].([]interface{})
+
+		if !ok {
+			logrus.Error("Cannot convert tenant JSON objects")
+			logrus.Warn("It is possible this property does not have any tenants")
 		}
 
-		CurrentIndex++
+		var CurName string
+		NameProceed := false
+		var CurStart string
+		StartProceed := false
+		var CurEnd string
+		EndProceed := false
+		var CurUnit string
+		UnitProceed := false
+
+		var TempTenants []Tenant
+
+		for _, obj2 := range tenantsdataslice {
+			objMap2, ok := obj2.(map[string]interface{})
+
+			if !ok {
+				logrus.Error("cannot convert tenants interface{} to type map[string] interface{}")
+			}
+
+			// The below if statements check on the data type
+			if res, ok := objMap2["name"].(string); ok {
+				CurName = res
+				NameProceed = true
+			}
+
+			if res, ok := objMap2["leasestart"].(string); ok {
+				CurStart = res
+				StartProceed = true
+			}
+
+			if res, ok := objMap2["leaseend"].(string); ok {
+				CurEnd = res
+				EndProceed = true
+			}
+
+			if res, ok := objMap2["unit"].(string); ok {
+				CurUnit = res
+				UnitProceed = true
+			}
+
+			if NameProceed && StartProceed && EndProceed && UnitProceed {
+				TempTenants = append(TempTenants, Tenant{Name: CurName, LeaseStart: CurStart, LeaseEnd: CurEnd, Unit: CurUnit})
+			}
+		}
+
+		if IdProceed && DescProceed && PriceProceed && LienProceed && RateProceed && YearsProceed && ValueProceed && MonthsLeftProceed && TypeProceed && OwnershipProceed && DateProceed {
+			CurrentProperties = append(CurrentProperties, RealEstatePost{Id: CurId, Description: CurDesc, Price: CurPrice, Lien: CurLien, Rate: CurRate, Years: CurYears, Value: CurValue, MonthsLeft: CurMonthsLeft, Type: CurType, Ownership: CurOwnership, Date: CurDate, Tenants: TempTenants, BuildingExpenses: CurExpenses})
+		}
+
 	}
 
 }
@@ -301,6 +352,13 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 
 	for property := range CurrentProperties {
 		if propertyData.Id == CurrentProperties[property].Id {
+
+			// Assigning these variables early because they are not sent in the front end
+			tenants := CurrentProperties[property].Tenants
+			buildingexpenses := CurrentProperties[property].BuildingExpenses
+
+			logrus.Info(tenants)
+
 			CurrentProperties[property].Id = propertyData.Id
 			CurrentProperties[property].Description = propertyData.Description
 			CurrentProperties[property].Price = propertyData.Price
@@ -312,8 +370,9 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 			CurrentProperties[property].Type = propertyData.Type
 			CurrentProperties[property].Ownership = propertyData.Ownership
 			CurrentProperties[property].Date = propertyData.Date
-			CurrentProperties[property].Tenants = propertyData.Tenants
-			CurrentProperties[property].BuildingExpenses = propertyData.BuildingExpenses
+			CurrentProperties[property].Tenants = tenants
+			CurrentProperties[property].BuildingExpenses = buildingexpenses
+
 		}
 	}
 
@@ -373,7 +432,7 @@ func deleteProperty(w http.ResponseWriter, request *http.Request) {
 }
 
 func addTenant(w http.ResponseWriter, request *http.Request) {
-	// Enabling CORS
+	// Enabling Cors
 	enableCors(&w)
 
 	// Sets the appropriate data type for JSON data transfer
@@ -392,21 +451,12 @@ func addTenant(w http.ResponseWriter, request *http.Request) {
 	// Uses the decoder to decode the response to tenant data at its memory location
 	decoder.Decode(&propertyData)
 
+	logrus.Info(propertyData)
+
 	for property := range CurrentProperties {
 		if propertyData.Id == CurrentProperties[property].Id {
-			CurrentProperties[property].Id = propertyData.Id
-			CurrentProperties[property].Description = propertyData.Description
-			CurrentProperties[property].Price = propertyData.Price
-			CurrentProperties[property].Lien = propertyData.Lien
-			CurrentProperties[property].Rate = propertyData.Rate
-			CurrentProperties[property].Years = propertyData.Years
-			CurrentProperties[property].Value = propertyData.Value
-			CurrentProperties[property].MonthsLeft = propertyData.MonthsLeft
-			CurrentProperties[property].Type = propertyData.Type
-			CurrentProperties[property].Ownership = propertyData.Ownership
-			CurrentProperties[property].Date = propertyData.Date
-			CurrentProperties[property].Tenants = propertyData.Tenants
-			CurrentProperties[property].BuildingExpenses = propertyData.BuildingExpenses
+			logrus.Info(propertyData)
+			CurrentProperties[property].Tenants = append(CurrentProperties[property].Tenants, propertyData.Tenants[0])
 		}
 	}
 

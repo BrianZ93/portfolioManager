@@ -3,16 +3,8 @@
   "ticker": "QQQ",
   "shares": 100,
   "price": 153,
-  "priceloaded": true,
+  "priceloaded": false,
   "value": 267.59,
-  "message": ""
- },
- {
-  "ticker": "C",
-  "shares": 100,
-  "price": 45.01,
-  "priceloaded": true,
-  "value": 45.73,
   "message": ""
  }
 ]

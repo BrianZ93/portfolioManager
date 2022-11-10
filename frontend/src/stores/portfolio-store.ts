@@ -35,6 +35,8 @@ export class Property {
   value: number;
   ownership: number;
   date: string;
+  tenants: Array<Tenant>;
+  buildingexpenses: Array<Expense>;
 
   constructor(
     type: string,
@@ -47,7 +49,9 @@ export class Property {
     monthsLeft: number,
     value: number,
     ownership: number,
-    date: string
+    date: string,
+    tenants: Array<Tenant>,
+    buildingexpenses: Array<Expense>
   ) {
     this.type = type;
     this.id = id;
@@ -60,6 +64,8 @@ export class Property {
     this.value = value;
     this.ownership = ownership;
     this.date = date;
+    this.tenants = tenants;
+    this.buildingexpenses = buildingexpenses;
   }
 }
 
@@ -77,6 +83,8 @@ export class PropertyRow {
   ownership: number;
   date: string;
   currentBalance: number;
+  tenants: Array<Tenant>;
+  buildingexpenses: Array<Expense>;
 
   constructor(
     type: string,
@@ -91,7 +99,9 @@ export class PropertyRow {
     equity: number,
     ownership: number,
     date: string,
-    currentBalance: number
+    currentBalance: number,
+    tenants: Array<Tenant>,
+    buildingexpenses: Array<Expense>
   ) {
     this.type = type;
     this.id = id;
@@ -106,6 +116,8 @@ export class PropertyRow {
     this.ownership = ownership;
     this.date = date;
     this.currentBalance = currentBalance;
+    this.tenants = tenants;
+    this.buildingexpenses = buildingexpenses;
   }
 }
 
@@ -117,6 +129,8 @@ export class Tenant {
   revenues: Array<Revenue>;
   unit: string;
   currenttenant: boolean;
+  id: number;
+  subid: number;
 
   constructor(
     name: string,
@@ -125,7 +139,9 @@ export class Tenant {
     expenses: Array<Expense>,
     revenues: Array<Revenue>,
     unit: string,
-    currenttenant: boolean
+    currenttenant: boolean,
+    id: number,
+    subid: number
   ) {
     this.name = name;
     this.leasestart = leasestart;
@@ -134,6 +150,8 @@ export class Tenant {
     this.revenues = revenues;
     this.unit = unit;
     this.currenttenant = currenttenant;
+    this.id = id;
+    this.subid = subid;
   }
 }
 
@@ -275,12 +293,40 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         modvalue: 0,
         modOwnership: 0,
         modREDate: '',
+        modTenants: [] as Array<Tenant>,
+        modExpenses: [] as Array<Expense>,
 
         // Property Delete Form Data
         delcurrentproperty: 0,
 
         // Selected Property
-        selectedProperty: new Property('', 0, '', 0, 0, 0, 0, 0, 0, 0, ''),
+        selectedProperty: new Property(
+          '',
+          0,
+          '',
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          '',
+          [] as Array<Tenant>,
+          [] as Array<Expense>
+        ),
+
+        newTenant: new Tenant(
+          '',
+          '',
+          '',
+          [] as Array<Expense>,
+          [] as Array<Revenue>,
+          '',
+          false,
+          0,
+          0
+        ),
 
         // Debt Form Data
         debtid: 0,
@@ -412,7 +458,32 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         .get('http://localhost:8081/properties')
         .then((res: any) => {
           this.propertiesTotal = 0;
+
           for (let i = 0; i < res.data.length; i++) {
+            console.log(res.data[i]);
+            const tempTenants = [] as Array<Tenant>;
+            if (res.data[i].tenants) {
+              console.log(res.data[i].description);
+              for (const tenant of Object.entries(res.data[i].tenants)) {
+                const t = tenant[1] as Tenant;
+                tempTenants.push(
+                  new Tenant(
+                    t.name,
+                    t.leasestart,
+                    t.leaseend,
+                    t.expenses,
+                    t.revenues,
+                    t.unit,
+                    t.currenttenant,
+                    t.id,
+                    t.subid
+                  )
+                );
+              }
+            }
+
+            console.log(tempTenants);
+
             this.realEstate.set(
               res.data[i].id,
               new Property(
@@ -426,7 +497,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].monthsLeft,
                 res.data[i].value,
                 res.data[i].ownership,
-                res.data[i].date
+                res.data[i].date,
+                tempTenants,
+                res.data[i].buildingexpenses
               )
             );
 
@@ -485,7 +558,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].value - currentBalance,
                 res.data[i].ownership,
                 res.data[i].date,
-                currentBalance
+                currentBalance,
+                tempTenants,
+                res.data[i].buildingexpenses
               )
             );
 
@@ -634,6 +709,22 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         .then((response) => {
           console.log(response);
           this.importCurrentDebts();
+        });
+    },
+    async addTenant() {
+      console.log(this.form.newTenant);
+      console.log(this.form.selectedProperty.id);
+      axios
+        .post(
+          'http://localhost:8081/tenantAdd',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            tenants: Array(this.form.newTenant) as Array<Tenant>,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
         });
     },
   },

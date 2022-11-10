@@ -336,8 +336,35 @@
             rounded
             color="primary"
             label="Delete"
-            @click="deleteProperty"
+            @click="persistentSure = true"
           ></q-btn>
+
+          <!-- Are you Sure Dialog -->
+          <q-dialog
+            v-model="persistentSure"
+            persistent
+            transition-show="scale"
+            transition-hide="scale"
+          >
+            <q-card class="bg-black text-primary" style="width: 30vw">
+              <q-card-section>
+                <div class="text-h6" style="text-align: center">
+                  Are you sure you want to delete this property?
+                </div>
+              </q-card-section>
+
+              <q-card-actions align="right" class="bg-black text-primary">
+                <q-btn
+                  class="glossy"
+                  rounded
+                  color="primary"
+                  label="Delete"
+                  @click="deleteProperty"
+                ></q-btn>
+                <q-btn flat label="Cancel" v-close-popup />
+              </q-card-actions>
+            </q-card>
+          </q-dialog>
 
           <!-- Manage Properties Full Dialog Box -->
           <q-dialog
@@ -368,7 +395,7 @@
               <!-- Middle Dialog -->
               <div class="q-pa-md q-gutter-sm">
                 <q-dialog
-                  v-model="persistent"
+                  v-model="persistentTenants"
                   persistent
                   transition-show="scale"
                   transition-hide="scale"
@@ -380,10 +407,12 @@
 
                     <q-card-section>
                       <q-list>
-                        <q-item v-for="tenant in realEstate" :key="tenant">
-                          <q-item-label>{{
-                            tenant[1].description
-                          }}</q-item-label>
+                        <q-item
+                          v-for="tenant in selectedProperty.tenants"
+                          :key="tenant"
+                          :value="tenant"
+                        >
+                          <q-item-label>{{ tenant.name }}</q-item-label>
                         </q-item>
 
                         <q-expansion-item
@@ -391,7 +420,7 @@
                           label="Add Tenant"
                         >
                           <q-form
-                            @submit="onSubmit"
+                            @submit="onSubmit(selectedProperty)"
                             @reset="onReset"
                             class="q-gutter-md"
                           >
@@ -555,7 +584,7 @@
                         </q-item-section>
                       </q-item>
 
-                      <q-item clickable @click="persistent = true">
+                      <q-item clickable @click="persistentTenants = true">
                         <q-item-section avatar>
                           <q-icon color="amber" name="people" />
                         </q-item-section>
@@ -614,7 +643,7 @@
 import { defineComponent, ref, computed, onBeforeMount } from 'vue';
 import { usePortfolioStore } from 'src/stores/portfolio-store';
 import { storeToRefs } from 'pinia';
-import { Property } from 'src/stores/portfolio-store';
+import { Property, Tenant, Expense, Revenue } from 'src/stores/portfolio-store';
 
 export default defineComponent({
   name: 'PropertyComponent',
@@ -632,7 +661,8 @@ export default defineComponent({
     const propertiesImported = ref(false);
     const persistentProperty = ref(false);
     const persistentPropertyEdit = ref(false);
-    const persistentDate = ref(false);
+    const persistentTenants = ref(false);
+    const persistentSure = ref(false);
 
     const realEstate = computed(() => portfolioStore.realEstate);
     const propertiesTotal = computed(() => portfolioStore.propertiesTotal);
@@ -737,19 +767,23 @@ export default defineComponent({
     const end = ref(null);
     const currentTenant = ref(false);
 
-    function onSubmit() {
-      console.log('form submitted');
-      console.log(
+    function onSubmit(selectedProperty: Property) {
+      console.log('SELECTED PROPERTY++++', selectedProperty);
+
+      // TODO - refactor "subid" logic
+      portfolioStore.form.newTenant = new Tenant(
         name.value,
-        ' ',
-        unit.value,
-        ' ',
-        currentTenant.value,
-        ' ',
         start.value,
-        ' ',
-        end.value
+        end.value,
+        [] as Array<Expense>,
+        [] as Array<Revenue>,
+        unit.value,
+        currentTenant.value,
+        selectedProperty.id,
+        0
       );
+
+      portfolioStore.addTenant();
     }
 
     function newPropertyDialog() {
@@ -837,8 +871,12 @@ export default defineComponent({
           row.monthsLeft,
           row.value,
           row.ownership,
-          row.date
+          row.date,
+          row.tenants,
+          row.buildingexpenses
         );
+
+        console.log(portfolioStore.form.selectedProperty);
 
         // Conversion to "YYYY-MM-DD" required to use with Quasar date pickers
         const dd = row.date.slice(3, 5);
@@ -927,7 +965,8 @@ export default defineComponent({
       dialog: ref(false),
       maximizedToggle: ref(true),
       selectedProperty,
-      persistent: ref(false),
+      persistentTenants,
+      persistentSure,
     };
   },
 });
