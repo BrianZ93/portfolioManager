@@ -42,12 +42,19 @@ export default {
           'Second Home(s)',
           'Investment Properties',
         ],
+
         chart: {
           width: 380,
           type: 'donut',
         },
         dataLabels: {
           enabled: true,
+          style: {
+            fontSize: '14px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 'bold',
+            colors: ['#FFFFFF'],
+          },
         },
         responsive: [
           {
@@ -67,9 +74,10 @@ export default {
           onItemHover: {
             highlightDataSeries: true,
           },
-          position: 'right',
+          position: 'bottom',
           offsetY: 50,
-          height: 230,
+
+          height: 0,
         },
       },
     };

@@ -163,7 +163,8 @@ export default defineComponent({
   text-align: center;
   font-size: 2rem;
   padding: auto;
-  color: gray;
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .section {
@@ -231,5 +232,23 @@ export default defineComponent({
   font-size: 1.25rem;
   text-align: center;
   padding-top: 1vh;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+
+.networthcard {
+  max-width: 80vw;
+  min-width: 80vw;
+  max-height: 9vh;
+  min-height: 9vh;
+  margin-left: 10vw;
+  margin-bottom: 2vh;
+  background-color: $primary;
+  font-size: 1.25rem;
+  text-align: center;
+  justify-content: center;
+  padding-top: 1vh;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
 }
 </style>

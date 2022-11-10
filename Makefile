@@ -10,6 +10,6 @@ run-local:
 
 clean:
 	docker login
-	docker-compose down --remove-orphans
+	docker-compose down --remove-orphans 
 	docker image prune -a
 	docker network prune

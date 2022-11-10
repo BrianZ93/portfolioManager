@@ -40,6 +40,12 @@ export default {
         },
         dataLabels: {
           enabled: true,
+          style: {
+            fontSize: '14px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 'bold',
+            colors: ['#FFFFFF'],
+          },
         },
         responsive: [
           {
@@ -49,7 +55,7 @@ export default {
                 width: 200,
               },
               legend: {
-                show: true,
+                show: false,
               },
             },
           },
@@ -59,9 +65,9 @@ export default {
           onItemHover: {
             highlightDataSeries: true,
           },
-          position: 'right',
+          position: 'bottom',
           offsetY: 50,
-          height: 230,
+          height: 0,
         },
       },
     };

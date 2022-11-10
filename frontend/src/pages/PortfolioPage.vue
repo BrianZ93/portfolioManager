@@ -269,7 +269,7 @@ export default defineComponent({
 
 <style>
 :root {
-  --height: 7vh;
+  --height: 6vh;
   --speed: 25s;
 }
 
@@ -302,7 +302,7 @@ export default defineComponent({
 .ticker-tape .ticker__item {
   display: inline-block;
   padding: 0 0.5rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
   letter-spacing: 1rem;
   color: rgba(0, 0, 0, 0.2);
