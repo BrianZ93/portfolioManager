@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page style="height: 80vh">
     <div class="flex flex-center">
       <!-- Cards on Top -->
       <div class="row cards">

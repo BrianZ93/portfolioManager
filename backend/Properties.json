@@ -16,15 +16,16 @@
     "name": "Janine Risk",
     "leasestart": "2022-10-01",
     "leaseend": "2023-10-01",
-    "expenses": [],
-    "income": null,
+    "expenses": null,
+    "revenues": null,
     "unit": "GS",
     "currenttenant": true,
     "id": 1,
     "subid": 0
    }
   ],
-  "buildingexpenses": null
+  "buildingexpenses": null,
+  "buildingrevenues": null
  },
  {
   "id": 2,
@@ -39,7 +40,8 @@
   "ownership": 100,
   "date": "07-01-2021",
   "tenants": null,
-  "buildingexpenses": null
+  "buildingexpenses": null,
+  "buildingrevenues": null
  },
  {
   "id": 3,
@@ -54,7 +56,8 @@
   "ownership": 10,
   "date": "09-01-2019",
   "tenants": null,
-  "buildingexpenses": null
+  "buildingexpenses": null,
+  "buildingrevenues": null
  },
  {
   "id": 4,
@@ -67,8 +70,9 @@
   "monthsleft": 0,
   "type": "Second Home",
   "ownership": 100,
-  "date": "08-01-2022",
+  "date": "09-01-2022",
   "tenants": null,
-  "buildingexpenses": null
+  "buildingexpenses": null,
+  "buildingrevenues": null
  }
 ]

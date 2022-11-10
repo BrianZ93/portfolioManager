@@ -67,7 +67,6 @@ export default {
           },
           position: 'bottom',
           offsetY: 50,
-
           height: 0,
         },
       },

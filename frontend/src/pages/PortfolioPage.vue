@@ -1,5 +1,5 @@
 <template>
-  <q-page>
+  <q-page style="height: 90vh">
     <!-- Navigation for Portfolio Page -->
     <div class="q-pa-md">
       <div class="q-gutter-y-md">

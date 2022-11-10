@@ -9,6 +9,7 @@ import (
 func main() {
 
 	readFile()
+	updatePrices()
 	readREFile()
 	readDebtFile()
 	getPrices()

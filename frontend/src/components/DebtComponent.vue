@@ -391,7 +391,7 @@ export default defineComponent({
       debtsTotal,
       columns,
       modelType: ref(''),
-      options: ['Installment', 'Revolving'],
+      options: ['Installment', 'Revolving', 'Lease'],
       form,
       date: ref('2022/10/01'),
       selectDate(date: string) {

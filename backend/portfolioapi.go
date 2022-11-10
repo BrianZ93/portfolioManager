@@ -18,7 +18,7 @@ type EquityPost struct {
 	Price       float64 `json:"price"`
 	PriceLoaded bool    `json:"priceloaded"`
 	Value       float64 `json:"value"`
-	Message     string  `json:"message"`
+	Margin      float64 `json:"margin"`
 }
 
 type Equities []EquityPost

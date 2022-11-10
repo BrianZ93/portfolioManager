@@ -25,7 +25,7 @@ export default {
       chartOptions: {
         tooltip: {
           y: {
-            formatter: function (value) {
+            formatter: function (value: number) {
               return value.toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'USD',
