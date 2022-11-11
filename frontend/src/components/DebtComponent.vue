@@ -75,15 +75,6 @@
             <q-input
               autogrow
               filled
-              v-model="form.debtpayment"
-              label="Payment"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
               v-model="form.debtdate"
               label="Date"
               @click="persistentDate = true"
@@ -194,15 +185,6 @@
               v-model="form.debtmodterm"
               label="Term (Years)"
               mask="#"
-              input-class="text-left"
-              fill-mask="0"
-              reverse-fill-mask
-            ></q-input>
-            <q-input
-              autogrow
-              filled
-              v-model="form.debtmodpayment"
-              label="Payment"
               input-class="text-left"
               fill-mask="0"
               reverse-fill-mask
@@ -336,11 +318,21 @@ export default defineComponent({
         sortable: true,
       },
       {
-        name: 'amount',
+        name: 'original amount',
         required: true,
-        label: 'Amount',
+        label: 'Original Amount',
         align: 'left',
         field: (row: Record<string, unknown>) => row.amount,
+        format: (val: number) =>
+          val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
+        sortable: true,
+      },
+      {
+        name: 'current',
+        required: true,
+        label: 'Current Amount',
+        align: 'left',
+        field: (row: Record<string, unknown>) => row.currentBalance,
         format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,
@@ -357,31 +349,33 @@ export default defineComponent({
       {
         name: 'term',
         required: true,
-        label: 'Term',
+        label: 'Term (Years)',
         align: 'left',
         field: (row: Record<string, unknown>) => row.term,
         format: (val: number) => `${val}`,
         sortable: true,
       },
       {
-        name: 'payment',
+        name: 'months left',
         required: true,
-        label: 'Payment',
+        label: 'Months Remaining',
         align: 'left',
-        field: (row: Record<string, unknown>) => row.payment,
+        field: (row: Record<string, unknown>) => row.monthsLeft,
         format: (val: number) => `${val}`,
         sortable: true,
       },
       {
-        name: 'date',
+        name: 'start date',
         required: true,
-        label: 'Date',
+        label: 'Start Date',
         align: 'left',
         field: (row: Record<string, unknown>) => row.date,
         format: (val: number) => `${val}`,
         sortable: true,
       },
     ];
+
+    const modelType = ref('');
 
     return {
       persistentDebt,
@@ -390,7 +384,7 @@ export default defineComponent({
       Debts,
       debtsTotal,
       columns,
-      modelType: ref(''),
+      modelType,
       options: ['Installment', 'Revolving', 'Lease'],
       form,
       date: ref('2022/10/01'),
@@ -413,7 +407,6 @@ export default defineComponent({
         portfolioStore.form.debtamount = form.value.debtamount;
         portfolioStore.form.debtrate = form.value.debtrate;
         portfolioStore.form.debtterm = form.value.debtterm;
-        portfolioStore.form.debtpayment = form.value.debtpayment;
         portfolioStore.form.debtdate = form.value.debtdate;
 
         persistentDebt.value = false;
@@ -430,8 +423,8 @@ export default defineComponent({
         portfolioStore.form.debtmodamount = row.amount;
         portfolioStore.form.debtmodrate = row.rate;
         portfolioStore.form.debtmodterm = row.term;
-        portfolioStore.form.debtmodpayment = row.payment;
         portfolioStore.form.debtmoddate = row.date;
+        modelType.value = row.type;
 
         persistentDebtEdit.value = true;
         persistentDate.value = false;
@@ -439,11 +432,10 @@ export default defineComponent({
       modifyDebt() {
         portfolioStore.form.debtmodid = form.value.debtmodid;
         portfolioStore.form.debtmodtitle = form.value.debtmodtitle;
-        portfolioStore.form.debtmodtype = form.value.debtmodtype;
+        portfolioStore.form.debtmodtype = modelType.value;
         portfolioStore.form.debtmodamount = form.value.debtmodamount;
         portfolioStore.form.debtmodrate = form.value.debtmodrate;
         portfolioStore.form.debtmodterm = form.value.debtmodterm;
-        portfolioStore.form.debtmodpayment = form.value.debtmodpayment;
         portfolioStore.form.debtmoddate = form.value.debtmoddate;
 
         portfolioStore.modifyDebt();

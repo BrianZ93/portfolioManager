@@ -10,14 +10,13 @@ import (
 )
 
 type DebtPost struct {
-	Id      float64 `json:"id"`
-	Title   string  `json:"title"`
-	Type    string  `json:"type"`
-	Amount  float64 `json:"amount"`
-	Rate    float64 `json:"rate"`
-	Term    float64 `json:"term"`
-	Payment float64 `json:"payment"`
-	Date    string  `json:"date"`
+	Id     float64 `json:"id"`
+	Title  string  `json:"title"`
+	Type   string  `json:"type"`
+	Amount float64 `json:"amount"`
+	Rate   float64 `json:"rate"`
+	Term   float64 `json:"term"`
+	Date   string  `json:"date"`
 }
 
 type Debt []DebtPost
@@ -33,14 +32,13 @@ func CheckDebtFile(filename string) error {
 
 		StarterDebtData := &[]DebtPost{
 			{
-				Id:      1,
-				Title:   "Home",
-				Type:    "Installment",
-				Amount:  208000,
-				Rate:    .02615,
-				Term:    30,
-				Payment: 1000,
-				Date:    "10/01/2022",
+				Id:     1,
+				Title:  "Home",
+				Type:   "Installment",
+				Amount: 208000,
+				Rate:   .02615,
+				Term:   30,
+				Date:   "10/01/2022",
 			},
 		}
 		file, _ := json.MarshalIndent(StarterDebtData, "", " ")
@@ -92,8 +90,6 @@ func readDebtFile() {
 	RateProceed := false
 	var CurTerm float64
 	TermProceed := false
-	var CurPayment float64
-	PaymentProceed := false
 	var CurDate string
 	DateProceed := false
 
@@ -137,18 +133,13 @@ func readDebtFile() {
 			TermProceed = true
 		}
 
-		if res, ok := objMap["payment"].(float64); ok {
-			CurPayment = res
-			PaymentProceed = true
-		}
-
 		if res, ok := objMap["date"].(string); ok {
 			CurDate = res
 			DateProceed = true
 		}
 
-		if IdProceed && TitleProceed && TypeProceed && AmountProceed && RateProceed && TermProceed && PaymentProceed && DateProceed {
-			CurrentDebts = append(CurrentDebts, DebtPost{Id: CurId, Title: CurTitle, Type: CurType, Amount: CurAmount, Rate: CurRate, Term: CurTerm, Payment: CurPayment, Date: CurDate})
+		if IdProceed && TitleProceed && TypeProceed && AmountProceed && RateProceed && TermProceed && DateProceed {
+			CurrentDebts = append(CurrentDebts, DebtPost{Id: CurId, Title: CurTitle, Type: CurType, Amount: CurAmount, Rate: CurRate, Term: CurTerm, Date: CurDate})
 		}
 
 		CurrentIndex++
@@ -190,7 +181,7 @@ func addDebt(w http.ResponseWriter, request *http.Request) {
 	TemtDebts = nil
 
 	if CurrentDebts == nil {
-		TemtDebts = append(TemtDebts, DebtPost{Id: 0, Title: debtData.Title, Type: debtData.Type, Amount: debtData.Amount, Rate: debtData.Rate, Term: debtData.Term, Payment: debtData.Payment, Date: debtData.Date})
+		TemtDebts = append(TemtDebts, DebtPost{Id: 0, Title: debtData.Title, Type: debtData.Type, Amount: debtData.Amount, Rate: debtData.Rate, Term: debtData.Term, Date: debtData.Date})
 		CurrentDebts = TemtDebts
 
 		file, _ := json.MarshalIndent(CurrentDebts, "", " ")
@@ -218,7 +209,7 @@ func addDebt(w http.ResponseWriter, request *http.Request) {
 			}
 		}
 
-		CurrentDebts = append(CurrentDebts, DebtPost{Id: NewId, Title: debtData.Title, Type: debtData.Type, Amount: debtData.Amount, Rate: debtData.Rate, Term: debtData.Term, Payment: debtData.Payment, Date: debtData.Date})
+		CurrentDebts = append(CurrentDebts, DebtPost{Id: NewId, Title: debtData.Title, Type: debtData.Type, Amount: debtData.Amount, Rate: debtData.Rate, Term: debtData.Term, Date: debtData.Date})
 
 		file, _ := json.MarshalIndent(CurrentDebts, "", " ")
 
@@ -256,7 +247,6 @@ func modifyDebt(w http.ResponseWriter, request *http.Request) {
 			CurrentDebts[debt].Amount = debtData.Amount
 			CurrentDebts[debt].Rate = debtData.Rate
 			CurrentDebts[debt].Term = debtData.Term
-			CurrentDebts[debt].Payment = debtData.Payment
 			CurrentDebts[debt].Date = debtData.Date
 		}
 	}
@@ -291,7 +281,6 @@ func deleteDebt(w http.ResponseWriter, request *http.Request) {
 		CurrentDebts[0].Amount = 0
 		CurrentDebts[0].Rate = 0
 		CurrentDebts[0].Term = 0
-		CurrentDebts[0].Payment = 0
 		CurrentDebts[0].Date = "Empty"
 
 	} else {

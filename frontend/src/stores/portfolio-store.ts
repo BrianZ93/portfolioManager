@@ -198,8 +198,9 @@ export class Debt {
   amount: number;
   rate: number;
   term: number;
-  payment: number;
   date: string;
+  currentBalance: number;
+  monthsLeft: number;
 
   constructor(
     id: number,
@@ -208,8 +209,9 @@ export class Debt {
     amount: number,
     rate: number,
     term: number,
-    payment: number,
-    date: string
+    date: string,
+    currentBalance: number,
+    monthsLeft: number
   ) {
     this.id = id;
     this.title = title;
@@ -217,8 +219,9 @@ export class Debt {
     this.amount = amount;
     this.rate = rate;
     this.term = term;
-    this.payment = payment;
     this.date = date;
+    this.currentBalance = currentBalance;
+    this.monthsLeft = monthsLeft;
   }
 }
 
@@ -335,7 +338,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         debtamount: 0,
         debtrate: 0,
         debtterm: 0,
-        debtpayment: 0,
         debtdate: '',
 
         // Debt Modify Form Data
@@ -345,7 +347,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         debtmodamount: 0,
         debtmodrate: 0,
         debtmodterm: 0,
-        debtmodpayment: 0,
         debtmoddate: '',
 
         // Debt Delete Form Data
@@ -406,7 +407,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             amount: Number(this.form.debtamount),
             rate: Number(rate),
             term: Number(this.form.debtterm),
-            payment: Number(this.form.debtpayment),
             date: this.form.debtdate,
           })
         )
@@ -460,10 +460,8 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           this.propertiesTotal = 0;
 
           for (let i = 0; i < res.data.length; i++) {
-            console.log(res.data[i]);
             const tempTenants = [] as Array<Tenant>;
             if (res.data[i].tenants) {
-              console.log(res.data[i].description);
               for (const tenant of Object.entries(res.data[i].tenants)) {
                 const t = tenant[1] as Tenant;
                 tempTenants.push(
@@ -481,8 +479,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 );
               }
             }
-
-            console.log(tempTenants);
 
             this.realEstate.set(
               res.data[i].id,
@@ -584,7 +580,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           .get('http://localhost:8081/debts')
           .then((res) => {
             this.Debts = [] as Array<Debt>;
-
             for (let i = 0; i < res.data.length; i++) {
               this.Debts.push(
                 new Debt(
@@ -594,15 +589,73 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                   res.data[i].amount as number,
                   res.data[i].rate as number,
                   res.data[i].term as number,
-                  res.data[i].payment as number,
-                  res.data[i].date as string
+                  res.data[i].date as string,
+                  res.data[i].amount as number,
+                  res.data[i].term
                 )
               );
+
+              if (
+                res.data[i].type == 'Lease' ||
+                res.data[i].type == 'Installment'
+              ) {
+                // Creating a blank date object
+                const dateObject = new Date();
+                // Retrieving todays date
+                const dd = String(dateObject.getDate()).padStart(2, 0);
+                const mm = String(dateObject.getMonth() + 1).padStart(2, '0');
+                const yyyy = dateObject.getFullYear();
+
+                const todayString = (mm + '/' + dd + '/' + yyyy) as string;
+
+                // Getting the current property lien to be amortized
+                let amortizingDebt = null;
+                for (const debt of this.Debts) {
+                  if ((debt.id = res.data[i].id)) {
+                    amortizingDebt = debt as Debt;
+                  }
+                }
+
+                // Calculating how many payments to amortize
+                const yearsElapsed =
+                  parseFloat(todayString.slice(6, 10)) -
+                  parseFloat(amortizingDebt?.date.slice(6, 10) as string);
+
+                const monthsElapsed =
+                  parseFloat(todayString.slice(0, 2)) -
+                  parseFloat(amortizingDebt?.date.slice(0, 2) as string) +
+                  yearsElapsed * 12;
+
+                const monthlyRate = res.data[i].rate / 100 / 12;
+                const rate = res.data[i].rate / 100;
+                const term = res.data[i].term * 12;
+                const lien = res.data[i].amount;
+
+                const factor = (1 + monthlyRate) ** term;
+                const rateFactor = monthlyRate * factor;
+                const termFactor = (1 + monthlyRate) ** term - 1;
+
+                const payment = lien * (rateFactor / termFactor);
+
+                let currentBalance = lien as number;
+                for (let i = 1; i < monthsElapsed; i++) {
+                  const interest = (rate / 12) * currentBalance;
+
+                  currentBalance = currentBalance - (payment - interest);
+                }
+
+                for (const debt of this.Debts) {
+                  if (debt.id == amortizingDebt?.id) {
+                    debt.currentBalance = currentBalance;
+                    debt.monthsLeft = debt.term * 12 - monthsElapsed;
+                  }
+                }
+              }
             }
 
             this.debtsTotal = 0;
             for (const debt of this.Debts) {
-              this.debtsTotal += debt.amount;
+              this.debtsTotal += debt.currentBalance;
             }
           });
       } catch {
@@ -689,7 +742,6 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             amount: Number(this.form.debtmodamount),
             rate: Number(rate),
             term: Number(this.form.debtmodterm),
-            payment: Number(this.form.debtmodpayment),
             date: this.form.debtmoddate,
           })
         )

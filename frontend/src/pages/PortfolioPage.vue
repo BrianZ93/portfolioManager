@@ -52,7 +52,7 @@
 
     <!-- Ticker Tape -->
     <q-footer
-      style="background-color: rgb(16, 16, 16)"
+      style="background-color: rgb(16, 16, 16); style: 1vh"
       reveal
       elevated
       bordered
