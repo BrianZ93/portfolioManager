@@ -14,10 +14,3 @@ services:
     ports:
       - 8081:8081
     command: air
-  # webscraper:
-  #   image: webscraper
-  #   volumes:
-  #     - ./webscraper:/webscraper
-  #   ports:
-  #     - 8082:8082
-  #   command: python3 main.py

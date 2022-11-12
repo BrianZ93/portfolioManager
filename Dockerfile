@@ -26,13 +26,4 @@ COPY ./frontend ./
 
 EXPOSE 9000
 
-# FROM python:3.9 as webscraper
-
-# RUN mkdir /webscraper
-# WORKDIR /webscraper
-
-# COPY ./webscraper ./
-
-# EXPOSE 8082
-
 
