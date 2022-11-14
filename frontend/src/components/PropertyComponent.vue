@@ -736,7 +736,7 @@ export default defineComponent({
         label: 'Ownership',
         align: 'left',
         field: (row: Record<string, unknown>) =>
-          (row.equity * row.ownership) / 100,
+          ((row.equity as number) * (row.ownership as number)) / 100,
         format: (val: number) =>
           val.toLocaleString('en-US', { style: 'currency', currency: 'USD' }),
         sortable: true,

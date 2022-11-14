@@ -74,7 +74,7 @@
                   currency: 'USD',
                 })
               }}
-              {{ parseFloat(indexStore.data[3]).toFixed(2) + '%' }}
+              {{ parseFloat(indexStore.data[3].toFixed(2)) + '%' }}
             </q-item-section>
             <q-item-section
               :style="
@@ -88,7 +88,7 @@
                 })
               }}
               {{
-                parseFloat(indexStore.data[3]).toFixed(2) + '%'
+                parseFloat(indexStore.data[3].toFixed(2)) + '%'
               }}</q-item-section
             >
             <q-icon
@@ -118,7 +118,7 @@
                 })
               }}
               {{
-                parseFloat(indexStore.data[7]).toFixed(2) + '%'
+                parseFloat(indexStore.data[7].toFixed(2)) + '%'
               }}</q-item-section
             >
             <q-item-section
@@ -133,7 +133,7 @@
                 })
               }}
               {{
-                parseFloat(indexStore.data[7]).toFixed(2) + '%'
+                parseFloat(indexStore.data[7].toFixed(2)) + '%'
               }}</q-item-section
             >
             <q-icon
@@ -163,7 +163,7 @@
                 })
               }}
               {{
-                parseFloat(indexStore.data[5]).toFixed(2) + '%'
+                parseFloat(indexStore.data[5].toFixed(2)) + '%'
               }}</q-item-section
             >
             <q-item-section
@@ -177,7 +177,7 @@
                 })
               }}
               {{
-                parseFloat(indexStore.data[5]).toFixed(2) + '%'
+                parseFloat(indexStore.data[5].toFixed(2)) + '%'
               }}</q-item-section
             >
             <q-icon
@@ -200,14 +200,14 @@
                 indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
               "
               >VIX (VIX) {{ indexStore.data[0] }}
-              {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
+              {{ parseFloat(indexStore.data[1].toFixed(2)) + '%' }}
             </q-item-section>
             <q-item-section
               :style="
                 indexStore.data[1] < 0 ? { color: 'red' } : { color: 'green' }
               "
               >{{ indexStore.data[0] }}
-              {{ parseFloat(indexStore.data[1]).toFixed(2) + '%' }}
+              {{ parseFloat(indexStore.data[1].toFixed(2)) + '%' }}
             </q-item-section>
             <q-icon
               v-if="indexStore.data[1] < 0"
