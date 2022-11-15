@@ -1,10 +1,10 @@
 [
- {
-  "ticker": "QQQ",
-  "shares": 37,
-  "price": 153,
-  "priceloaded": true,
-  "value": 282.75,
-  "margin": 0
- }
+  {
+    "ticker": "QQQ",
+    "shares": 37,
+    "price": 153,
+    "priceloaded": true,
+    "value": 285.44,
+    "margin": 0
+  }
 ]

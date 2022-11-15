@@ -1,78 +1,112 @@
 [
- {
-  "id": 1,
-  "description": "4530 N Magnolia Ave",
-  "price": 240500,
-  "lien": 228475,
-  "rate": 3.875,
-  "years": 30,
-  "value": 315000,
-  "monthsleft": 0,
-  "type": "Investment Property",
-  "ownership": 100,
-  "date": "07-01-2017",
-  "tenants": [
-   {
-    "name": "Janine Risk",
-    "leasestart": "2022-10-01",
-    "leaseend": "2023-10-01",
-    "expenses": null,
-    "revenues": null,
-    "unit": "GS",
-    "currenttenant": true,
+  {
     "id": 1,
-    "subid": 0
-   }
-  ],
-  "buildingexpenses": null,
-  "buildingrevenues": null
- },
- {
-  "id": 2,
-  "description": "2143 Maple Ave",
-  "price": 230000,
-  "lien": 214700,
-  "rate": 2.615,
-  "years": 30,
-  "value": 315000,
-  "monthsleft": 0,
-  "type": "Primary Residence",
-  "ownership": 100,
-  "date": "07-01-2021",
-  "tenants": null,
-  "buildingexpenses": null,
-  "buildingrevenues": null
- },
- {
-  "id": 3,
-  "description": "3352 N Glenlake",
-  "price": 300000,
-  "lien": 415000,
-  "rate": 4.01,
-  "years": 30,
-  "value": 450000,
-  "monthsleft": 0,
-  "type": "Investment Property",
-  "ownership": 10,
-  "date": "09-01-2019",
-  "tenants": null,
-  "buildingexpenses": null,
-  "buildingrevenues": null
- },
- {
-  "id": 4,
-  "description": "3107 Everglade",
-  "price": 315000,
-  "lien": 314000,
-  "rate": 6.75,
-  "years": 30,
-  "value": 325000,
-  "monthsleft": 0,
-  "type": "Second Home",
-  "ownership": 100,
-  "date": "09-01-2022",
-  "tenants": null,
-  "buildingexpenses": null,
-  "buildingrevenues": null
- }
+    "description": "4530 N Magnolia Ave",
+    "price": 240500,
+    "lien": 228475,
+    "rate": 3.875,
+    "years": 30,
+    "value": 315000,
+    "monthsleft": 0,
+    "type": "Investment Property",
+    "ownership": 100,
+    "date": "07-01-2017",
+    "tenants": [
+      {
+        "name": "Janine Risk",
+        "leasestart": "2022-10-01",
+        "leaseend": "2023-10-01",
+        "expenses": null,
+        "revenues": null,
+        "unit": "GS",
+        "currenttenant": true,
+        "id": 1,
+        "subid": 0
+      },
+      {
+        "name": "Jimmy Risk",
+        "leasestart": "2020-01-10",
+        "leaseend": "2022-10-10",
+        "expenses": [],
+        "revenues": [],
+        "unit": "GS",
+        "currenttenant": false,
+        "id": 1,
+        "subid": 0
+      }
+    ],
+    "buildingexpenses": null,
+    "buildingrevenues": null
+  },
+  {
+    "id": 2,
+    "description": "2143 Maple Ave",
+    "price": 230000,
+    "lien": 214700,
+    "rate": 2.615,
+    "years": 30,
+    "value": 315000,
+    "monthsleft": 0,
+    "type": "Primary Residence",
+    "ownership": 100,
+    "date": "07-01-2021",
+    "tenants": [
+      {
+        "name": "Ron De Leon",
+        "leasestart": "2017-10-01",
+        "leaseend": "2023-10-01",
+        "expenses": [],
+        "revenues": [],
+        "unit": "1",
+        "currenttenant": true,
+        "id": 2,
+        "subid": 0
+      },
+      {
+        "name": "Beau LaHaye",
+        "leasestart": "2022-09-01",
+        "leaseend": "2023-10-01",
+        "expenses": [],
+        "revenues": [],
+        "unit": "2",
+        "currenttenant": true,
+        "id": 2,
+        "subid": 0
+      }
+    ],
+    "buildingexpenses": null,
+    "buildingrevenues": null
+  },
+  {
+    "id": 3,
+    "description": "3352 N Glenlake",
+    "price": 300000,
+    "lien": 415000,
+    "rate": 4.01,
+    "years": 30,
+    "value": 450000,
+    "monthsleft": 0,
+    "type": "Investment Property",
+    "ownership": 10,
+    "date": "09-01-2019",
+    "tenants": null,
+    "buildingexpenses": null,
+    "buildingrevenues": null
+  },
+  {
+    "id": 4,
+    "description": "3107 Everglade",
+    "price": 315000,
+    "lien": 314000,
+    "rate": 6.75,
+    "years": 30,
+    "value": 325000,
+    "monthsleft": 0,
+    "type": "Second Home",
+    "ownership": 100,
+    "date": "09-01-2022",
+    "tenants": null,
+    "buildingexpenses": null,
+    "buildingrevenues": null
+  }
 ]

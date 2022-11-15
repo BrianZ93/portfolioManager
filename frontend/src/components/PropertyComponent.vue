@@ -392,8 +392,169 @@
                 <div class="text-h6"></div>
               </q-card-section>
 
-              <!-- Middle Dialog -->
-              <div class="q-pa-md q-gutter-sm">
+              <div class="flex row">
+                <div class="flex col">
+                  <q-card class="my-card">
+                    <q-item>
+                      <q-item-section
+                        class="text-h6 text-primary"
+                        style="text-align: center"
+                      >
+                        Property Snapshot
+                      </q-item-section>
+                    </q-item>
+                    <q-separator></q-separator>
+                    <q-list>
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="primary" name="home" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>
+                            {{ selectedProperty.description }}</q-item-label
+                          >
+                          <q-item-label caption>{{
+                            selectedProperty.type
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="green" name="paid" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Current Value</q-item-label>
+                          <q-item-label caption>{{
+                            selectedProperty.value.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon color="red" name="payments" />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Outstanding Liens</q-item-label>
+                          <q-item-label caption>{{
+                            selectedProperty.lien.toLocaleString('en-US', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+
+                      <q-item clickable>
+                        <q-item-section avatar>
+                          <q-icon
+                            v-if="
+                              selectedProperty.value - selectedProperty.lien < 0
+                            "
+                            color="red"
+                            name="wallet"
+                          />
+                          <q-icon
+                            v-if="
+                              selectedProperty.value - selectedProperty.lien >
+                              -0.01
+                            "
+                            color="green"
+                            name="wallet"
+                          />
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>Equity</q-item-label>
+                          <q-item-label caption>{{
+                            (
+                              selectedProperty.value - selectedProperty.lien
+                            ).toLocaleString('en-us', {
+                              style: 'currency',
+                              currency: 'USD',
+                            })
+                          }}</q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+
+                    <q-item>
+                      <q-item-section avatar>
+                        <q-icon color="primary" name="people"></q-icon>
+                      </q-item-section>
+
+                      <q-item-section class="text-h6 text-primary">
+                        Tenants
+                      </q-item-section>
+                    </q-item>
+                    <q-separator></q-separator>
+                    <q-list>
+                      <q-item
+                        clickable
+                        v-for="tenant in selectedProperty.tenants"
+                        :key="tenant"
+                        :value="tenant"
+                      >
+                        <q-item-section avatar>
+                          <q-icon color="primary" name="person"> </q-icon>
+                        </q-item-section>
+
+                        <q-item-section>
+                          <q-item-label>
+                            {{ tenant.name }} {{ tenant.unit }}
+                          </q-item-label>
+                        </q-item-section>
+                      </q-item>
+                    </q-list>
+
+                    <q-item clickable @click="persistentTenants = true">
+                      <q-item-section avatar>
+                        <q-icon color="amber" name="perm_identity" />
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label>Add Tenant</q-item-label>
+                      </q-item-section>
+                    </q-item>
+
+                    <q-item>
+                      <q-item-section
+                        class="text-h6 text-primary"
+                        style="text-align: center"
+                      >
+                        Building Expenses & Other Revenues
+                      </q-item-section>
+                    </q-item>
+                    <q-separator></q-separator>
+                    <q-item clickable>
+                      <q-item-section avatar>
+                        <q-icon color="green" name="attach_money" />
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label>Revenues</q-item-label>
+                        <q-item-label caption>Add Caption Later</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                    <q-item clickable>
+                      <q-item-section avatar>
+                        <q-icon color="red" name="payments" />
+                      </q-item-section>
+
+                      <q-item-section>
+                        <q-item-label>Expenses</q-item-label>
+                        <q-item-label caption>Add Caption Later</q-item-label>
+                      </q-item-section>
+                    </q-item>
+                  </q-card>
+                </div>
+
                 <q-dialog
                   v-model="persistentTenants"
                   persistent
@@ -408,8 +569,8 @@
                     <q-card-section>
                       <q-list>
                         <q-item
-                          v-for="tenant in selectedProperty.tenants"
-                          :key="tenant"
+                          v-for="tenant in form.selectedProperty.tenants"
+                          :key="tenant && selectedProperty"
                           :value="tenant"
                         >
                           <q-item-label>{{ tenant.name }}</q-item-label>
@@ -505,97 +666,7 @@
                     </q-card-actions>
                   </q-card>
                 </q-dialog>
-              </div>
 
-              <div class="flex row">
-                <div class="flex col">
-                  <q-card class="my-card">
-                    <q-item>
-                      <q-item-section
-                        class="text-h6 text-primary"
-                        style="text-align: center"
-                      >
-                        Property Snapshot
-                      </q-item-section>
-                    </q-item>
-                    <q-separator></q-separator>
-                    <q-list>
-                      <q-item clickable>
-                        <q-item-section avatar>
-                          <q-icon color="primary" name="home" />
-                        </q-item-section>
-
-                        <q-item-section>
-                          <q-item-label>
-                            {{ selectedProperty.description }}</q-item-label
-                          >
-                          <q-item-label caption>{{
-                            selectedProperty.type
-                          }}</q-item-label>
-                        </q-item-section>
-                      </q-item>
-                      <q-item clickable>
-                        <q-item-section avatar>
-                          <q-icon color="primary" name="local_bar" />
-                        </q-item-section>
-
-                        <q-item-section>
-                          <q-item-label>Current Value</q-item-label>
-                          <q-item-label caption>{{
-                            selectedProperty.value.toLocaleString('en-US', {
-                              style: 'currency',
-                              currency: 'USD',
-                            })
-                          }}</q-item-label>
-                        </q-item-section>
-                      </q-item>
-
-                      <q-item clickable>
-                        <q-item-section avatar>
-                          <q-icon color="red" name="pages" />
-                        </q-item-section>
-
-                        <q-item-section>
-                          <q-item-label>Outstanding Liens</q-item-label>
-                          <q-item-label caption>{{
-                            selectedProperty.lien.toLocaleString('en-US', {
-                              style: 'currency',
-                              currency: 'USD',
-                            })
-                          }}</q-item-label>
-                        </q-item-section>
-                      </q-item>
-
-                      <q-item clickable>
-                        <q-item-section avatar>
-                          <q-icon color="amber" name="local_movies" />
-                        </q-item-section>
-
-                        <q-item-section>
-                          <q-item-label>Equity</q-item-label>
-                          <q-item-label caption>{{
-                            (
-                              selectedProperty.value - selectedProperty.lien
-                            ).toLocaleString('en-us', {
-                              style: 'currency',
-                              currency: 'USD',
-                            })
-                          }}</q-item-label>
-                        </q-item-section>
-                      </q-item>
-
-                      <q-item clickable @click="persistentTenants = true">
-                        <q-item-section avatar>
-                          <q-icon color="amber" name="people" />
-                        </q-item-section>
-
-                        <q-item-section>
-                          <q-item-label>Manage Tenants</q-item-label>
-                        </q-item-section>
-                      </q-item>
-                    </q-list>
-                  </q-card>
-                </div>
                 <div class="flex col">
                   <!-- Put apex chart in here for loan paydown -->
                 </div>
@@ -661,8 +732,8 @@ export default defineComponent({
     const propertiesImported = ref(false);
     const persistentProperty = ref(false);
     const persistentPropertyEdit = ref(false);
-    const persistentTenants = ref(false);
     const persistentSure = ref(false);
+    const persistentTenants = ref(false);
 
     const realEstate = computed(() => portfolioStore.realEstate);
     const propertiesTotal = computed(() => portfolioStore.propertiesTotal);
@@ -768,8 +839,6 @@ export default defineComponent({
     const currentTenant = ref(false);
 
     function onSubmit(selectedProperty: Property) {
-      console.log('SELECTED PROPERTY++++', selectedProperty);
-
       // TODO - refactor "subid" logic
       portfolioStore.form.newTenant = new Tenant(
         name.value,
@@ -965,8 +1034,8 @@ export default defineComponent({
       dialog: ref(false),
       maximizedToggle: ref(true),
       selectedProperty,
-      persistentTenants,
       persistentSure,
+      persistentTenants,
     };
   },
 });
