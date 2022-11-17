@@ -1001,6 +1001,42 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           this.importCurrentProperties();
         });
     },
+    async deleteExpense(expense: Expense) {
+      axios
+        .post(
+          'http://localhost:8081/expensedel',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            tenantid: Number(expense.tenantid),
+            description: expense.description,
+            amount: Number(expense.amount),
+            date: expense.date,
+            subid: Number(expense.subid),
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
+        });
+    },
+    async deleteRevenue(revenue: Revenue) {
+      axios
+        .post(
+          'http://localhost:8081/revenuedel',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            tenantid: Number(revenue.tenantid),
+            description: revenue.description,
+            amount: Number(revenue.amount),
+            date: revenue.date,
+            subid: Number(revenue.subid),
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
+        });
+    },
   },
   getters: {
     grabEquities: (state) => {

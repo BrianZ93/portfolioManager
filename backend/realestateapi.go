@@ -918,3 +918,87 @@ func modifyRevenue(w http.ResponseWriter, request *http.Request) {
 	_ = ioutil.WriteFile("Properties.json", file, 0644)
 
 }
+
+func deleteExpense(w http.ResponseWriter, request *http.Request) {
+	// Enabling Cors
+	enableCors(&w)
+
+	// Sets the appropriate data type for JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Initializing API variables
+	var expenseData Expense
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to Property data at its memory location
+	decoder.Decode(&expenseData)
+
+	var TempExpenses []Expense
+
+	for property := range CurrentProperties {
+		if CurrentProperties[property].Id != expenseData.Id {
+			continue
+		} else {
+			for expense := range CurrentProperties[property].BuildingExpenses {
+				if CurrentProperties[property].BuildingExpenses[expense].SubId == expenseData.SubId {
+					continue
+
+				} else {
+					TempExpenses = append(TempExpenses, CurrentProperties[property].BuildingExpenses[expense])
+
+				}
+			}
+			CurrentProperties[property].BuildingExpenses = TempExpenses
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
+
+}
+
+func deleteRevenue(w http.ResponseWriter, request *http.Request) {
+	// Enabling Cors
+	enableCors(&w)
+
+	// Sets the appropriate data type for JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Initializing API variables
+	var revenueData Revenue
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to Property data at its memory location
+	decoder.Decode(&revenueData)
+
+	var TempRevenues []Revenue
+
+	for property := range CurrentProperties {
+		if CurrentProperties[property].Id != revenueData.Id {
+			continue
+		} else {
+			for revenue := range CurrentProperties[property].BuildingRevenues {
+				if CurrentProperties[property].BuildingRevenues[revenue].SubId == revenueData.SubId {
+					continue
+
+				} else {
+					TempRevenues = append(TempRevenues, CurrentProperties[property].BuildingRevenues[revenue])
+
+				}
+			}
+			CurrentProperties[property].BuildingRevenues = TempRevenues
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
+
+}

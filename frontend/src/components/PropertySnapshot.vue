@@ -78,31 +78,6 @@
       </q-item>
     </q-list>
 
-    <q-item>
-      <q-item-section avatar>
-        <q-icon color="primary" name="people"></q-icon>
-      </q-item-section>
-
-      <q-item-section class="text-h6 text-primary"> Tenants </q-item-section>
-    </q-item>
-    <q-separator></q-separator>
-    <q-list>
-      <q-item
-        clickable
-        v-for="tenant in selectedProperty.tenants"
-        :key="tenant"
-        :value="tenant"
-      >
-        <q-item-section avatar>
-          <q-icon color="primary" name="person"> </q-icon>
-        </q-item-section>
-
-        <q-item-section>
-          <q-item-label> {{ tenant.name }} {{ tenant.unit }} </q-item-label>
-        </q-item-section>
-      </q-item>
-    </q-list>
-
     <q-item clickable @click="persistentTenants = true">
       <q-item-section avatar>
         <q-icon color="amber" name="perm_identity" />
@@ -246,7 +221,9 @@
   >
     <q-card class="text-primary" style="width: 300px">
       <q-card-section>
-        <div class="text-h6">Add Building Expense</div>
+        <div class="text-h6" style="text-align: center">
+          Add Building Expense
+        </div>
       </q-card-section>
 
       <q-card-section class="q-pt-none" style="text-align: center">
@@ -314,7 +291,9 @@
   >
     <q-card class="text-primary" style="width: 300px">
       <q-card-section>
-        <div class="text-h6">Add Building Revenue</div>
+        <div class="text-h6" style="text-align: center">
+          Add Building Revenue
+        </div>
       </q-card-section>
 
       <q-card-section class="q-pt-none" style="text-align: center">
@@ -436,7 +415,8 @@ export default defineComponent({
         0,
         expense.value,
         amount,
-        expensedate.value
+        expensedate.value,
+        0
       );
 
       persistentExpenses.value = false;
@@ -451,7 +431,8 @@ export default defineComponent({
         0,
         revenue.value,
         amount,
-        revdate.value
+        revdate.value,
+        0
       );
 
       persistentRevenues.value = false;

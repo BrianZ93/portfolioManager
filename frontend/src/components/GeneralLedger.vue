@@ -1,11 +1,9 @@
 <template>
   <q-card>
     <q-table
-      dense
       title="General Ledger"
       :columns="columns"
       :rows="form.selectedProperty.ledger"
-      :key="form.selectedProperty.ledger"
       @row-click="itemClick"
     ></q-table>
   </q-card>
@@ -18,7 +16,7 @@
     transition-show="scale"
     transition-hide="scale"
   >
-    <q-card class="text-primary" style="width: 300px">
+    <q-card class="text-primary" style="width: 18vw">
       <q-card-section>
         <div class="text-h6" style="text-align: center">Edit Ledger Item</div>
       </q-card-section>
@@ -28,7 +26,7 @@
       </q-card-section>
 
       <q-form
-        @submit="onLedgerModifySubmit(form.selectedProperty)"
+        @submit="onLedgerModifySubmit()"
         @reset="onLedgerModifyReset"
         class="q-gutter-md"
       >
@@ -67,7 +65,20 @@
         />
 
         <div style="margin-bottom: 1vh">
-          <q-btn label="Submit" type="submit" color="primary" />
+          <q-btn
+            glossy
+            label="Submit"
+            type="submit"
+            color="primary"
+            style="margin-right: 1vw; margin-left: 1vw"
+          />
+          <q-btn
+            glossy
+            color="primary"
+            label="Delete Entry"
+            @click="persistentSure = true"
+          ></q-btn>
+
           <q-btn
             label="Reset"
             type="reset"
@@ -78,6 +89,34 @@
           <q-btn flat label="Cancel" v-close-popup />
         </div>
       </q-form>
+    </q-card>
+  </q-dialog>
+
+  <!-- Are you sure dialog -->
+
+  <q-dialog
+    v-model="persistentSure"
+    persistent
+    transition-show="scale"
+    transition-hide="scale"
+  >
+    <q-card class="bg-black text-primary" style="width: 30vw">
+      <q-card-section>
+        <div class="text-h6" style="text-align: center">
+          Are you sure you want to delete this entry?
+        </div>
+      </q-card-section>
+
+      <q-card-actions align="right" class="bg-black text-primary">
+        <q-btn
+          class="glossy"
+          rounded
+          color="primary"
+          label="Delete"
+          @click="deleteEntry"
+        ></q-btn>
+        <q-btn flat label="Cancel" v-close-popup />
+      </q-card-actions>
     </q-card>
   </q-dialog>
 </template>
@@ -94,8 +133,8 @@ export default defineComponent({
     let portfolioStore = usePortfolioStore();
 
     const { form } = storeToRefs(portfolioStore);
-
     const persistentLedgerEdit = ref(false);
+    const persistentSure = ref(false);
 
     const modtype = ref(null);
     const moddescription = ref(null);
@@ -120,34 +159,6 @@ export default defineComponent({
       moddescription.value = null;
       modamount.value = null;
       moddate.value = null;
-    }
-
-    function onLedgerModifySubmit() {
-      if (modtype.value == 'Expense') {
-        const newExpense = new Expense(
-          portfolioStore.form.modLedgerId,
-          portfolioStore.form.modLedgerTenantId,
-          moddescription.value,
-          modamount.value,
-          moddate.value,
-          portfolioStore.form.modLedgerSubId
-        );
-
-        console.log(newExpense);
-
-        portfolioStore.modifyExpense(newExpense);
-      } else {
-        const newRevenue = new Revenue(
-          portfolioStore.form.modLedgerId,
-          portfolioStore.form.modLedgerTenantId,
-          moddescription.value,
-          modamount.value,
-          moddate.value,
-          portfolioStore.form.modLedgerSubId
-        );
-
-        portfolioStore.modifyRevenue(newRevenue);
-      }
     }
 
     // Ledger Columns
@@ -201,7 +212,66 @@ export default defineComponent({
       modamount,
       moddate,
       onLedgerModifyReset,
-      onLedgerModifySubmit,
+      async onLedgerModifySubmit() {
+        if (modtype.value == 'Expense') {
+          const newExpense = new Expense(
+            portfolioStore.form.modLedgerId,
+            portfolioStore.form.modLedgerTenantId,
+            moddescription.value,
+            modamount.value,
+            moddate.value,
+            portfolioStore.form.modLedgerSubId
+          );
+
+          console.log(newExpense);
+
+          await portfolioStore.modifyExpense(newExpense);
+        } else {
+          const newRevenue = new Revenue(
+            portfolioStore.form.modLedgerId,
+            portfolioStore.form.modLedgerTenantId,
+            moddescription.value,
+            modamount.value,
+            moddate.value,
+            portfolioStore.form.modLedgerSubId
+          );
+
+          await portfolioStore.modifyRevenue(newRevenue);
+        }
+
+        persistentLedgerEdit.value = false;
+      },
+      async deleteEntry() {
+        if (modtype.value == 'Expense') {
+          const newExpense = new Expense(
+            portfolioStore.form.modLedgerId,
+            portfolioStore.form.modLedgerTenantId,
+            moddescription.value,
+            modamount.value,
+            moddate.value,
+            portfolioStore.form.modLedgerSubId
+          );
+
+          console.log(newExpense);
+
+          await portfolioStore.deleteExpense(newExpense);
+        } else {
+          const newRevenue = new Revenue(
+            portfolioStore.form.modLedgerId,
+            portfolioStore.form.modLedgerTenantId,
+            moddescription.value,
+            modamount.value,
+            moddate.value,
+            portfolioStore.form.modLedgerSubId
+          );
+
+          await portfolioStore.deleteRevenue(newRevenue);
+        }
+
+        persistentSure.value = false;
+        persistentLedgerEdit.value = false;
+      },
+      persistentSure,
     };
   },
 });
