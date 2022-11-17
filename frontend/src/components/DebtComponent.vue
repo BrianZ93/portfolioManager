@@ -415,7 +415,6 @@ export default defineComponent({
         portfolioStore.form.debttitle = '';
       },
       DebtClick(e: Event, row: any) {
-        console.log(row);
 
         portfolioStore.form.debtmodid = row.id;
         portfolioStore.form.debtmodtitle = row.title;

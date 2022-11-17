@@ -37,6 +37,8 @@ export class Property {
   date: string;
   tenants: Array<Tenant>;
   buildingexpenses: Array<Expense>;
+  buildingrevenues: Array<Revenue>;
+  ledger: Array<LedgerRow>;
 
   constructor(
     type: string,
@@ -51,7 +53,9 @@ export class Property {
     ownership: number,
     date: string,
     tenants: Array<Tenant>,
-    buildingexpenses: Array<Expense>
+    buildingexpenses: Array<Expense>,
+    buildingrevenues: Array<Revenue>,
+    ledger: Array<LedgerRow>
   ) {
     this.type = type;
     this.id = id;
@@ -66,6 +70,8 @@ export class Property {
     this.date = date;
     this.tenants = tenants;
     this.buildingexpenses = buildingexpenses;
+    this.buildingrevenues = buildingrevenues;
+    this.ledger = ledger;
   }
 }
 
@@ -85,6 +91,8 @@ export class PropertyRow {
   currentBalance: number;
   tenants: Array<Tenant>;
   buildingexpenses: Array<Expense>;
+  buildingrevenues: Array<Revenue>;
+  ledger: Array<LedgerRow>;
 
   constructor(
     type: string,
@@ -101,7 +109,9 @@ export class PropertyRow {
     date: string,
     currentBalance: number,
     tenants: Array<Tenant>,
-    buildingexpenses: Array<Expense>
+    buildingexpenses: Array<Expense>,
+    buildingrevenues: Array<Revenue>,
+    ledger: Array<LedgerRow>
   ) {
     this.type = type;
     this.id = id;
@@ -118,6 +128,8 @@ export class PropertyRow {
     this.currentBalance = currentBalance;
     this.tenants = tenants;
     this.buildingexpenses = buildingexpenses;
+    this.buildingrevenues = buildingrevenues;
+    this.ledger = ledger;
   }
 }
 
@@ -156,26 +168,52 @@ export class Tenant {
 }
 
 export class Expense {
+  id: number;
+  tenantid: number;
   description: string;
   amount: number;
   date: string;
+  subid: number;
 
-  constructor(description: string, amount: number, date: string) {
+  constructor(
+    id: number,
+    tenantid: number,
+    description: string,
+    amount: number,
+    date: string,
+    subid: number
+  ) {
+    this.id = id;
+    this.tenantid = tenantid;
     this.description = description;
     this.amount = amount;
     this.date = date;
+    this.subid = subid;
   }
 }
 
 export class Revenue {
+  id: number;
+  tenantid: number;
   description: string;
   amount: number;
   date: string;
+  subid: number;
 
-  constructor(description: string, amount: number, date: string) {
+  constructor(
+    id: number,
+    tenantid: number,
+    description: string,
+    amount: number,
+    date: string,
+    subid: number
+  ) {
+    this.id = id;
+    this.tenantid = tenantid;
     this.description = description;
     this.amount = amount;
     this.date = date;
+    this.subid = subid;
   }
 }
 
@@ -225,6 +263,34 @@ export class Debt {
   }
 }
 
+export class LedgerRow {
+  date: string;
+  type: string;
+  description: string;
+  amount: number;
+  id: number;
+  subid: number;
+  tenantid: number;
+
+  constructor(
+    date: string,
+    type: string,
+    description: string,
+    amount: number,
+    id: number,
+    subid: number,
+    tenantid: number
+  ) {
+    this.date = date;
+    this.type = type;
+    this.description = description;
+    this.amount = amount;
+    this.id = id;
+    this.subid = subid;
+    this.tenantid = tenantid;
+  }
+}
+
 export const usePortfolioStore = defineStore('portfolioStore', {
   state: () => {
     return {
@@ -234,6 +300,8 @@ export const usePortfolioStore = defineStore('portfolioStore', {
       propertyRows: [] as Array<PropertyRow>,
       // Equity table,
       equityRows: [] as Array<Equity>,
+
+      ledgerRows: [] as Array<LedgerRow>,
 
       Debts: [] as Array<Debt>,
 
@@ -316,7 +384,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           0,
           '',
           [] as Array<Tenant>,
-          [] as Array<Expense>
+          [] as Array<Expense>,
+          [] as Array<Revenue>,
+          [] as Array<LedgerRow>
         ),
 
         newTenant: new Tenant(
@@ -330,6 +400,30 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           0,
           0
         ),
+
+        selectedTenant: new Tenant(
+          '',
+          '',
+          '',
+          [] as Array<Expense>,
+          [] as Array<Revenue>,
+          '',
+          false,
+          0,
+          0
+        ),
+
+        newExpense: new Expense(0, 0, '', 0, '', 0),
+
+        // Ledger Modify
+        modLedgerId: 0,
+        modLedgerTenantId: 0,
+        modLedgerDescription: '',
+        modLedgerAmount: 0,
+        modLedgerDate: '',
+        modLedgerSubId: 0,
+
+        newRevenue: new Revenue(0, 0, '', 0, '', 0),
 
         // Debt Form Data
         debtid: 0,
@@ -480,6 +574,68 @@ export const usePortfolioStore = defineStore('portfolioStore', {
               }
             }
 
+            const tempLedger = [] as Array<LedgerRow>;
+
+            const tempExpenses = [] as Array<Expense>;
+            if (res.data[i].buildingexpenses) {
+              for (const expense of Object.entries(
+                res.data[i].buildingexpenses
+              )) {
+                const e = expense[1] as Expense;
+                tempExpenses.push(
+                  new Expense(
+                    e.id,
+                    e.tenantid,
+                    e.description,
+                    e.amount,
+                    e.date,
+                    e.subid
+                  )
+                );
+                tempLedger.push(
+                  new LedgerRow(
+                    e.date,
+                    'Expense',
+                    e.description,
+                    e.amount,
+                    e.id,
+                    e.subid,
+                    e.tenantid
+                  )
+                );
+              }
+            }
+
+            const tempRevenues = [] as Array<Revenue>;
+            if (res.data[i].buildingrevenues) {
+              for (const revenue of Object.entries(
+                res.data[i].buildingrevenues
+              )) {
+                const r = revenue[1] as Revenue;
+                tempRevenues.push(
+                  new Revenue(
+                    r.id,
+                    r.tenantid,
+                    r.description,
+                    r.amount,
+                    r.date,
+                    r.subid
+                  )
+                );
+                tempLedger.push(
+                  new LedgerRow(
+                    r.date,
+                    'Revenue',
+                    r.description,
+                    r.amount,
+                    r.id,
+                    r.subid,
+                    r.tenantid
+                  )
+                );
+              }
+            }
+
             this.realEstate.set(
               res.data[i].id,
               new Property(
@@ -495,7 +651,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].ownership,
                 res.data[i].date,
                 tempTenants,
-                res.data[i].buildingexpenses
+                tempExpenses,
+                tempRevenues,
+                tempLedger
               )
             );
 
@@ -556,7 +714,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
                 res.data[i].date,
                 currentBalance,
                 tempTenants,
-                res.data[i].buildingexpenses
+                tempExpenses,
+                tempRevenues,
+                tempLedger
               )
             );
 
@@ -764,14 +924,76 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         });
     },
     async addTenant() {
-      console.log(this.form.newTenant);
-      console.log(this.form.selectedProperty.id);
       axios
         .post(
           'http://localhost:8081/tenantAdd',
           JSON.stringify({
             id: Number(this.form.selectedProperty.id),
             tenants: Array(this.form.newTenant) as Array<Tenant>,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
+        });
+    },
+    async addExpense() {
+      axios
+        .post(
+          'http://localhost:8081/expenseadd',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            buildingexpenses: Array(this.form.newExpense) as Array<Expense>,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
+        });
+    },
+    async addRevenue() {
+      axios
+        .post(
+          'http://localhost:8081/revenueadd',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            buildingrevenues: Array(this.form.newRevenue) as Array<Revenue>,
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
+        });
+    },
+    async modifyExpense(expense: Expense) {
+      axios
+        .post(
+          'http://localhost:8081/expensemod',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            tenantid: Number(expense.tenantid),
+            description: expense.description,
+            amount: Number(expense.amount),
+            date: expense.date,
+            subid: Number(expense.subid),
+          })
+        )
+        .then((response) => {
+          console.log(response);
+          this.importCurrentProperties();
+        });
+    },
+    async modifyRevenue(revenue: Revenue) {
+      axios
+        .post(
+          'http://localhost:8081/revenuemod',
+          JSON.stringify({
+            id: Number(this.form.selectedProperty.id),
+            tenantid: Number(revenue.tenantid),
+            description: revenue.description,
+            amount: Number(revenue.amount),
+            date: revenue.date,
+            subid: Number(revenue.subid),
           })
         )
         .then((response) => {

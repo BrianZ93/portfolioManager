@@ -22,15 +22,21 @@ type Tenant struct {
 }
 
 type Expense struct {
+	Id          float64 `json:"id"`
+	TenantId    float64 `json:"tenantid"`
 	Description string  `json:"description"`
 	Amount      float64 `json:"amount"`
 	Date        string  `json:"date"`
+	SubId       float64 `json:"subid"`
 }
 
 type Revenue struct {
+	Id          float64 `json:"id"`
+	TenantId    float64 `json:"tenantid"`
 	Description string  `json:"description"`
 	Amount      float64 `json:"amount"`
 	Date        string  `json:"date"`
+	SubId       float64 `json:"subid"`
 }
 
 type RealEstatePost struct {
@@ -366,12 +372,18 @@ func readREFile() {
 			logrus.Warn("It is possible this building does not have any expenses")
 		}
 
+		var CurBldgExpId float64
+		BldgExpIdProceed := false
+		var CurBldgExpTenantId float64
+		BldgExpTenantIdProceed := false
 		var CurBldgExpDesc string
 		BldgExpDescProceed := false
 		var CurBldgExpAmt float64
 		BldgExpAmtProceed := false
 		var CurBldgExpDate string
 		BldgExpDateProceed := false
+		var CurBldgExpSubId float64
+		BldgExpSubIdProceed := false
 
 		var TempBuildingExpenses []Expense
 
@@ -380,6 +392,16 @@ func readREFile() {
 
 			if !ok {
 				logrus.Error("cannot convert building expenses to interface{}")
+			}
+
+			if res, ok := objMap5["id"].(float64); ok {
+				CurBldgExpId = res
+				BldgExpIdProceed = true
+			}
+
+			if res, ok := objMap5["tenantid"].(float64); ok {
+				CurBldgExpTenantId = res
+				BldgExpTenantIdProceed = true
 			}
 
 			if res, ok := objMap5["description"].(string); ok {
@@ -397,8 +419,13 @@ func readREFile() {
 				BldgExpDateProceed = true
 			}
 
-			if BldgExpDescProceed && BldgExpAmtProceed && BldgExpDateProceed {
-				TempBuildingExpenses = append(TempBuildingExpenses, Expense{Description: CurBldgExpDesc, Amount: CurBldgExpAmt, Date: CurBldgExpDate})
+			if res, ok := objMap5["subid"].(float64); ok {
+				CurBldgExpSubId = res
+				BldgExpSubIdProceed = true
+			}
+
+			if BldgExpIdProceed && BldgExpTenantIdProceed && BldgExpDescProceed && BldgExpAmtProceed && BldgExpDateProceed && BldgExpSubIdProceed {
+				TempBuildingExpenses = append(TempBuildingExpenses, Expense{Id: CurBldgExpId, TenantId: CurBldgExpTenantId, Description: CurBldgExpDesc, Amount: CurBldgExpAmt, Date: CurBldgExpDate, SubId: CurBldgExpSubId})
 			}
 		}
 
@@ -410,12 +437,18 @@ func readREFile() {
 			logrus.Warn("It is possible this building does not have any revenues")
 		}
 
+		var CurBldgRevId float64
+		CurBldgRevIdProceed := false
+		var CurBldgRevTenantId float64
+		CurBldgRevTenantIdProceed := false
 		var CurBldgRevDesc string
 		BldgRevDescProceed := false
 		var CurBldgRevAmt float64
 		BldgRevAmtProceed := false
 		var CurBldgRevDate string
 		BldgRevDateProceed := false
+		var CurBldgRevSubId float64
+		BldgRevSubIdProceed := false
 
 		var TempBuildingRevenues []Revenue
 
@@ -424,6 +457,17 @@ func readREFile() {
 
 			if !ok {
 				logrus.Error("cannot convert building revenues to interface{}")
+			}
+
+			if res, ok := objMap6["id"].(float64); ok {
+				CurBldgRevId = res
+				CurBldgRevIdProceed = true
+				logrus.Info(CurBldgRevId)
+			}
+
+			if res, ok := objMap6["tenantid"].(float64); ok {
+				CurBldgRevTenantId = res
+				CurBldgRevTenantIdProceed = true
 			}
 
 			if res, ok := objMap6["description"].(string); ok {
@@ -441,8 +485,13 @@ func readREFile() {
 				BldgRevDateProceed = true
 			}
 
-			if BldgRevDescProceed && BldgRevAmtProceed && BldgRevDateProceed {
-				TempBuildingRevenues = append(TempBuildingRevenues, Revenue{Description: CurBldgRevDesc, Amount: CurBldgRevAmt, Date: CurBldgRevDate})
+			if res, ok := objMap6["subid"].(float64); ok {
+				CurBldgRevSubId = res
+				BldgRevSubIdProceed = true
+			}
+
+			if CurBldgRevIdProceed && CurBldgRevTenantIdProceed && BldgRevDescProceed && BldgRevAmtProceed && BldgRevDateProceed && BldgRevSubIdProceed {
+				TempBuildingRevenues = append(TempBuildingRevenues, Revenue{Id: CurBldgRevId, TenantId: CurBldgRevTenantId, Description: CurBldgRevDesc, Amount: CurBldgRevAmt, Date: CurBldgRevDate, SubId: CurBldgRevSubId})
 			}
 
 		}
@@ -553,8 +602,7 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 			// Assigning these variables early because they are not sent in the front end
 			tenants := CurrentProperties[property].Tenants
 			buildingexpenses := CurrentProperties[property].BuildingExpenses
-
-			logrus.Info(tenants)
+			buildingrevenues := CurrentProperties[property].BuildingRevenues
 
 			CurrentProperties[property].Id = propertyData.Id
 			CurrentProperties[property].Description = propertyData.Description
@@ -569,6 +617,7 @@ func modifyProperty(w http.ResponseWriter, request *http.Request) {
 			CurrentProperties[property].Date = propertyData.Date
 			CurrentProperties[property].Tenants = tenants
 			CurrentProperties[property].BuildingExpenses = buildingexpenses
+			CurrentProperties[property].BuildingRevenues = buildingrevenues
 
 		}
 	}
@@ -648,16 +697,224 @@ func addTenant(w http.ResponseWriter, request *http.Request) {
 	// Uses the decoder to decode the response to tenant data at its memory location
 	decoder.Decode(&propertyData)
 
-	logrus.Info(propertyData)
-
 	for property := range CurrentProperties {
 		if propertyData.Id == CurrentProperties[property].Id {
-			logrus.Info(propertyData)
-			CurrentProperties[property].Tenants = append(CurrentProperties[property].Tenants, propertyData.Tenants[0])
+
+			NewId := float64(len(CurrentProperties[property].Tenants))
+
+			IdAvailable := false
+			IdInBatch := false
+
+			for !IdAvailable {
+				IdInBatch = false
+				for _, tenant := range CurrentProperties[property].Tenants {
+					if NewId == tenant.SubId {
+						IdInBatch = true
+					}
+				}
+
+				if !IdInBatch {
+					IdAvailable = true
+				} else {
+					NewId++
+				}
+			}
+
+			newTenant := Tenant{Name: propertyData.Tenants[0].Name, LeaseStart: propertyData.Tenants[0].LeaseStart, LeaseEnd: propertyData.Tenants[0].LeaseEnd, Expenses: propertyData.Tenants[0].Expenses, Revenues: propertyData.Tenants[0].Revenues, Unit: propertyData.Tenants[0].Unit, CurrentTenant: propertyData.Tenants[0].CurrentTenant, Id: propertyData.Tenants[0].Id, SubId: NewId}
+
+			CurrentProperties[property].Tenants = append(CurrentProperties[property].Tenants, newTenant)
 		}
 	}
 
 	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
 
 	_ = ioutil.WriteFile("Properties.json", file, 0644)
+}
+
+func addExpense(w http.ResponseWriter, request *http.Request) {
+	// Enabling Cors
+	enableCors(&w)
+
+	// Sets the appropriate data type for JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Returns the status of the local host
+	w.WriteHeader(http.StatusOK)
+
+	// Initializing API variables
+	var expenseData RealEstatePost
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to expenseData at its memory location
+	decoder.Decode(&expenseData)
+
+	for property := range CurrentProperties {
+		if expenseData.Id == CurrentProperties[property].Id {
+
+			NewId := float64(len(CurrentProperties[property].BuildingExpenses))
+
+			IdAvailable := false
+			IdInBatch := false
+
+			for !IdAvailable {
+				IdInBatch = false
+				for _, expense := range CurrentProperties[property].BuildingExpenses {
+					if NewId == expense.SubId {
+						IdInBatch = true
+					}
+				}
+
+				if !IdInBatch {
+					IdAvailable = true
+				} else {
+					NewId++
+				}
+			}
+
+			newExpense := Expense{Id: expenseData.BuildingExpenses[0].Id, TenantId: expenseData.BuildingExpenses[0].TenantId, Description: expenseData.BuildingExpenses[0].Description, Amount: expenseData.BuildingExpenses[0].Amount, Date: expenseData.BuildingExpenses[0].Date, SubId: NewId}
+
+			CurrentProperties[property].BuildingExpenses = append(CurrentProperties[property].BuildingExpenses, newExpense)
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
+
+}
+
+func modifyExpense(w http.ResponseWriter, request *http.Request) {
+	// Enabling CORS
+	enableCors(&w)
+
+	// Sets the appropriate data type for the JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Initializing API variables
+	var expenseData Expense
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to Property data at its memory location
+	decoder.Decode(&expenseData)
+
+	for property := range CurrentProperties {
+		if CurrentProperties[property].Id == expenseData.Id {
+			for expense := range CurrentProperties[property].BuildingExpenses {
+				if CurrentProperties[property].BuildingExpenses[expense].SubId == expenseData.SubId {
+
+					CurrentProperties[property].BuildingExpenses[expense].Id = expenseData.Id
+					CurrentProperties[property].BuildingExpenses[expense].TenantId = expenseData.TenantId
+					CurrentProperties[property].BuildingExpenses[expense].Description = expenseData.Description
+					CurrentProperties[property].BuildingExpenses[expense].Amount = expenseData.Amount
+					CurrentProperties[property].BuildingExpenses[expense].Date = expenseData.Date
+					CurrentProperties[property].BuildingExpenses[expense].SubId = expenseData.SubId
+				}
+			}
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
+
+}
+
+func addRevenue(w http.ResponseWriter, request *http.Request) {
+	// Enabling Cors
+	enableCors(&w)
+
+	// Sets the appropriate data type for JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Returns the status of the local host
+	w.WriteHeader(http.StatusOK)
+
+	// Initializing API variables
+	var revenueData RealEstatePost
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to revenueData at its memory location
+	decoder.Decode(&revenueData)
+
+	for property := range CurrentProperties {
+		if revenueData.Id == CurrentProperties[property].Id {
+
+			NewId := float64(len(CurrentProperties[property].BuildingRevenues))
+
+			IdAvailable := false
+			IdInBatch := false
+
+			for !IdAvailable {
+				IdInBatch = false
+				for _, revenue := range CurrentProperties[property].BuildingRevenues {
+					if NewId == revenue.SubId {
+						IdInBatch = true
+					}
+				}
+
+				if !IdInBatch {
+					IdAvailable = true
+				} else {
+					NewId++
+				}
+			}
+
+			newRevenue := Revenue{Id: revenueData.BuildingRevenues[0].Id, TenantId: revenueData.BuildingRevenues[0].TenantId, Description: revenueData.BuildingRevenues[0].Description, Amount: revenueData.BuildingRevenues[0].Amount, Date: revenueData.BuildingRevenues[0].Date, SubId: NewId}
+
+			CurrentProperties[property].BuildingRevenues = append(CurrentProperties[property].BuildingRevenues, newRevenue)
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
+
+}
+
+func modifyRevenue(w http.ResponseWriter, request *http.Request) {
+	// Enabling CORS
+	enableCors(&w)
+
+	// Sets the appropriate data type for the JSON data transfer
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+
+	// Initializing API variables
+	var revenueData Revenue
+
+	// Initializes the JSON decoder
+	decoder := json.NewDecoder(request.Body)
+
+	// Uses the decoder to decode the response to Property data at its memory location
+	decoder.Decode(&revenueData)
+
+	for property := range CurrentProperties {
+		if CurrentProperties[property].Id == revenueData.Id {
+			for revenue := range CurrentProperties[property].BuildingRevenues {
+				if CurrentProperties[property].BuildingRevenues[revenue].SubId == revenueData.SubId {
+
+					CurrentProperties[property].BuildingRevenues[revenue].Id = revenueData.Id
+					CurrentProperties[property].BuildingRevenues[revenue].TenantId = revenueData.TenantId
+					CurrentProperties[property].BuildingRevenues[revenue].Description = revenueData.Description
+					CurrentProperties[property].BuildingRevenues[revenue].Amount = revenueData.Amount
+					CurrentProperties[property].BuildingRevenues[revenue].Date = revenueData.Date
+					CurrentProperties[property].BuildingRevenues[revenue].SubId = revenueData.SubId
+				}
+			}
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentProperties, "", " ")
+
+	_ = ioutil.WriteFile("Properties.json", file, 0644)
+
 }

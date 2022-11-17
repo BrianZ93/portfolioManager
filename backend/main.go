@@ -44,6 +44,14 @@ func handleRequests() {
 	http.HandleFunc("/propertydel", deleteProperty)
 	// Tenant Portion
 	http.HandleFunc("/tenantAdd", addTenant)
+	// Building Expenses Portion
+	http.HandleFunc("/expenseadd", addExpense)
+	http.HandleFunc("/expensemod", modifyExpense)
+	// http.HandleFunc("/expensedel", deleteExpense)
+	// Building Revenues Portion
+	http.HandleFunc("/revenueadd", addRevenue)
+	http.HandleFunc("/revenuemod", modifyRevenue)
+	// http.HandleFunc("/revenuedel", deleteRevenue)
 
 	// Debt REST
 	http.HandleFunc("/debts", DebtRetrieve)

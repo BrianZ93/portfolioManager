@@ -27,12 +27,12 @@
         "name": "Jimmy Risk",
         "leasestart": "2020-01-10",
         "leaseend": "2022-10-10",
-        "expenses": [],
-        "revenues": [],
+        "expenses": null,
+        "revenues": null,
         "unit": "GS",
         "currenttenant": false,
         "id": 1,
-        "subid": 0
+        "subid": 1
       }
     ],
     "buildingexpenses": null,
@@ -55,8 +55,8 @@
         "name": "Ron De Leon",
         "leasestart": "2017-10-01",
         "leaseend": "2023-10-01",
-        "expenses": [],
-        "revenues": [],
+        "expenses": null,
+        "revenues": null,
         "unit": "1",
         "currenttenant": true,
         "id": 2,
@@ -66,12 +66,12 @@
         "name": "Beau LaHaye",
         "leasestart": "2022-09-01",
         "leaseend": "2023-10-01",
-        "expenses": [],
-        "revenues": [],
+        "expenses": null,
+        "revenues": null,
         "unit": "2",
         "currenttenant": true,
         "id": 2,
-        "subid": 0
+        "subid": 1
       }
     ],
     "buildingexpenses": null,
@@ -105,8 +105,162 @@
     "type": "Second Home",
     "ownership": 100,
     "date": "09-01-2022",
-    "tenants": null,
-    "buildingexpenses": null,
-    "buildingrevenues": null
+    "tenants": [
+      {
+        "name": "Sample",
+        "leasestart": "2021-10-01",
+        "leaseend": "2022-11-01",
+        "expenses": null,
+        "revenues": null,
+        "unit": "1",
+        "currenttenant": false,
+        "id": 4,
+        "subid": 0
+      },
+      {
+        "name": "Sample 2",
+        "leasestart": "2021-10-01",
+        "leaseend": "2022-11-01",
+        "expenses": null,
+        "revenues": null,
+        "unit": "2",
+        "currenttenant": false,
+        "id": 4,
+        "subid": 4
+      },
+      {
+        "name": "Sample 3",
+        "leasestart": "2021-10-01",
+        "leaseend": "2022-11-01",
+        "expenses": null,
+        "revenues": null,
+        "unit": "3",
+        "currenttenant": false,
+        "id": 4,
+        "subid": 2
+      },
+      {
+        "name": "Sample 4",
+        "leasestart": "2021-10-01",
+        "leaseend": "2022-11-01",
+        "expenses": null,
+        "revenues": null,
+        "unit": "4",
+        "currenttenant": false,
+        "id": 4,
+        "subid": 3
+      },
+      {
+        "name": "Sample 5",
+        "leasestart": "2021-10-01",
+        "leaseend": "2022-11-01",
+        "expenses": null,
+        "revenues": null,
+        "unit": "5",
+        "currenttenant": false,
+        "id": 4,
+        "subid": 5
+      }
+    ],
+    "buildingexpenses": [
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Lawn Service",
+        "amount": 100,
+        "date": "2022-10-01",
+        "subid": 0
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Carpet Cleaning",
+        "amount": 50,
+        "date": "2022-10-01",
+        "subid": 1
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Lawn Service",
+        "amount": 100,
+        "date": "2022-11-01",
+        "subid": 2
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Legal Fees",
+        "amount": 100,
+        "date": "2022-10-01",
+        "subid": 3
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Roof Repair",
+        "amount": 100,
+        "date": "2022-10-01",
+        "subid": 4
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Carpet Cleaning",
+        "amount": 100,
+        "date": "2022-11-01",
+        "subid": 5
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Lawn Service",
+        "amount": 100,
+        "date": "2022-10-01",
+        "subid": 6
+      }
+    ],
+    "buildingrevenues": [
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Laundry",
+        "amount": 50,
+        "date": "2022-10-01",
+        "subid": 0
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Laundry",
+        "amount": 50,
+        "date": "2022-10-01",
+        "subid": 1
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Laundry",
+        "amount": 100,
+        "date": "2022-10-01",
+        "subid": 2
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Laundry",
+        "amount": 50,
+        "date": "2022-10-01",
+        "subid": 3
+      },
+      {
+        "id": 4,
+        "tenantid": 0,
+        "description": "Laundry",
+        "amount": 50,
+        "date": "2022-10-01",
+        "subid": 4
+      }
+    ]
   }
 ]
