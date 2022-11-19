@@ -116,7 +116,7 @@ func readREFile() {
 	redataslice, ok := redata.([]interface{})
 
 	if !ok {
-		logrus.Error("cannot convert properties JSON objects")
+		logrus.Info("cannot convert properties JSON objects")
 	}
 
 	var CurId float64
@@ -146,7 +146,7 @@ func readREFile() {
 		objMap, ok := obj.(map[string]interface{})
 
 		if !ok {
-			logrus.Error("cannot convert RE interface{} to type map[string]interface{}")
+			logrus.Info("cannot convert RE interface{} to type map[string]interface{}")
 		}
 
 		// The below if statements check on the data type to see if an upload is possible
@@ -208,8 +208,8 @@ func readREFile() {
 		tenantsdataslice, ok := objMap["tenants"].([]interface{})
 
 		if !ok {
-			logrus.Error("Cannot convert tenant JSON objects")
-			logrus.Warn("It is possible this property does not have any tenants")
+			logrus.Info("Cannot convert tenant JSON objects")
+			logrus.Debug("It is possible this property does not have any tenants")
 		}
 
 		var CurName string
@@ -234,7 +234,7 @@ func readREFile() {
 			objMap2, ok := obj2.(map[string]interface{})
 
 			if !ok {
-				logrus.Error("cannot convert tenants interface{} to type map[string] interface{}")
+				logrus.Info("cannot convert tenants interface{} to type map[string] interface{}")
 			}
 
 			// The below if statements check on the data type
@@ -276,8 +276,8 @@ func readREFile() {
 			expensesdataslice, ok := objMap2["expenses"].([]interface{})
 
 			if !ok {
-				logrus.Error("Cannot convert expenses JSON objects")
-				logrus.Warn("It is possible this tenant does not have any expenses")
+				logrus.Info("Cannot convert expenses JSON objects")
+				logrus.Debug("It is possible this tenant does not have any expenses")
 			}
 
 			var CurExpenseDescription string
@@ -293,7 +293,7 @@ func readREFile() {
 				objMap3, ok := obj3.(map[string]interface{})
 
 				if !ok {
-					logrus.Error("cannot convert tenant expenses interface{} to map[string]interface{}")
+					logrus.Info("cannot convert tenant expenses interface{} to map[string]interface{}")
 				}
 
 				if res, ok := objMap3["description"].(string); ok {
@@ -319,8 +319,8 @@ func readREFile() {
 			revenuesdataslice, ok := objMap2["revenues"].([]interface{})
 
 			if !ok {
-				logrus.Error("Cannot convert revenues JSON objects")
-				logrus.Warn("It is possible this tenant does not have any revenues")
+				logrus.Info("Cannot convert revenues JSON objects")
+				logrus.Debug("It is possible this tenant does not have any revenues")
 			}
 
 			var CurRevenueDescription string
@@ -336,7 +336,7 @@ func readREFile() {
 				objMap4, ok := obj4.(map[string]interface{})
 
 				if !ok {
-					logrus.Error("cannot convert tenant revenues to interface{}")
+					logrus.Info("cannot convert tenant revenues to interface{}")
 				}
 
 				if res, ok := objMap4["description"].(string); ok {
@@ -368,8 +368,8 @@ func readREFile() {
 		bldgexpdataslice, ok := objMap["buildingexpenses"].([]interface{})
 
 		if !ok {
-			logrus.Error("Cannot convert building expenses JSON objects")
-			logrus.Warn("It is possible this building does not have any expenses")
+			logrus.Info("Cannot convert building expenses JSON objects")
+			logrus.Debug("It is possible this building does not have any expenses")
 		}
 
 		var CurBldgExpId float64
@@ -391,7 +391,7 @@ func readREFile() {
 			objMap5, ok := obj5.(map[string]interface{})
 
 			if !ok {
-				logrus.Error("cannot convert building expenses to interface{}")
+				logrus.Info("cannot convert building expenses to interface{}")
 			}
 
 			if res, ok := objMap5["id"].(float64); ok {
@@ -433,8 +433,8 @@ func readREFile() {
 		bldgrevsdataslice, ok := objMap["buildingrevenues"].([]interface{})
 
 		if !ok {
-			logrus.Error("Cannot convert building revenues JSON Objects")
-			logrus.Warn("It is possible this building does not have any revenues")
+			logrus.Info("Cannot convert building revenues JSON Objects")
+			logrus.Debug("It is possible this building does not have any revenues")
 		}
 
 		var CurBldgRevId float64
@@ -456,7 +456,7 @@ func readREFile() {
 			objMap6, ok := obj6.(map[string]interface{})
 
 			if !ok {
-				logrus.Error("cannot convert building revenues to interface{}")
+				logrus.Info("cannot convert building revenues to interface{}")
 			}
 
 			if res, ok := objMap6["id"].(float64); ok {

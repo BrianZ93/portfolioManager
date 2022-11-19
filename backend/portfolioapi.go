@@ -85,8 +85,7 @@ func readFile() {
 	dataSlice, ok := data.([]interface{})
 
 	if !ok {
-		logrus.Error("cannot convert equities JSON objects")
-		os.Exit(1)
+		logrus.Info("cannot convert equities JSON objects")
 	}
 
 	var CurTicker string
@@ -98,13 +97,11 @@ func readFile() {
 	var CurValue float64
 	var ValueProceed = false
 
-	var CurrentIndex = 0
-
 	for _, obj := range dataSlice {
 		objMap, ok := obj.(map[string]interface{})
 
 		if !ok {
-			logrus.Error("cannot convert interface{} to type map[string]interface{}")
+			logrus.Info("cannot convert interface{} to type map[string]interface{}")
 		}
 
 		if res, ok := objMap["ticker"].(string); ok {
@@ -132,8 +129,6 @@ func readFile() {
 
 			// API Call to find equity values
 		}
-
-		CurrentIndex++
 
 	}
 
@@ -170,9 +165,14 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 	// Uses the decoder to decode the response to Equity data at its memory location
 	decoder.Decode(&equityData)
 
+	q, err := quote.Get(equityData.Ticker)
+	if err != nil {
+		logrus.Error(q, "is not a recognized security")
+	}
+
 	TempEquities = nil
 
-	if len(CurrentEquities) == 1 && CurrentEquities[0].Ticker == "0" && CurrentEquities[0].Shares == 0 {
+	if len(CurrentEquities) == 0 {
 		TempEquities = append(TempEquities, EquityPost{Ticker: equityData.Ticker, Shares: equityData.Shares, Price: equityData.Price})
 		CurrentEquities = TempEquities
 
@@ -187,6 +187,7 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 					logrus.Info("Security Already Exists - Shares Added")
 					if CurrentEquities[i].Shares+equityData.Shares >= 0 {
 						CurrentEquities[i].Shares += equityData.Shares
+						CurrentEquities[i].Price = equityData.Price
 
 						file, _ := json.MarshalIndent(CurrentEquities, "", " ")
 
@@ -220,7 +221,7 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 
 	updatePrices()
 
-	// TODO - make the API check if its a valid ticker before adding it to prevent unnecessary errors
+	// TODO - When Voya's website is working look through PDF's to potential use to scrape through for updated portfolio Data
 
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
@@ -276,12 +277,8 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 	decoder.Decode(&equityData)
 
 	if len(CurrentEquities) == 1 {
-		TempEquities = nil
-		CurrentEquities[0].Ticker = "0"
-		CurrentEquities[0].Shares = 0
-		CurrentEquities[0].Price = 0
-		CurrentEquities[0].PriceLoaded = false
-		CurrentEquities[0].Value = 0
+
+		CurrentEquities = nil
 
 	} else {
 		TempEquities = nil
@@ -315,6 +312,11 @@ func updatePrices() {
 		}
 
 		CurrentEquities[i].PriceLoaded = true
-		CurrentEquities[i].Value = q.RegularMarketPrice
+
+		if q != nil {
+			CurrentEquities[i].Value = q.RegularMarketPrice
+
+		}
+
 	}
 }

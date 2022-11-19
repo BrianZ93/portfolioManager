@@ -75,7 +75,7 @@ func readDebtFile() {
 	debtdataslice, ok := debtdata.([]interface{})
 
 	if !ok {
-		logrus.Error("cannot convert Debts JSON objects")
+		logrus.Info("cannot convert Debts JSON objects")
 	}
 
 	var CurId float64
@@ -99,7 +99,7 @@ func readDebtFile() {
 		objMap, ok := obj.(map[string]interface{})
 
 		if !ok {
-			logrus.Error("cannot convert RE interface{} to type map[string]interface{}")
+			logrus.Info("cannot convert RE interface{} to type map[string]interface{}")
 		}
 
 		// The below if statements check on the data type to see if an upload is possible
