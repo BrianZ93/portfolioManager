@@ -11,6 +11,8 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// TODO - remove the json tags and see if you no longer need to use the interface hack to get the json to unmarshal correctly
+
 // Defining JSON Structures
 type EquityPost struct {
 	Ticker      string  `json:"ticker"`
