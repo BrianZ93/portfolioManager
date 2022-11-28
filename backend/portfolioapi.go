@@ -11,8 +11,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// TODO - remove the json tags and see if you no longer need to use the interface hack to get the json to unmarshal correctly
-
 // Defining JSON Structures
 type EquityPost struct {
 	Ticker      string  `json:"ticker"`
@@ -84,6 +82,8 @@ func readFile() {
 
 	json.Unmarshal(file, &data)
 
+	logrus.Info(data)
+
 	dataSlice, ok := data.([]interface{})
 
 	if !ok {
@@ -98,6 +98,8 @@ func readFile() {
 	var PriceProceed = false
 	var CurValue float64
 	var ValueProceed = false
+	var CurMargin float64
+	var MarginProceed = true
 
 	for _, obj := range dataSlice {
 		objMap, ok := obj.(map[string]interface{})
@@ -126,8 +128,13 @@ func readFile() {
 			ValueProceed = true
 		}
 
-		if TickerProceed && SharesProceed && PriceProceed && ValueProceed {
-			CurrentEquities = append(CurrentEquities, EquityPost{Ticker: CurTicker, Shares: CurShares, Price: CurPrice, Value: CurValue})
+		if res, ok := objMap["margin"].(float64); ok {
+			CurMargin = res
+			MarginProceed = true
+		}
+
+		if TickerProceed && SharesProceed && PriceProceed && ValueProceed && MarginProceed {
+			CurrentEquities = append(CurrentEquities, EquityPost{Ticker: CurTicker, Shares: CurShares, Price: CurPrice, Value: CurValue, Margin: CurMargin})
 
 			// API Call to find equity values
 		}
@@ -223,8 +230,6 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 
 	updatePrices()
 
-	// TODO - When Voya's website is working look through PDF's to potential use to scrape through for updated portfolio Data
-
 	// Returns the status of the local host
 	w.WriteHeader(http.StatusOK)
 
@@ -306,11 +311,12 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 func updatePrices() {
 
 	for i := 0; i < len(CurrentEquities); i++ {
+		logrus.Warn(CurrentEquities[i].Ticker)
 		q, err := quote.Get(CurrentEquities[i].Ticker)
 		if err != nil {
 			CurrentEquities[i].PriceLoaded = false
 			CurrentEquities[i].Value = 0
-			logrus.Warn("Ticker not found")
+			logrus.Warn("Ticker not found ", err)
 		}
 
 		CurrentEquities[i].PriceLoaded = true

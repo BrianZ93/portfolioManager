@@ -4,14 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-
-	"github.com/sirupsen/logrus"
 )
 
 func main() {
 
 	// Only log warnings of severity "warning" or above
-	logrus.SetLevel(logrus.WarnLevel)
+	// logrus.SetLevel(logrus.WarnLevel)
 
 	readFile()
 	updatePrices()
