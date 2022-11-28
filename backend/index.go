@@ -2,12 +2,12 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
 	"github.com/piquette/finance-go/index"
+	"github.com/sirupsen/logrus"
 )
 
 // Initializing global variables
@@ -30,7 +30,7 @@ func getPrices() {
 	// Getting index prices - the first one must be done independently in order to define the "err" variable
 	i, err := index.Get("^VIX")
 	if err != nil {
-		panic(err)
+		logrus.Error(err)
 	}
 
 	x = strconv.FormatFloat(i.RegularMarketPrice, 'f', -1, 64)
@@ -57,7 +57,7 @@ func getPrices() {
 	}
 
 	if iter.Err() != nil {
-		panic(err)
+		logrus.Error(err)
 	}
 
 }
@@ -77,6 +77,6 @@ func indexPage(w http.ResponseWriter, r *http.Request) {
 		Index{Title: "IXIC", Price: indexesprice[3], Change: indexeschange[3]},
 	}
 
-	fmt.Println("Index Endpoint Hit")
+	logrus.Info("Index Endpoint Hit")
 	json.NewEncoder(w).Encode(x_indexes)
 }

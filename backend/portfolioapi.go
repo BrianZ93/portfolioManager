@@ -136,7 +136,6 @@ func readFile() {
 		if TickerProceed && SharesProceed && PriceProceed && ValueProceed && MarginProceed {
 			CurrentEquities = append(CurrentEquities, EquityPost{Ticker: CurTicker, Shares: CurShares, Price: CurPrice, Value: CurValue, Margin: CurMargin})
 
-			// API Call to find equity values
 		}
 
 	}
@@ -173,11 +172,6 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 
 	// Uses the decoder to decode the response to Equity data at its memory location
 	decoder.Decode(&equityData)
-
-	q, err := quote.Get(equityData.Ticker)
-	if err != nil {
-		logrus.Error(q, "is not a recognized security")
-	}
 
 	TempEquities = nil
 
@@ -311,7 +305,6 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 func updatePrices() {
 
 	for i := 0; i < len(CurrentEquities); i++ {
-		logrus.Warn(CurrentEquities[i].Ticker)
 		q, err := quote.Get(CurrentEquities[i].Ticker)
 		if err != nil {
 			CurrentEquities[i].PriceLoaded = false

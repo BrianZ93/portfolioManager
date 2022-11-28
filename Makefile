@@ -13,3 +13,7 @@ clean:
 	docker-compose down --remove-orphans 
 	docker image prune -a
 	docker network prune
+
+# air:
+# 	alias air='$(go env GOPATH)/bin/air'
+# 	air
