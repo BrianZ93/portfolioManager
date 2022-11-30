@@ -389,6 +389,19 @@ export const usePortfolioStore = defineStore('portfolioStore', {
           [] as Array<LedgerRow>
         ),
 
+        // Selected Tenant
+        selectedTenant: new Tenant(
+          '',
+          '',
+          '',
+          [] as Array<Expense>,
+          [] as Array<Revenue>,
+          '',
+          false,
+          -1,
+          -1
+        ),
+
         newTenant: new Tenant(
           '',
           '',

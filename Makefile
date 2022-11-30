@@ -17,3 +17,13 @@ clean:
 # air:
 # 	alias air='$(go env GOPATH)/bin/air'
 # 	air
+
+stop-appArmor:
+	sudo aa-status
+	sudo systemctl disable apparmor.service --now 
+	sudo service apparmor teardown
+	sudo aa-status
+
+restart-appArmor:
+	sudo systemctl start apparmor
+	sudo apparmor_parser -r /var/lib/snapd/apparmor/profiles/*

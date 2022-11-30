@@ -4,13 +4,15 @@ services:
     image: frontend
     volumes:
       - ./frontend:/frontend
-    ports:
-      - 9000:9000
+    network_mode: host
+    # ports:
+    #   - 9000:9000
     command: quasar dev
   backend:
     image: backend
     volumes:
       - ./backend:/backend
-    ports:
-      - 8081:8081
+    network_mode: host
+    # ports:
+    #   - 8081:8081
     command: air

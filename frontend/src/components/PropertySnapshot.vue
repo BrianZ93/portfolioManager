@@ -7,16 +7,35 @@
     </q-item>
     <q-separator></q-separator>
     <q-list>
-      <q-item clickable>
-        <q-item-section avatar>
-          <q-icon color="primary" name="home" />
-        </q-item-section>
+      <q-expansion-item
+        color="primary"
+        :label="selectedProperty.description"
+        :caption="selectedProperty.type"
+        style="text-align: center"
+      >
+        <q-list>
+          <q-item
+            clickable
+            v-for="property in allProperties"
+            :key="property"
+            :value="property"
+            style="text-align: left"
+            @click="propertySelectClick(property)"
+          >
+            <q-item-section avatar>
+              <q-icon color="primary" name="home" />
+            </q-item-section>
 
-        <q-item-section>
-          <q-item-label> {{ selectedProperty.description }}</q-item-label>
-          <q-item-label caption>{{ selectedProperty.type }}</q-item-label>
-        </q-item-section>
-      </q-item>
+            <q-item-section>
+              <q-item-label> {{ property.description }}</q-item-label>
+              <q-item-label caption>{{ property.type }}</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-expansion-item>
+
+      <q-separator horizontal></q-separator>
+
       <q-item clickable>
         <q-item-section avatar>
           <q-icon color="green" name="paid" />
@@ -371,6 +390,8 @@ export default defineComponent({
       () => portfolioStore.form.selectedProperty
     );
 
+    const allProperties = computed(() => portfolioStore.propertyRows);
+
     const persistentTenants = ref(false);
     const persistentExpenses = ref(false);
     const persistentRevenues = ref(false);
@@ -440,15 +461,32 @@ export default defineComponent({
       portfolioStore.addRevenue();
     }
 
+    function propertySelectClick(property: Property) {
+      portfolioStore.form.selectedProperty = property;
+      portfolioStore.form.selectedTenant = new Tenant(
+        '',
+        '',
+        '',
+        [] as Array<Expense>,
+        [] as Array<Revenue>,
+        '',
+        false,
+        -1,
+        -1
+      );
+    }
+
     return {
       selectedProperty,
       persistentTenants,
       persistentExpenses,
       persistentRevenues,
+      allProperties,
       form,
       onSubmit,
       onExpenseSubmit,
       onRevenueSubmit,
+      propertySelectClick,
       name,
       unit,
       start,
