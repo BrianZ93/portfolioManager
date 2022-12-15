@@ -10,6 +10,70 @@
           @click="persistentEquity = true"
         ></q-btn>
 
+        <q-btn
+          class="glossy"
+          rounded
+          label="Add Margin/Cash"
+          color="primary"
+          @click="persistentMargin = true"
+          style="margin-left: 1vw"
+          :disable="usesMargin"
+        ></q-btn>
+
+        <!-- Margin Dialog -->
+        <q-dialog
+          v-model="persistentMargin"
+          persistent
+          transition-show="scale"
+          transition-hide="scale"
+        >
+          <q-card class="bg-black text-white" style="width: 300px">
+            <!-- Q-card-section is here for spacing on the title -->
+            <q-card-section>
+              <div class="text-h6 absolute-center"></div>
+            </q-card-section>
+
+            <q-card-section>
+              <div class="text-h6 absolute-center" style="text-align: center">
+                Margin/Cash Amount
+              </div>
+            </q-card-section>
+
+            <q-card-section>
+              <form class="columns" action="" method="POST">
+                <q-input
+                  v-model="cashPosition"
+                  autogrow
+                  filled
+                  type="number"
+                  label="Amount"
+                  hint="Use negative amounts for margin and positive amounts for cash"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val !== null && val == typeof Number) ||
+                      'Please type an amount here, use a negative number for margin and a positive number for cash',
+                  ]"
+                ></q-input>
+              </form>
+            </q-card-section>
+
+            <q-card-section class="q-pt-none"> </q-card-section>
+
+            <q-card-actions align="right" class="bg-black text-grey">
+              <q-btn
+                class="glossy"
+                rounded
+                color="primary"
+                label="Submit"
+                @click="modifyMargin"
+              ></q-btn>
+
+              <q-btn flat label="Cancel" v-close-popup></q-btn>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+
         <q-dialog
           v-model="persistentEquity"
           persistent
@@ -31,52 +95,63 @@
                 <q-input
                   autogrow
                   filled
-                  v-model="form.ticker"
+                  v-model="ticker"
                   label="Ticker"
+                  lazy-rules
+                  :rules="[
+                    (val) => (val && val.length > 0) || 'Please type in ticker',
+                  ]"
                 ></q-input>
                 <q-input
                   autogrow
                   filled
-                  v-model="form.shares"
-                  label="Shares"
                   type="number"
+                  v-model="shares"
+                  label="Shares"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val !== null && val !== '') ||
+                      'Please enter number of shares',
+                  ]"
                 ></q-input>
                 <q-input
                   autogrow
                   filled
-                  v-model="form.equityPrice"
+                  type="number"
+                  v-model="price"
                   label="Price"
-                  mask="$#.##"
-                  input-class="text-left"
-                  fill-mask="0"
-                  reverse-fill-mask
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val !== null && val !== '') ||
+                      'Please enter the price of the security',
+                  ]"
                 ></q-input>
+
+                <q-card-actions align="right" class="bg-black text-grey">
+                  <q-btn
+                    class="glossy"
+                    rounded
+                    color="primary"
+                    label="New Equity"
+                    @click="addEquity"
+                  ></q-btn>
+
+                  <q-popup-proxy>
+                    <q-banner>
+                      <template v-slot:avatar>
+                        <q-icon name="warning" color="primary"></q-icon>
+                      </template>
+                      Please enter a number of shares greater than 0 and a valid
+                      symbol
+                    </q-banner>
+                  </q-popup-proxy>
+
+                  <q-btn flat label="Cancel" v-close-popup></q-btn>
+                </q-card-actions>
               </form>
             </q-card-section>
-
-            <q-card-section class="q-pt-none"> </q-card-section>
-
-            <q-card-actions align="right" class="bg-black text-grey">
-              <q-btn
-                class="glossy"
-                rounded
-                color="primary"
-                label="New Equity"
-                @click="addEquity"
-              ></q-btn>
-
-              <q-popup-proxy>
-                <q-banner>
-                  <template v-slot:avatar>
-                    <q-icon name="warning" color="primary"></q-icon>
-                  </template>
-                  Please enter a number of shares greater than 0 and a valid
-                  symbol
-                </q-banner>
-              </q-popup-proxy>
-
-              <q-btn flat label="Cancel" v-close-popup></q-btn>
-            </q-card-actions>
           </q-card>
         </q-dialog>
 
@@ -116,12 +191,15 @@
                 <q-input
                   autogrow
                   filled
+                  type="number"
                   v-model="form.modprice"
                   label="Price"
-                  mask="$#.##"
-                  input-class="text-left"
-                  fill-mask="0"
-                  reverse-fill-mask
+                  prefix="$"
+                  lazy-rules
+                  :rules="[
+                    (val) =>
+                      (val !== null && val !== '') || 'Please enter a price',
+                  ]"
                 ></q-input>
               </form>
             </q-card-section>
@@ -204,6 +282,7 @@ export default defineComponent({
     const equitiesImported = ref(false);
     const persistentEquity = ref(false);
     const persistentEquityEdit = ref(false);
+    const persistentMargin = ref(false);
 
     const equitiesTotal = computed(() => portfolioStore.equitiesTotal);
 
@@ -275,10 +354,25 @@ export default defineComponent({
       portfolioStore.importCurrentDebts();
     });
 
+    // Margin Form
+    const cashPosition = ref(null);
+    const usesMargin = computed(() => portfolioStore.usesMargin);
+
+    // Add Equity Form
+    const ticker = ref(null);
+    const shares = ref(null);
+    const price = ref(null);
+
     return {
       equities,
+      cashPosition,
+      usesMargin,
+      ticker,
+      shares,
+      price,
       portfolioStore,
       persistentEquity,
+      persistentMargin,
       persistentEquityEdit,
       form,
       columns,
@@ -287,18 +381,31 @@ export default defineComponent({
       equityClick,
       equitiesTotal,
       addEquity() {
-        if (form.value.shares > 0 && typeof form.value.ticker == 'string') {
-          portfolioStore.form.ticker = form.value.ticker;
-          portfolioStore.form.shares = form.value.shares;
-          portfolioStore.form.equityPrice = form.value.equityPrice;
+        if (shares.value > 0 && typeof ticker.value == 'string') {
+          portfolioStore.form.ticker = ticker.value;
+          portfolioStore.form.shares = shares.value;
+          portfolioStore.form.equityPrice = price.value;
 
           persistentEquity.value = false;
           portfolioStore.addEquityApi();
-
-          portfolioStore.form.ticker = '';
-          portfolioStore.form.shares = 0;
-          portfolioStore.form.equityPrice = 0;
         }
+      },
+      modifyMargin() {
+        if (cashPosition.value >= 0) {
+          portfolioStore.form.ticker = '$CASH';
+        } else {
+          portfolioStore.form.ticker = '$MARGIN';
+        }
+
+        portfolioStore.form.shares = 1;
+        portfolioStore.form.equityPrice = cashPosition.value;
+
+        persistentMargin.value = false;
+        portfolioStore.addEquityApi();
+
+        portfolioStore.form.ticker = '';
+        portfolioStore.form.shares = 0;
+        portfolioStore.form.equityPrice = 0;
       },
       modifyEquity() {
         if (form.value.modshares > 0) {

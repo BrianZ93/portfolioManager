@@ -165,8 +165,8 @@
     "name": "Sample 6",
     "leasestart": "2021-10-01",
     "leaseend": "2022-11-01",
-    "expenses": [],
-    "revenues": [],
+    "expenses": null,
+    "revenues": null,
     "unit": "6",
     "currenttenant": false,
     "id": 4,
@@ -176,8 +176,8 @@
     "name": "Sample 7",
     "leasestart": "2021-10-01",
     "leaseend": "2022-11-01",
-    "expenses": [],
-    "revenues": [],
+    "expenses": null,
+    "revenues": null,
     "unit": "6",
     "currenttenant": false,
     "id": 4,
@@ -187,8 +187,8 @@
     "name": "Sample 8",
     "leasestart": "2021-10-01",
     "leaseend": "2022-11-01",
-    "expenses": [],
-    "revenues": [],
+    "expenses": null,
+    "revenues": null,
     "unit": "6",
     "currenttenant": false,
     "id": 4,
@@ -285,6 +285,22 @@
     "amount": 50,
     "date": "2022-10-01",
     "subid": 4
+   },
+   {
+    "id": 4,
+    "tenantid": 0,
+    "description": "Rent",
+    "amount": 1700,
+    "date": "2022-10-01",
+    "subid": 5
+   },
+   {
+    "id": 4,
+    "tenantid": 0,
+    "description": "Rent",
+    "amount": 1700,
+    "date": "2022-10-01",
+    "subid": 6
    }
   ]
  }

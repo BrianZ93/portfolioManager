@@ -459,6 +459,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
         // Debt Delete Form Data
         delcurrentdebt: 0,
       },
+      usesMargin: false,
     };
   },
   actions: {
@@ -530,15 +531,31 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             this.equities = [] as Array<Equity>;
 
             for (let i = 0; i < res.data.length; i++) {
-              this.equities.push(
-                new Equity(
-                  res.data[i].ticker as string,
-                  res.data[i].shares as number,
-                  res.data[i].price,
-                  false,
-                  res.data[i].value
-                )
-              );
+              if (
+                res.data[i].ticker == '$CASH' ||
+                res.data[i].ticker == '$MARGIN'
+              ) {
+                this.usesMargin = true;
+                this.equities.push(
+                  new Equity(
+                    res.data[i].ticker as string,
+                    res.data[i].shares as number,
+                    res.data[i].price,
+                    false,
+                    res.data[i].price
+                  )
+                );
+              } else {
+                this.equities.push(
+                  new Equity(
+                    res.data[i].ticker as string,
+                    res.data[i].shares as number,
+                    res.data[i].price,
+                    false,
+                    res.data[i].value
+                  )
+                );
+              }
             }
 
             this.equityRows = [] as Array<Equity>;
@@ -548,6 +565,7 @@ export const usePortfolioStore = defineStore('portfolioStore', {
             this.equityValues = [] as Array<number>;
             for (const equity of this.equities) {
               this.equityRows.push(equity);
+
               this.equitiesTotal += equity.value * equity.shares;
 
               this.equityTickers.push(equity.ticker);

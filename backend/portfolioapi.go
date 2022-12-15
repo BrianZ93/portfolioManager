@@ -29,6 +29,9 @@ type Iter struct {
 
 var CurrentEquities Equities
 var TempEquities Equities
+var PreviousMarginValue float64
+var YesterdaysMargin float64
+var TodaysValue float64
 
 func checkFile(filename string) error {
 	_, err := os.Stat(filename)
@@ -134,6 +137,12 @@ func readFile() {
 		}
 
 		if TickerProceed && SharesProceed && PriceProceed && ValueProceed && MarginProceed {
+			if CurTicker == "$MARGIN" {
+				YesterdaysMargin = CurPrice
+			} else {
+				PreviousMarginValue += CurShares * CurValue
+			}
+
 			CurrentEquities = append(CurrentEquities, EquityPost{Ticker: CurTicker, Shares: CurShares, Price: CurPrice, Value: CurValue, Margin: CurMargin})
 
 		}
@@ -304,7 +313,14 @@ func deleteEquity(w http.ResponseWriter, request *http.Request) {
 
 func updatePrices() {
 
+	TodaysValue = 0
+
 	for i := 0; i < len(CurrentEquities); i++ {
+
+		if CurrentEquities[i].Ticker == "$CASH" || CurrentEquities[i].Ticker == "$MARGIN" {
+			continue
+		}
+
 		q, err := quote.Get(CurrentEquities[i].Ticker)
 		if err != nil {
 			CurrentEquities[i].PriceLoaded = false
@@ -316,8 +332,21 @@ func updatePrices() {
 
 		if q != nil {
 			CurrentEquities[i].Value = q.RegularMarketPrice
+			TodaysValue += q.RegularMarketPrice * CurrentEquities[i].Shares
 
 		}
 
 	}
+
+	for i := 0; i < len(CurrentEquities); i++ {
+
+		if CurrentEquities[i].Ticker == "$MARGIN" {
+			CurrentEquities[i].Price = CurrentEquities[i].Price - (TodaysValue - PreviousMarginValue)
+		}
+	}
+
+	file, _ := json.MarshalIndent(CurrentEquities, "", " ")
+
+	_ = ioutil.WriteFile("Equities.json", file, 0644)
+
 }
