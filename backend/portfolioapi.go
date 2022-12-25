@@ -32,6 +32,7 @@ var TempEquities Equities
 var PreviousMarginValue float64
 var YesterdaysMargin float64
 var TodaysValue float64
+var PreviousEquitiesLength float64
 
 func checkFile(filename string) error {
 	_, err := os.Stat(filename)
@@ -231,6 +232,8 @@ func addEquity(w http.ResponseWriter, request *http.Request) {
 		}
 	}
 
+	PreviousEquitiesLength = float64(len(CurrentEquities)) - 1
+
 	updatePrices()
 
 	// Returns the status of the local host
@@ -341,9 +344,13 @@ func updatePrices() {
 	for i := 0; i < len(CurrentEquities); i++ {
 
 		if CurrentEquities[i].Ticker == "$MARGIN" {
-			CurrentEquities[i].Price = CurrentEquities[i].Price - (TodaysValue - PreviousMarginValue)
+			CurrentEquities[i].Price -= (TodaysValue - PreviousMarginValue)
 		}
 	}
+
+	logrus.Info(YesterdaysMargin)
+	logrus.Info(TodaysValue)
+	logrus.Info(PreviousMarginValue)
 
 	file, _ := json.MarshalIndent(CurrentEquities, "", " ")
 

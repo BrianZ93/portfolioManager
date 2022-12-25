@@ -837,6 +837,9 @@ export const usePortfolioStore = defineStore('portfolioStore', {
 
                 for (const debt of this.Debts) {
                   if (debt.id == amortizingDebt?.id) {
+                    console.log(debt.id);
+                    console.log(amortizingDebt.id);
+
                     debt.currentBalance = currentBalance;
                     debt.monthsLeft = debt.term * 12 - monthsElapsed;
                   }

@@ -12,7 +12,7 @@
   "id": 1,
   "title": "Chase Credit Card",
   "type": "Revolving",
-  "amount": 14700,
+  "amount": 13000,
   "rate": 24.99,
   "term": 0,
   "date": "10/01/2022"
@@ -21,9 +21,18 @@
   "id": 2,
   "title": "Synchrony Financial",
   "type": "Revolving",
-  "amount": 3700,
+  "amount": 4700,
   "rate": 24.99,
   "term": 0,
   "date": "10/01/2022"
+ },
+ {
+  "id": 4,
+  "title": "Bootcamp Loans",
+  "type": "Installment",
+  "amount": 15500,
+  "rate": 11.75,
+  "term": 5,
+  "date": "08/01/2022"
  }
 ]

@@ -4,13 +4,13 @@
   "shares": 100,
   "price": 408,
   "priceloaded": true,
-  "value": 276.89,
+  "value": 267.36,
   "margin": 0
  },
  {
   "ticker": "$MARGIN",
   "shares": 1,
-  "price": -18037.84,
+  "price": -17084.17,
   "priceloaded": false,
   "value": 0,
   "margin": 0
